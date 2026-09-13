@@ -36,9 +36,10 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@dstn/fli": "^2.0.1",
     "drizzle-kit": "^0.31.10",
     "pagefind": "^1.5.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.3"
   }
 }

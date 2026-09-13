@@ -46,7 +46,7 @@ if (db) {
 			.limit(60);
 
 		if (rows.length > 0) {
-			updatedLaws = rows.map((r) => ({
+			updatedLaws = rows.map((r: any) => ({
 				slug: r.slug,
 				abbreviation: r.abbreviation || r.slug.toUpperCase(),
 				title: r.title,

@@ -263,7 +263,7 @@ const curatedLeitgesetze = [
 				</div>
 
 				{initialLetter && (
-					<script id="ssr-initial-laws" type="application/json" set:html={JSON.stringify(initialLaws)} />
+					<script is:inline id="ssr-initial-laws" type="application/json" set:html={JSON.stringify(initialLaws)} />
 				)}
 			</section>
 
@@ -995,7 +995,6 @@ const curatedLeitgesetze = [
 	// In-memory cache for letters: letter => LawEntry[]
 	const cache = new Map<string, LawEntry[]>();
 	let currentLetter: string | null = null;
-	let currentMode: 'overview' | 'letter' | 'search' = 'overview';
 
 	let currentLetterLaws: LawEntry[] = [];
 	let currentLetterShown = 0;
@@ -1091,7 +1090,6 @@ const curatedLeitgesetze = [
 	const initialLetterFromUrl = urlParams.get('buchstabe') || urlParams.get('letter');
 	if (initialLetterFromUrl) {
 		currentLetter = initialLetterFromUrl.toUpperCase();
-		currentMode = 'letter';
 		const ssrDataEl = document.getElementById('ssr-initial-laws');
 		if (ssrDataEl && ssrDataEl.textContent) {
 			try {
@@ -1109,7 +1107,6 @@ const curatedLeitgesetze = [
 	}
 
 	function showView(view: 'overview' | 'letter' | 'search') {
-		currentMode = view;
 		if (loadingView) loadingView.hidden = true;
 
 		if (overviewView) overviewView.style.display = view === 'overview' ? '' : 'none';

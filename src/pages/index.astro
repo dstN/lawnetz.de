@@ -181,6 +181,9 @@ try {
 	const kbdHint = document.getElementById('search-kbd-hint') as HTMLElement | null;
 
 	if (form && input && dropdown) {
+		const searchForm = form;
+		const searchInput = input;
+		const searchDropdown = dropdown;
 		let selectedIndex = -1;
 		let currentItems: Array<{ url: string; title: string; subtitle?: string; badge?: string }> = [];
 
@@ -189,13 +192,13 @@ try {
 			selectedIndex = -1;
 
 			if (items.length === 0) {
-				dropdown.hidden = true;
-				dropdown.innerHTML = '';
+				searchDropdown.hidden = true;
+				searchDropdown.innerHTML = '';
 				return;
 			}
 
-			dropdown.hidden = false;
-			dropdown.innerHTML = items
+			searchDropdown.hidden = false;
+			searchDropdown.innerHTML = items
 				.map(
 					(item, idx) => `
           <a href="${item.url}" class="suggestion-item" role="option" data-index="${idx}">
@@ -211,7 +214,7 @@ try {
 		}
 
 		function updateSuggestions() {
-			const q = input.value.trim();
+			const q = searchInput.value.trim();
 
 			if (clearBtn) clearBtn.hidden = q.length === 0;
 			if (kbdHint) kbdHint.hidden = q.length > 0;
@@ -314,12 +317,12 @@ try {
 				selectedIndex = (selectedIndex - 1 + currentItems.length) % currentItems.length;
 				highlightItem();
 			} else if (e.key === 'Escape') {
-				dropdown.hidden = true;
+				searchDropdown.hidden = true;
 			}
 		});
 
 		function highlightItem() {
-			const elements = dropdown.querySelectorAll('.suggestion-item');
+			const elements = searchDropdown.querySelectorAll('.suggestion-item');
 			elements.forEach((el, i) => {
 				if (i === selectedIndex) {
 					el.classList.add('is-active');
@@ -332,8 +335,8 @@ try {
 		}
 
 		// Form submission handling (Enter or click Submit)
-		form.addEventListener('submit', (e) => {
-			const q = input.value.trim();
+		searchForm.addEventListener('submit', (e) => {
+			const q = searchInput.value.trim();
 			if (!q) {
 				e.preventDefault();
 				return;
@@ -367,21 +370,21 @@ try {
 
 		// Close dropdown on click outside
 		document.addEventListener('click', (e) => {
-			if (!form.contains(e.target as Node)) {
-				dropdown.hidden = true;
+			if (!searchForm.contains(e.target as Node)) {
+				searchDropdown.hidden = true;
 			}
 		});
 
 		// Press '/' key to focus search input anywhere on the page
 		window.addEventListener('keydown', (e) => {
-			if (e.key === '/' && document.activeElement !== input) {
+			if (e.key === '/' && document.activeElement !== searchInput) {
 				const target = e.target as HTMLElement | null;
 				if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
 					return;
 				}
 				e.preventDefault();
-				input.focus();
-				input.select();
+				searchInput.focus();
+				searchInput.select();
 			}
 		});
 	}

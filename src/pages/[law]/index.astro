@@ -157,7 +157,7 @@ const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
 		<!-- Full Outline & Norms -->
 		<div id="norm-list-container" class="law-outline">
 			{
-				law.items.map((item) => {
+				law.items.map((item: any) => {
 					if (item.type === 'structure') {
 						return (
 							<div class="structure-heading-item">

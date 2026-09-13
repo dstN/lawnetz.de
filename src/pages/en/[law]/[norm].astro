@@ -11,9 +11,7 @@
  */
 
 import BaseLayout from '@layouts/BaseLayout.astro';
-import FlagIcon from '@components/FlagIcon.astro';
 import { getLaw, getNorm, getAdjacentNorms } from '../../../db/index';
-import translationsData from '../../../data/translations.json';
 
 const { law: lawParam, norm: normParam } = Astro.params;
 
@@ -30,8 +28,7 @@ if (!norm || !law) {
 
 const { prev: prevNorm, next: nextNorm } = await getAdjacentNorms(law.slug, norm.orderIndex);
 
-const entry = (translationsData as any[]).find((t) => t.slug === lawParam);
-const germanSlug = entry ? entry.germanSlug : law.slug.replace(/^englisch_/, '');
+
 
 const pageTitle = `${norm.identifier} ${law.abbreviation}${norm.title ? ` | ${norm.title}` : ''} (English Translation) | LawNetz`;
 const paragraphsList: string[] = Array.isArray(norm.paragraphs) ? norm.paragraphs.map((p: any) => (typeof p === 'string' ? p : p.text)) : [];
@@ -60,7 +57,7 @@ const jsonLd = {
 ---
 
 <BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
-	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+	<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 	<article class="norm-container" data-pagefind-body>
 		<!-- Navigation -->
@@ -670,7 +667,7 @@ const jsonLd = {
 	}
 </style>
 
-<script define:vars={{
+<script is:inline define:vars={{
 	citationText: `${norm.identifier} ${law.abbreviation}`,
 	fullNormText,
 	prevUrl: prevNorm ? `/en/${law.slug}/${prevNorm.normSlug}` : null,

@@ -309,7 +309,7 @@ const curatedStatutes = [
 				</div>
 
 				{initialLetter && (
-					<script id="ssr-initial-laws" type="application/json" set:html={JSON.stringify(initialLaws)} />
+					<script is:inline id="ssr-initial-laws" type="application/json" set:html={JSON.stringify(initialLaws)} />
 				)}
 			</section>
 
@@ -1027,7 +1027,6 @@ const curatedStatutes = [
 	const letterView = document.getElementById('letter-view') as HTMLElement | null;
 	const searchView = document.getElementById('search-view') as HTMLElement | null;
 	const loadingView = document.getElementById('loading-view') as HTMLElement | null;
-	const loadingText = document.getElementById('loading-text') as HTMLParagraphElement | null;
 
 	const letterViewTitle = document.getElementById('letter-view-title') as HTMLHeadingElement | null;
 	const letterViewBadge = document.getElementById('letter-view-badge') as HTMLSpanElement | null;
@@ -1040,13 +1039,11 @@ const curatedStatutes = [
 	const letterLoadMoreText = document.getElementById('load-more-text') as HTMLSpanElement | null;
 	const letterLoadMoreCount = document.getElementById('load-more-count') as HTMLSpanElement | null;
 
-	const searchViewTitle = document.getElementById('search-view-title') as HTMLHeadingElement | null;
 	const searchLawList = document.getElementById('search-law-list') as HTMLUListElement | null;
 	const searchEmptyState = document.getElementById('search-empty-state') as HTMLDivElement | null;
 	const btnResetSearch = document.getElementById('btn-reset-search') as HTMLButtonElement | null;
 
 	const searchLoadMoreDiv = document.getElementById('search-load-more') as HTMLDivElement | null;
-	const btnLoadMoreSearch = document.getElementById('btn-load-more-search') as HTMLButtonElement | null;
 	const btnLoadAllSearch = document.getElementById('btn-load-all-search') as HTMLButtonElement | null;
 	const searchLoadMoreText = document.getElementById('load-more-search-text') as HTMLSpanElement | null;
 	const searchLoadMoreCount = document.getElementById('load-more-search-count') as HTMLSpanElement | null;
@@ -1054,7 +1051,6 @@ const curatedStatutes = [
 	// In-memory cache for letters
 	const cache = new Map<string, LawEntry[]>();
 	let currentLetter: string | null = null;
-	let currentMode: 'overview' | 'letter' | 'search' = 'overview';
 
 	let currentLetterLaws: LawEntry[] = [];
 	let currentLetterShown = 0;
@@ -1126,7 +1122,6 @@ const curatedStatutes = [
 	}
 
 	function showView(mode: 'overview' | 'letter' | 'search') {
-		currentMode = mode;
 		if (loadingView) loadingView.hidden = true;
 
 		if (overviewView) overviewView.style.display = mode === 'overview' ? 'block' : 'none';

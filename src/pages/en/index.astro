@@ -36,7 +36,7 @@ for (const t of translations) {
 }
 
 // Sort lists
-for (const [letter, list] of grouped.entries()) {
+for (const [, list] of grouped.entries()) {
 	list.sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
 }
 
@@ -120,9 +120,9 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 											</div>
 											<div class="law-meta-wrap">
 												<span class="badge-lang">English</span>
-												<a href={`/${law.germanSlug}/`} class="badge-de" title="Zur deutschen Originalfassung springen" onclick="event.stopPropagation();">
-													DE ↗
-												</a>
+												<span class="badge-de" title="Deutsche Originalfassung verfügbar">
+													DE
+												</span>
 											</div>
 										</a>
 									</li>

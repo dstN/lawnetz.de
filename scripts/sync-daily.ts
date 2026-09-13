@@ -15,9 +15,9 @@ import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fetchAndParseLaw } from './fetch-law';
-import { db, isDatabaseConfigured } from '../src/db/index';
+import { db } from '../src/db/index';
 import * as schema from '../src/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 async function main() {
   const startTime = Date.now();

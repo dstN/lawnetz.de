@@ -31,7 +31,7 @@ export const isDatabaseConfigured = (): boolean => {
 };
 
 let pool: mysql.Pool | null = null;
-let dbInstance: ReturnType<typeof drizzle<typeof schema>> | null = null;
+let dbInstance: any = null;
 
 if (isDatabaseConfigured()) {
   try {
