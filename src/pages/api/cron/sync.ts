@@ -87,9 +87,20 @@ export const ALL: APIRoute = async ({ request, url }) => {
 							lawSlug: law.slug,
 							normSlug: norm.slug,
 							identifier: norm.identifier,
-							title: norm.title,
-							paragraphs: norm.paragraphs.map((p) => ({ number: null, text: p })),
-							contentText: norm.paragraphs.join('\n'),
+							paragraphs: norm.paragraphs.map((p: any) => {
+								if (typeof p === 'string') {
+									const m = p.match(/^\s*\((\d+[a-z]?)\)/);
+									return { number: m ? m[1] : null, text: p, html: p };
+								}
+								return {
+									number: p.number ?? null,
+									text: p.text || '',
+									html: p.html || p.text || '',
+								};
+							}),
+							contentText: norm.paragraphs
+								.map((p: any) => (typeof p === 'string' ? p : p.text || ''))
+								.join('\n'),
 							orderIndex: norm.orderIndex,
 							language: 'de',
 							createdAt: new Date(),

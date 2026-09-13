@@ -46,7 +46,7 @@ export const TOP_LAWS = [
   'urhg',     // Urheberrechtsgesetz
   'arbzg',    // Arbeitszeitgesetz
   'burlg',    // Bundesurlaubsgesetz
-  'infsg',    // Infektionsschutzgesetz
+  'ifsg',     // Infektionsschutzgesetz
   'sgb_1',    // Sozialgesetzbuch I
   'stvo_2013' // Straßenverkehrs-Ordnung
 ];
@@ -60,13 +60,19 @@ export interface LawOutlineNode {
   title?: string;       // e.g. "Allgemeiner Teil"
 }
 
+export interface ParagraphData {
+  number?: string | null;
+  text: string;
+  html?: string;
+}
+
 export interface LawNorm {
   type: 'norm';
   doknr: string;
   slug: string;          // e.g. "__138" or "art_1"
   identifier: string;    // e.g. "§ 138" or "Art 1"
   title: string;         // e.g. "Sittenwidriges Rechtsgeschäft; Wucher"
-  paragraphs: string[];  // HTML or text paragraphs
+  paragraphs: Array<ParagraphData | string>;  // Structured or text paragraphs
   footnotes?: string;
   orderIndex: number;
 }
@@ -168,19 +174,71 @@ function cleanText(text: any): string {
 }
 
 /**
- * Extract paragraph list from XML textdaten
+ * Parse a raw <P>...</P> element from gii-norm XML into structured paragraph data.
+ * Preserves the exact document order of introductory text, lists (<DL>), and trailing text.
  */
-function extractParagraphs(textNode: any): string[] {
-  if (!textNode || !textNode.Content) return [];
-  const content = textNode.Content;
-  const pList = content.P;
-  if (!pList) {
-    const single = cleanText(content);
-    return single ? [single] : [];
+function parseRawP(rawPXml: string): ParagraphData {
+  const inner = rawPXml.replace(/^<P[^>]*>/i, '').replace(/<\/P>$/i, '').trim();
+
+  // Extract Absatz number if available, e.g. "(1)", "(2a)", etc.
+  const match = inner.match(/^\s*\((\d+[a-z]?)\)/);
+  const number = match ? match[1] : null;
+
+  const hasFormatting = /<DL|<TABLE|<BR|<I>|<B>|<U>|<SUB>|<SUP>|<SP|<NB/i.test(inner);
+  if (!hasFormatting) {
+    const text = cleanText(inner);
+    return { number, text, html: text };
   }
 
-  const list = Array.isArray(pList) ? pList : [pList];
-  return list.map(p => cleanText(p)).filter(p => p.length > 0);
+  // Convert XML list and layout tags to clean HTML
+  const html = inner
+    .replace(/<DL[^>]*>/gi, '<dl class="norm-dl">')
+    .replace(/<\/DL>/gi, '</dl>')
+    .replace(/<DT[^>]*>(.*?)<\/DT>/gi, '<dt class="norm-dt">$1</dt>')
+    .replace(/<DD[^>]*>/gi, '<dd class="norm-dd">')
+    .replace(/<\/DD>/gi, '</dd>')
+    .replace(/<LA[^>]*>/gi, '<div class="norm-la">')
+    .replace(/<\/LA>/gi, '</div>')
+    .replace(/<BR\s*\/?>/gi, '<br />')
+    .replace(/<SP[^>]*>(.*?)<\/SP>/gi, '<span class="norm-sp">$1</span>')
+    .replace(/<NB[^>]*>(.*?)<\/NB>/gi, '<span class="norm-nb">$1</span>');
+
+  // Convert to clean formatted plain text preserving exact sentence order
+  const text = inner
+    .replace(/<DT[^>]*>\s*(.*?)\s*<\/DT>/gi, '\n  $1 ')
+    .replace(/<LA[^>]*>/gi, '')
+    .replace(/<\/LA>/gi, '')
+    .replace(/<DD[^>]*>/gi, '')
+    .replace(/<\/DD>/gi, '')
+    .replace(/<DL[^>]*>/gi, '')
+    .replace(/<\/DL>/gi, '\n')
+    .replace(/<BR\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n/g, '\n')
+    .trim();
+
+  return { number, text, html };
+}
+
+/**
+ * Extract paragraph list from XML textdaten preserving document order
+ */
+function extractParagraphs(contentNode: any): ParagraphData[] {
+  if (!contentNode) return [];
+  const rawStr = typeof contentNode === 'string'
+    ? contentNode
+    : (typeof contentNode === 'object' ? contentNode['#text'] || contentNode.Content || '' : String(contentNode));
+  if (!rawStr) return [];
+
+  const pRegex = /<P[\s\S]*?<\/P>/gi;
+  const matches = rawStr.match(pRegex);
+  if (!matches || matches.length === 0) {
+    const single = parseRawP(rawStr);
+    return single.text ? [single] : [];
+  }
+
+  return matches.map(parseRawP);
 }
 
 // ── Main Downloader & Parser ────────────────────────────────────────────────
@@ -214,12 +272,13 @@ export async function fetchAndParseLaw(slug: string): Promise<LawData> {
   const xmlBytes = unzipped[xmlFilename];
   const xmlString = new TextDecoder('utf-8').decode(xmlBytes);
 
-  // Parse XML
+  // Parse XML with raw Content node preservation
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
     textNodeName: '#text',
     trimValues: true,
+    stopNodes: ['*.Content', 'Content', '*.textdaten.text.Content'],
   });
 
   const parsed = parser.parse(xmlString);
@@ -286,12 +345,13 @@ export async function fetchAndParseLaw(slug: string): Promise<LawData> {
       const title = cleanText(meta.titel);
       const normSlug = normIdentifierToSlug(identifier);
 
-      let paragraphs: string[] = [];
+      let paragraphs: ParagraphData[] = [];
       let footnotes: string | undefined;
 
       if (norm.textdaten) {
         if (norm.textdaten.text) {
-          paragraphs = extractParagraphs(norm.textdaten.text);
+          const content = norm.textdaten.text.Content || norm.textdaten.text;
+          paragraphs = extractParagraphs(content);
         }
         if (norm.textdaten.fussnoten) {
           const fn = cleanText(norm.textdaten.fussnoten);

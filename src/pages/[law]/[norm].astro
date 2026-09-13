@@ -138,6 +138,7 @@ const jsonLd = {
 						norm.paragraphs.length > 0 ? (
 							norm.paragraphs.map((p: any, idx: number) => {
 								const text = typeof p === 'string' ? p : (p as any)?.text || '';
+								const html = typeof p === 'object' && p?.html ? p.html : text;
 								const match = text.match(/^\s*\((\d+[a-z]?)\)/);
 								const absNum = match ? match[1] : (norm.paragraphs.length > 1 ? `${idx + 1}` : '');
 								const paraCitation = absNum ? `${norm.identifier} Abs. ${absNum} ${law.abbreviation}` : `${norm.identifier} ${law.abbreviation}`;
@@ -149,9 +150,7 @@ const jsonLd = {
 										data-citation={paraCitation}
 										data-copy-text={fullParaText}
 									>
-										<p class="norm-paragraph" id={`absatz-${idx + 1}`}>
-											{text}
-										</p>
+										<div class="norm-paragraph" id={`absatz-${idx + 1}`} set:html={html} />
 										<button
 											type="button"
 											class="para-copy-btn"

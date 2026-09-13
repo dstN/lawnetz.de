@@ -174,7 +174,7 @@ export async function getNorm(lawSlug: string, normSlug: string): Promise<(schem
         title: found.title,
         paragraphs: found.paragraphs,
         contentHtml: null,
-        contentText: found.paragraphs ? found.paragraphs.map((p: any) => p.text).join('\n') : '',
+        contentText: found.paragraphs ? found.paragraphs.map((p: any) => (typeof p === 'string' ? p : p.text || '')).join('\n') : '',
         orderIndex: found.orderIndex ?? foundIndex,
         language: 'de',
         createdAt: new Date(),

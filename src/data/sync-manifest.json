@@ -37,5 +37,40 @@
   },
   "betrvg": {
     "lastUpdated": "2026-09-12T15:00:35.271Z"
+  },
+  "dba_taipeh": {
+    "etag": "\"401-4d099c82feb80\"",
+    "lastModified": "Tue, 11 Dec 2012 20:46:54 GMT",
+    "lastSynced": "2026-09-13T22:38:35.324Z",
+    "status": "ok",
+    "normsCount": 0
+  },
+  "bimschv_32": {
+    "etag": "\"2381-652fa38edc163\"",
+    "lastModified": "Fri, 29 May 2026 19:55:10 GMT",
+    "lastSynced": "2026-09-13T22:38:35.823Z",
+    "status": "ok",
+    "normsCount": 16
+  },
+  "offshstabk": {
+    "etag": "\"1789-651283728e9a4\"",
+    "lastModified": "Wed, 06 May 2026 15:57:06 GMT",
+    "lastSynced": "2026-09-13T22:38:35.996Z",
+    "status": "ok",
+    "normsCount": 17
+  },
+  "bimschv_31_2024": {
+    "etag": "\"b486-651281859456b\"",
+    "lastModified": "Wed, 06 May 2026 15:48:29 GMT",
+    "lastSynced": "2026-09-13T22:38:36.255Z",
+    "status": "ok",
+    "normsCount": 23
+  },
+  "ao_1977": {
+    "etag": "\"3329a-65a5d2de457af\"",
+    "lastModified": "Mon, 31 Aug 2026 19:55:08 GMT",
+    "lastSynced": "2026-09-13T22:38:51.137Z",
+    "status": "ok",
+    "normsCount": 504
   }
 }
