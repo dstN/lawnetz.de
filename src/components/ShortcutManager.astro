@@ -1,0 +1,352 @@
+---
+/**
+ * ShortcutManager.astro
+ * Layer 3 of the accessible navigation system.
+ *
+ * Sequential keyboard shortcuts (GitHub/Gmail-style):
+ * - 'g' followed by a letter navigates to a page
+ * - '?' opens the shortcut help dialog
+ * - Shortcuts are DISABLED when any input/textarea/select is focused
+ * - Shortcuts are DISABLED when a dialog/modal is open
+ * - Shortcuts are announced to screen readers via aria-live region
+ *
+ * This replaces legacy HTML accesskey attributes which conflict
+ * with screen reader commands and are not WCAG 2.2 AAA compliant.
+ */
+---
+
+<!-- Screen reader announcement region -->
+<div id="shortcut-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true" role="status"></div>
+
+<!-- Visual status indicator for pending shortcuts -->
+<div class="shortcut-status" id="shortcut-status" aria-hidden="true">
+	<span id="shortcut-status-text"></span>
+</div>
+
+<!-- Shortcut help dialog -->
+<dialog class="shortcut-dialog" id="shortcut-dialog" aria-labelledby="shortcut-dialog-title">
+	<div class="shortcut-dialog__header">
+		<h2 class="shortcut-dialog__title" id="shortcut-dialog-title">Tastenkombinationen</h2>
+		<button class="shortcut-dialog__close" aria-label="Dialog schließen" type="button" data-close-dialog>
+			<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+				<path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+			</svg>
+		</button>
+	</div>
+
+	<div class="shortcut-dialog__body">
+		<div class="shortcut-dialog__group">
+			<h3 class="shortcut-dialog__group-title">Navigation</h3>
+			<ul class="shortcut-dialog__list" role="list">
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Startseite</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">H</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Seitenanfang</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">T</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Gesetze &amp; Verordnungen</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">G</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Aktualitätendienst</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">A</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Volltextsuche</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">S</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Hinweise</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">I</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Impressum</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">M</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Datenschutz</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">D</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Titel-Suche</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">G</kbd>
+						<span class="shortcut-dialog__separator" aria-hidden="true">→</span>
+						<kbd class="shortcut-dialog__key">N</kbd>
+					</span>
+				</li>
+			</ul>
+		</div>
+
+		<div class="shortcut-dialog__group">
+			<h3 class="shortcut-dialog__group-title">Allgemein</h3>
+			<ul class="shortcut-dialog__list" role="list">
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Tastenkombinationen anzeigen</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">?</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Suche fokussieren</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">/</kbd>
+					</span>
+				</li>
+				<li class="shortcut-dialog__item">
+					<span class="shortcut-dialog__label">Dialog schließen</span>
+					<span class="shortcut-dialog__keys">
+						<kbd class="shortcut-dialog__key">Esc</kbd>
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</dialog>
+
+<script>
+	/**
+	 * ShortcutManager | WCAG 2.2 AAA keyboard navigation
+	 *
+	 * Uses sequential two-key shortcuts (like GitHub/Gmail) instead of
+	 * modifier-based accesskeys that conflict with assistive technology.
+	 */
+
+	const SHORTCUT_TIMEOUT_MS = 800;
+
+	const NAV_SHORTCUTS: Record<string, { url: string; label: string }> = {
+		h: { url: '/', label: 'Startseite' },
+		t: { url: '#top', label: 'Seitenanfang' },
+		g: { url: '/gesetze', label: 'Gesetze & Verordnungen' },
+		a: { url: '/aktualitaeten', label: 'Aktualitätendienst' },
+		s: { url: '/suche', label: 'Volltextsuche' },
+		i: { url: '/hinweise', label: 'Hinweise' },
+		m: { url: '/impressum', label: 'Impressum' },
+		d: { url: '/datenschutz', label: 'Datenschutz' },
+		n: { url: '/suche?modus=titel', label: 'Titel-Suche' },
+	};
+
+	class ShortcutManager {
+		private pending: string | null = null;
+		private timeoutId: ReturnType<typeof setTimeout> | null = null;
+		private announcer: HTMLElement | null;
+		private statusEl: HTMLElement | null;
+		private statusText: HTMLElement | null;
+		private dialog: HTMLDialogElement | null = null;
+		private previouslyFocused: HTMLElement | null = null;
+
+		constructor() {
+			this.announcer = document.getElementById('shortcut-announcer');
+			this.statusEl = document.getElementById('shortcut-status');
+			this.statusText = document.getElementById('shortcut-status-text');
+			this.dialog = document.getElementById('shortcut-dialog') as HTMLDialogElement | null;
+
+			this.handleKeydown = this.handleKeydown.bind(this);
+			document.addEventListener('keydown', this.handleKeydown);
+
+			// Close dialog button
+			this.dialog?.querySelector('[data-close-dialog]')?.addEventListener('click', () => {
+				this.dialog?.close();
+			});
+
+			// Backdrop click closes native dialog
+			this.dialog?.addEventListener('click', (event) => {
+				if (!this.dialog) return;
+				const rect = this.dialog.getBoundingClientRect();
+				const isInDialog =
+					rect.top <= event.clientY &&
+					event.clientY <= rect.top + rect.height &&
+					rect.left <= event.clientX &&
+					event.clientX <= rect.left + rect.width;
+				if (!isInDialog) {
+					this.dialog.close();
+				}
+			});
+
+			// Restore focus upon closing dialog
+			this.dialog?.addEventListener('close', () => {
+				if (this.previouslyFocused && typeof this.previouslyFocused.focus === 'function') {
+					this.previouslyFocused.focus();
+				}
+				this.previouslyFocused = null;
+			});
+		}
+
+		/**
+		 * Check if shortcuts should be active.
+		 * Disabled when:
+		 * - An input, textarea, select, or contenteditable is focused
+		 * - A dialog or modal is open
+		 * - An element with aria-busy="true" is present
+		 */
+		private isActive(): boolean {
+			const active = document.activeElement;
+			if (!active) return true;
+
+			const tagName = active.tagName.toLowerCase();
+			if (['input', 'textarea', 'select'].includes(tagName)) return false;
+			if (active.getAttribute('contenteditable') === 'true') return false;
+			if (active.getAttribute('role') === 'textbox') return false;
+
+			// Check if any dialog is open
+			const openDialogs = document.querySelectorAll('dialog[open]');
+			if (openDialogs.length > 0) return false;
+
+			return true;
+		}
+
+		private handleKeydown(event: KeyboardEvent): void {
+			// Always allow Escape to close dialog
+			if (event.key === 'Escape' && this.pending) {
+				this.reset();
+				return;
+			}
+
+			if (!this.isActive()) return;
+
+			// Don't interfere with modifier key combinations
+			if (event.ctrlKey || event.altKey || event.metaKey) return;
+
+			const key = event.key.toLowerCase();
+
+			// '?' opens shortcut help dialog
+			if (event.key === '?' || (event.shiftKey && key === 'ß')) {
+				event.preventDefault();
+				this.showDialog();
+				return;
+			}
+
+			// '/' focuses search
+			if (key === '/' && !event.shiftKey) {
+				const searchInput = document.querySelector<HTMLInputElement>('#search-input, [role="searchbox"]');
+				if (searchInput) {
+					event.preventDefault();
+					searchInput.focus();
+					this.announce('Suche fokussiert');
+				}
+				return;
+			}
+
+			// Handle sequential shortcut: pending 'g' + second key
+			if (this.pending === 'g') {
+				event.preventDefault();
+				const target = NAV_SHORTCUTS[key];
+				if (target) {
+					this.navigate(target.url, target.label);
+				} else {
+					this.announce(`Unbekannte Tastenkombination: G → ${key.toUpperCase()}`);
+				}
+				this.reset();
+				return;
+			}
+
+			// Start a new sequence with 'g'
+			if (key === 'g' && !event.shiftKey) {
+				event.preventDefault();
+				this.pending = 'g';
+				this.showStatus('G → …');
+				this.announce('Navigations-Shortcut aktiv. Drücke eine zweite Taste.');
+
+				this.timeoutId = setTimeout(() => {
+					this.reset();
+				}, SHORTCUT_TIMEOUT_MS);
+				return;
+			}
+		}
+
+		private navigate(url: string, label: string): void {
+			if (url === '#top') {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+				// Focus the first focusable element or the body
+				const firstHeading = document.querySelector<HTMLElement>('h1, [role="banner"]');
+				firstHeading?.focus();
+				this.announce(`Navigiert zu: ${label}`);
+			} else {
+				this.announce(`Navigiere zu: ${label}`);
+				window.location.href = url;
+			}
+		}
+
+		private showDialog(): void {
+			if (this.dialog) {
+				this.previouslyFocused = document.activeElement as HTMLElement | null;
+				this.dialog.showModal();
+				// Focus the close button for keyboard users
+				const closeBtn = this.dialog.querySelector<HTMLButtonElement>('[data-close-dialog]');
+				closeBtn?.focus();
+			}
+		}
+
+		private announce(message: string): void {
+			if (this.announcer) {
+				// Clear and re-set to ensure screen readers announce the change
+				this.announcer.textContent = '';
+				requestAnimationFrame(() => {
+					if (this.announcer) {
+						this.announcer.textContent = message;
+					}
+				});
+			}
+		}
+
+		private showStatus(text: string): void {
+			if (this.statusEl && this.statusText) {
+				this.statusText.textContent = text;
+				this.statusEl.setAttribute('data-visible', '');
+			}
+		}
+
+		private hideStatus(): void {
+			if (this.statusEl) {
+				this.statusEl.removeAttribute('data-visible');
+			}
+		}
+
+		private reset(): void {
+			this.pending = null;
+			if (this.timeoutId) {
+				clearTimeout(this.timeoutId);
+				this.timeoutId = null;
+			}
+			this.hideStatus();
+		}
+	}
+
+	// Initialize when DOM is ready
+	new ShortcutManager();
+</script>

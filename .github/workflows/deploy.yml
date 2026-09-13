@@ -1,0 +1,64 @@
+name: Deploy to Netcup
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy to Netcup
+    runs-on: ubuntu-latest
+    # Only run deploy if the SSH secrets are configured in the GitHub repository
+    if: github.repository_owner == 'dstN'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 26
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Application
+        run: npm run build
+
+      - name: Run A11y & Smoke Tests
+        run: npm test
+
+      - name: Deploy to Netcup Server via SSH / Rsync
+        if: env.NETCUP_SSH_HOST != ''
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_KEY }}
+          ARGS: "-rlgoDzvc -i --delete --exclude='.env' --exclude='node_modules'"
+          SOURCE: "dist/ app.js package.json package-lock.json scripts/ src/data/"
+          REMOTE_HOST: ${{ secrets.NETCUP_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.NETCUP_SSH_USER }}
+          TARGET: ${{ secrets.NETCUP_SSH_TARGET || '/var/www/vhosts/lawnetz.de/httpdocs' }}
+          SCRIPT_AFTER: |
+            cd ${{ secrets.NETCUP_SSH_TARGET || '/var/www/vhosts/lawnetz.de/httpdocs' }}
+            npm install --omit=dev
+            mkdir -p tmp
+            touch tmp/restart.txt
+        with:
+          NETCUP_SSH_HOST: ${{ secrets.NETCUP_SSH_HOST }}
+
+      - name: Deployment Notice (if secrets not yet set)
+        if: env.NETCUP_SSH_HOST == ''
+        run: |
+          echo "Deployment skipped: NETCUP_SSH_HOST secret is not configured yet."
+          echo "Refer to NETCUP_DEPLOYMENT.md for setup instructions."
+        env:
+          NETCUP_SSH_HOST: ${{ secrets.NETCUP_SSH_HOST }}

@@ -1,0 +1,95 @@
+---
+/**
+ * BaseLayout.astro
+ * Main layout wrapper for all pages.
+ *
+ * Provides:
+ * - HTML document structure with proper lang attribute
+ * - SEO meta tags
+ * - Skip links (Layer 1)
+ * - ARIA landmarks (Layer 2)
+ * - Shortcut manager (Layer 3)
+ * - Header & Footer
+ * - Font loading via @dstn/fli (self-hosted, GDPR-safe)
+ */
+
+interface Props {
+	title: string;
+	description?: string;
+	canonical?: string;
+}
+
+const { title, description = 'LawNetz | Deutsche Bundesgesetze und Rechtsverordnungen im Volltext.', canonical } = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname;
+const isEnglish = currentPath.startsWith('/en');
+const fullTitle = title === 'Startseite' || title === 'Home' ? (isEnglish ? 'LawNetz | German Federal Law in English' : 'LawNetz | Bundesgesetze und Rechtsverordnungen') : `${title} | LawNetz`;
+const canonicalURL = canonical || new URL(currentPath, Astro.site).toString();
+
+import SkipLinks from '@components/SkipLinks.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import ShortcutManager from '@components/ShortcutManager.astro';
+
+import '@styles/global.css';
+---
+
+<!doctype html>
+<html lang={isEnglish ? 'en' : 'de'} id="top">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+
+		<!-- Theme Initialization (zero FOUC) -->
+		<script is:inline>
+			(function () {
+				try {
+					var stored = localStorage.getItem('lawnetz-theme');
+					if (stored === 'dark' || stored === 'light') {
+						document.documentElement.setAttribute('data-theme', stored);
+					}
+				} catch (e) {}
+			})();
+		</script>
+
+		<!-- SEO -->
+		<title>{fullTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph -->
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content={isEnglish ? 'en_US' : 'de_DE'} />
+		<meta property="og:site_name" content="LawNetz" />
+		<meta property="og:url" content={canonicalURL} />
+
+		<!-- Favicon -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<!-- Fonts | self-hosted via @dstn/fli (GDPR-safe, no external requests) -->
+		<link rel="preload" href="/fonts/atkinson-hyperlegible-regular.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/lexend-regular.woff2" as="font" type="font/woff2" crossorigin />
+
+		<!-- Generator -->
+		<meta name="generator" content={Astro.generator} />
+	</head>
+
+	<body>
+		<SkipLinks />
+
+		<div class="page-wrapper">
+			<Header currentPath={currentPath} />
+
+			<main id="main-content" class="page-content" role="main" tabindex="-1">
+				<slot />
+			</main>
+
+			<Footer />
+		</div>
+
+		<ShortcutManager />
+	</body>
+</html>

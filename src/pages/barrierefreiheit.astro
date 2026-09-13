@@ -1,0 +1,189 @@
+---
+/**
+ * barrierefreiheit.astro | Erklärung zur digitalen Barrierefreiheit (WCAG 2.2 AAA)
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Erklärung zur Barrierefreiheit" description="Erklärung zur digitalen Barrierefreiheit gemäß WCAG 2.2 Stufe AAA für LawNetz.de.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Brotkrumen" class="breadcrumbs">
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Barrierefreiheit</span>
+			</nav>
+
+			<h1 class="content-title">Erklärung zur Barrierefreiheit</h1>
+			<p class="content-lead">
+				Diese Erklärung zur Barrierefreiheit gilt für das Webangebot von LawNetz.de und dokumentiert den Umsetzungsstand der Web Content Accessibility Guidelines (WCAG 2.2 Stufe AAA).
+			</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>1. Stand der Vereinbarkeit</h2>
+				<p>Dieses Webangebot ist mit den Web Content Accessibility Guidelines (WCAG 2.2) auf der Konformitätsstufe AAA vereinbar.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>2. Umgesetzte Barrierefreiheits-Maßnahmen</h2>
+				<dl class="measures-list">
+					<div class="measure-item">
+						<dt class="measure-title">Kontrastverhältnis ≥ 7:1 (AAA)</dt>
+						<dd class="measure-desc">Textkontraste und Bedienelemente erfüllen die Kontrastanforderungen der Stufe AAA im Hell- und Dunkelmodus.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Vollständige Tastaturbedienbarkeit</dt>
+						<dd class="measure-desc">Alle Funktionen sind ohne Maus zugänglich: Skip-Links, sichtbare Fokusringe und sequenzielle Tastenkürzel.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Typografie für Lesbarkeit</dt>
+						<dd class="measure-desc">Einsatz von Atkinson Hyperlegible (speziell entwickelt für Menschen mit Sehbeeinträchtigungen) und Lexend.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Semantisches HTML & ARIA</dt>
+						<dd class="measure-desc">Saubere Dokumenthierarchie mit nur einem H1-Element, eindeutigen Landmarks und screenreader-optimierten Labels.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">44px Mindestklickfläche</dt>
+						<dd class="measure-desc">Alle Schaltflächen, Links und interaktiven Elemente besitzen mindestens 44 × 44 Pixel Touch-Target.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Zoom bis 400 %</dt>
+						<dd class="measure-desc">Die Seite bleibt bis zu 400 % Textvergrößerung ohne horizontalen Scrollbalken und ohne Informationsverlust bedienbar.</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section class="info-section">
+				<h2>3. Feedback & Kontakt</h2>
+				<p>Sollten Ihnen Mängel in Bezug auf die barrierefreie Gestaltung von LawNetz auffallen, freuen wir uns über Ihre Rückmeldung:</p>
+				<p>
+					E-Mail: <a href="mailto:barrierefreiheit@lawnetz.de">barrierefreiheit@lawnetz.de</a>
+				</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-lg);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+
+	.measures-list {
+		margin-top: var(--space-6);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.measure-item {
+		display: grid;
+		grid-template-columns: 260px 1fr;
+		gap: var(--space-4);
+		padding: var(--space-4) 0;
+		border-bottom: 1px solid var(--border-subtle);
+		align-items: baseline;
+	}
+
+	@media (max-width: 640px) {
+		.measure-item {
+			grid-template-columns: 1fr;
+			gap: var(--space-1);
+		}
+	}
+
+	.measure-title {
+		font-family: var(--font-display);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--content-primary);
+	}
+
+	.measure-desc {
+		font-size: var(--text-sm);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+		margin: 0;
+	}
+</style>

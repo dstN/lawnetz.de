@@ -1,0 +1,47 @@
+---
+/**
+ * Footer.astro
+ * Site footer with legal links and accessibility info.
+ */
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer" role="contentinfo">
+	<div class="site-footer__inner">
+		<div class="site-footer__info">
+			<p class="site-footer__copyright">
+				© {currentYear} LawNetz | Ein freies <a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer">Open-Source-Projekt auf GitHub</a>.
+			</p>
+			<p class="site-footer__source">
+				Datenquelle: <a href="https://www.gesetze-im-internet.de" target="_blank" rel="noopener noreferrer">gesetze-im-internet.de</a> (Bundesministerium der Justiz).
+			</p>
+		</div>
+
+		<nav class="site-footer__nav" aria-label="Rechtliche Hinweise und Hilfe">
+			<ul class="site-footer__links" role="list">
+				<li>
+					<a href="/impressum" class="site-footer__link">Impressum</a>
+				</li>
+				<li>
+					<a href="/datenschutz" class="site-footer__link">Datenschutz</a>
+				</li>
+				<li>
+					<a href="/aktualitaeten" class="site-footer__link">Aktualitätendienst</a>
+				</li>
+				<li>
+					<a href="/hinweise" class="site-footer__link">Hinweise</a>
+				</li>
+				<li>
+					<a href="/barrierefreiheit" class="site-footer__link">Barrierefreiheit</a>
+				</li>
+				<li>
+					<a href="/tastenkombinationen" class="site-footer__link">Tastenkombinationen</a>
+				</li>
+				<li>
+					<a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer" class="site-footer__link">GitHub ↗</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</footer>

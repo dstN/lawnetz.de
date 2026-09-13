@@ -1,0 +1,530 @@
+---
+/**
+ * [law]/index.astro | Inhaltsverzeichnis eines Gesetzes
+ *
+ * z.B. /bgb/ oder /gg/
+ *
+ * Zeigt:
+ * - Amtliche Titel, Abkürzung, Ausfertigungsdatum, Stand
+ * - Vollständige Gliederung (Bücher, Abschnitte, Titel)
+ * - Durchsuchbare Liste aller Paragraphen / Artikel
+ * - Barrierefreie Tastaturnavigation
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FlagIcon from '@components/FlagIcon.astro';
+import { getLaw, getLawNorms, hasTranslation } from '../../db/index';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const { law: lawParam } = Astro.params;
+
+let law = Astro.props.law;
+
+if (!law && lawParam) {
+	const localFile = resolve(process.cwd(), `src/data/laws/${lawParam}.json`);
+	if (existsSync(localFile)) {
+		try {
+			law = JSON.parse(readFileSync(localFile, 'utf-8'));
+		} catch {}
+	}
+	if (!law) {
+		const dbLaw = await getLaw(lawParam);
+		if (dbLaw) {
+			if (dbLaw.slug !== lawParam) {
+				return Astro.redirect(`/${dbLaw.slug}/`);
+			}
+			const dbNorms = await getLawNorms(dbLaw.slug);
+			law = {
+				...dbLaw,
+				norms: dbNorms,
+				items: dbNorms.map((n) => ({
+					type: 'norm',
+					slug: n.normSlug,
+					identifier: n.identifier,
+					title: n.title,
+				})),
+			};
+		}
+	}
+}
+
+if (!law) {
+	return Astro.redirect('/404');
+}
+
+const englishTranslationSlug = await hasTranslation(law.slug);
+const pageTitle = `${law.abbreviation} | ${law.title} (Nichtamtliches Inhaltsverzeichnis)`;
+const normCount = law.norms ? law.norms.length : law.items ? law.items.filter((i: any) => i.type === 'norm').length : 0;
+const description = `${law.title} (${law.abbreviation}) im Volltext lesen. ${normCount} Paragrafen/Artikel, nichtamtliche Textfassung.`;
+const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
+---
+
+<BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
+	<article class="law-container">
+		<!-- Navigation -->
+		<nav aria-label="Brotkrumen" class="breadcrumbs">
+			<a href="/gesetze/" class="back-link" title="Zurück zur Gesetzesübersicht">
+				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+				<span>Gesetze</span>
+			</a>
+			<span class="bc-sep" aria-hidden="true">/</span>
+			<span class="bc-current" aria-current="page">{law.abbreviation}</span>
+		</nav>
+
+		<!-- Law Header -->
+		<header class="law-header">
+			<div class="law-header-eyebrow">
+				<span class="law-abbr-pill">{law.abbreviation}</span>
+				<span class="law-jurisdiction">Bundesrecht</span>
+				<span class="eyebrow-dot" aria-hidden="true">·</span>
+				<span class="law-meta-disclaimer">Nichtamtliches Verzeichnis</span>
+			</div>
+
+			<h1 class="law-main-title">{law.title}</h1>
+
+			<div class="law-metadata-row">
+				{
+					law.latestChange && (
+						<span class="meta-item">
+							<span class="meta-label">Stand:</span> {law.latestChange}
+						</span>
+					)
+				}
+				{
+					law.enactmentDate && (
+						<span class="meta-item">
+							<span class="meta-sep" aria-hidden="true">·</span>
+							<span class="meta-label">Ausfertigung:</span> {law.enactmentDate}
+						</span>
+					)
+				}
+				{
+					law.citation && (
+						<span class="meta-item">
+							<span class="meta-sep" aria-hidden="true">·</span>
+							<span class="meta-label">Fundort:</span> <code>{law.citation}</code>
+						</span>
+					)
+				}
+				<span class="meta-item">
+					<span class="meta-sep" aria-hidden="true">·</span>
+					<a href={law.sourceUrl} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Originalseite auf gesetze-im-internet.de öffnen">
+						gesetze-im-internet.de ↗
+					</a>
+				</span>
+				<span class="meta-item">
+					<span class="meta-sep" aria-hidden="true">·</span>
+					<a href={`https://www.gesetze-im-internet.de/${law.slug}/${law.slug}.pdf`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche PDF-Fassung herunterladen">
+						PDF ↗
+					</a>
+				</span>
+				<span class="meta-item">
+					<span class="meta-sep" aria-hidden="true">·</span>
+					<a href={`https://www.gesetze-im-internet.de/${law.slug}/xml.zip`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche Maschinendaten (XML ZIP) herunterladen">
+						XML ↗
+					</a>
+				</span>
+				{
+					englishTranslationSlug && (
+						<span class="meta-item">
+							<span class="meta-sep" aria-hidden="true">·</span>
+							<a href={`/en/${englishTranslationSlug}/`} class="meta-trans-link" title="Official English translation of this statute">
+								<FlagIcon country="GB" size={12} />
+								<span>English Translation</span>
+							</a>
+						</span>
+					)
+				}
+			</div>
+		</header>
+
+		<!-- Section Search / Quick Filter -->
+		<section class="law-search-box" aria-label="Paragraphen durchsuchen">
+			<div class="search-input-wrapper">
+				<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="m21 21-4.3-4.3"></path>
+				</svg>
+				<label for="norm-search" class="visually-hidden">Paragraph oder Stichwort suchen</label>
+				<input id="norm-search" type="search" placeholder={`In ${law.abbreviation} suchen…`} autocomplete="off" spellcheck="false" />
+				<span id="norm-count" class="norm-count-badge" aria-live="polite">
+					{law.norms.length} Normen
+				</span>
+			</div>
+		</section>
+
+		<!-- Full Outline & Norms -->
+		<div id="norm-list-container" class="law-outline">
+			{
+				law.items.map((item) => {
+					if (item.type === 'structure') {
+						return (
+							<div class="structure-heading-item">
+								<h2 class="structure-title">
+									{item.designation && <span class="structure-desig">{item.designation}: </span>}
+									{item.title}
+								</h2>
+							</div>
+						);
+					}
+
+					const isSpecial = /inhaltsübersicht|eingangsformel|schlussformel|anhang/i.test(item.identifier);
+					const displayTitle = item.title || (isSpecial ? '' : '(Ohne amtliche Überschrift)');
+
+					return (
+						<div class="norm-row-item" data-identifier={item.identifier.toLowerCase()} data-title={item.title.toLowerCase()}>
+							<a href={`/${law.slug}/${item.slug}`} class="norm-row-link">
+								<span class="norm-id">{item.identifier}</span>
+								{displayTitle && <span class="norm-title">{displayTitle}</span>}
+							</a>
+						</div>
+					);
+				})
+			}
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.law-container {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		gap: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		margin-bottom: var(--space-4);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		color: var(--content-secondary);
+		text-decoration: none;
+		font-weight: 500;
+		padding: 2px 4px;
+		margin-left: -4px;
+		border-radius: var(--radius-sm);
+		transition: color var(--duration-fast);
+	}
+
+	.back-link:hover {
+		color: var(--accent-default);
+	}
+
+	.bc-sep {
+		color: var(--border-strong);
+	}
+
+	.bc-current {
+		color: var(--content-tertiary);
+	}
+
+	.law-header {
+		border-bottom: 1px solid var(--border-subtle);
+		padding-bottom: var(--space-5);
+		margin-bottom: var(--space-5);
+	}
+
+	.law-header-eyebrow {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+	}
+
+	.law-abbr-pill {
+		display: inline-block;
+		padding: 2px 7px;
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 11px;
+		border-radius: var(--radius-sm);
+		letter-spacing: 0.05em;
+	}
+
+	.law-jurisdiction {
+		font-weight: 500;
+		color: var(--content-secondary);
+	}
+
+	.eyebrow-dot {
+		color: var(--border-strong);
+	}
+
+	.law-meta-disclaimer {
+		color: var(--content-tertiary);
+	}
+
+	.law-main-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.law-main-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.law-metadata-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 6px var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.meta-item {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 4px;
+	}
+
+	.meta-label {
+		color: var(--content-tertiary);
+		font-weight: 500;
+	}
+
+	.meta-sep {
+		color: var(--border-strong);
+		margin-right: 2px;
+	}
+
+	.law-metadata-row code {
+		font-family: var(--font-mono);
+		background: var(--surface-sunken);
+		padding: 1px 5px;
+		border-radius: var(--radius-sm);
+		font-size: 11px;
+	}
+
+	.meta-source-link {
+		color: var(--content-secondary);
+		text-decoration: none;
+		border-bottom: 1px dotted var(--border-strong);
+		transition: color var(--duration-fast), border-color var(--duration-fast);
+	}
+
+	.meta-source-link:hover {
+		color: var(--accent-default);
+		border-bottom-color: var(--accent-default);
+	}
+
+	.meta-trans-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		color: var(--accent-default);
+		font-weight: 600;
+		text-decoration: none;
+		padding: 1px 6px;
+		background: var(--accent-subtle);
+		border-radius: var(--radius-sm);
+		transition: background-color var(--duration-fast);
+	}
+
+	.meta-trans-link:hover {
+		background: color-mix(in srgb, var(--accent-subtle) 80%, var(--accent-default));
+		text-decoration: underline;
+	}
+
+	/* Search */
+	.law-search-box {
+		margin-bottom: var(--space-5);
+	}
+
+	.search-input-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 100%;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 14px;
+		color: var(--content-tertiary);
+		pointer-events: none;
+	}
+
+	#norm-search {
+		width: 100%;
+		height: 44px;
+		padding: 0 100px 0 38px;
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-full);
+		outline: none;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	#norm-search:focus-visible {
+		background: var(--surface-raised);
+		border-color: var(--accent-default);
+		box-shadow: 0 0 0 3px var(--accent-focus);
+	}
+
+	.norm-count-badge {
+		position: absolute;
+		right: 14px;
+		font-size: var(--text-xs);
+		font-weight: 500;
+		color: var(--content-tertiary);
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	/* Outline list */
+	.law-outline {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.structure-heading-item {
+		margin-top: var(--space-5);
+		margin-bottom: var(--space-2);
+		padding-top: var(--space-2);
+	}
+
+	.structure-title {
+		font-family: var(--font-display);
+		font-size: var(--text-base);
+		font-weight: 700;
+		color: var(--content-primary);
+		letter-spacing: -0.01em;
+	}
+
+	.structure-desig {
+		color: var(--content-secondary);
+		font-weight: 600;
+	}
+
+	.norm-row-item {
+		border-radius: var(--radius-sm);
+		transition: background-color var(--duration-fast);
+	}
+
+	.norm-row-item:hover,
+	.norm-row-item:focus-within {
+		background: var(--surface-raised);
+	}
+
+	.norm-row-link {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-3);
+		padding: var(--space-2) var(--space-3);
+		min-height: 40px;
+		text-decoration: none;
+		color: var(--content-primary);
+		width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	.norm-id {
+		font-family: var(--font-mono);
+		font-weight: 600;
+		font-size: var(--text-xs);
+		min-width: 80px;
+		flex-shrink: 0;
+		color: var(--accent-default);
+	}
+
+	.norm-title {
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		line-height: var(--leading-normal);
+		min-width: 0;
+		flex: 1;
+		word-break: break-word;
+		overflow-wrap: break-word;
+	}
+
+	@media (max-width: 640px) {
+		.norm-id {
+			min-width: 64px;
+			font-size: 11px;
+		}
+
+		.norm-row-link {
+			padding: var(--space-2) var(--space-2);
+			gap: var(--space-2);
+		}
+	}
+
+	.norm-row-item.hidden {
+		display: none !important;
+	}
+</style>
+
+<script>
+	const searchInput = document.getElementById('norm-search') as HTMLInputElement | null;
+	const countNotice = document.getElementById('norm-count') as HTMLSpanElement | null;
+	const normRows = Array.from(document.querySelectorAll<HTMLElement>('.norm-row-item'));
+	const structureHeadings = Array.from(document.querySelectorAll<HTMLElement>('.structure-heading-item'));
+	const total = normRows.length;
+
+	if (searchInput) {
+		searchInput.addEventListener('input', () => {
+			const q = searchInput.value.trim().toLowerCase();
+			if (!q) {
+				normRows.forEach((r) => r.classList.remove('hidden'));
+				structureHeadings.forEach((h) => (h.style.display = ''));
+				if (countNotice) countNotice.textContent = `${total} Normen`;
+				return;
+			}
+
+			let matches = 0;
+			normRows.forEach((row) => {
+				const id = row.getAttribute('data-identifier') || '';
+				const title = row.getAttribute('data-title') || '';
+				const hit = id.includes(q) || title.includes(q);
+				if (hit) {
+					row.classList.remove('hidden');
+					matches++;
+				} else {
+					row.classList.add('hidden');
+				}
+			});
+
+			// Hide structure headings during search to keep clean list
+			structureHeadings.forEach((h) => (h.style.display = 'none'));
+
+			if (countNotice) {
+				countNotice.textContent = `${matches} / ${total}`;
+			}
+		});
+	}
+</script>

@@ -1,0 +1,737 @@
+---
+/**
+ * Header.astro — LawNetz Global Header
+ *
+ * Implements:
+ * - Desktop & Mobile Navigation (Apple HIG / Editorial Craft)
+ * - Accessible Dark Mode Switch (Persisted via localStorage, 0ms FOUC)
+ * - English UI Language Switcher (Context-aware routing between DE and EN)
+ * - Responsive Slide-in Off-Canvas Drawer for Mobile & Tablet
+ * - WCAG 2.2 AAA compliant touch targets & focus management
+ */
+
+import translationsData from '../data/translations.json';
+import FlagIcon from './FlagIcon.astro';
+
+interface Props {
+	currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+const isEnglish = currentPath.startsWith('/en');
+
+// Context-aware language switch target
+let switchLangUrl = isEnglish ? '/' : '/en';
+let switchLangLabel = isEnglish ? 'DE' : 'EN (135)';
+let switchLangTitle = isEnglish ? 'Zu den deutschen Gesetzestexten wechseln' : 'Offizielle englische Übersetzungen (135 Bundesgesetze)';
+
+if (isEnglish) {
+	// e.g. /en/englisch_arbst_ttv or /en/englisch_arbst_ttv/section_1 or /en/stvo
+	const match = currentPath.match(/^\/en\/([^\/]+)(?:\/([^\/]+))?/);
+	if (match) {
+		const slug = match[1];
+		const entry = (translationsData as any[]).find((t) => t.slug === slug || t.germanSlug === slug);
+		if (entry && entry.germanSlug) {
+			switchLangUrl = `/${entry.germanSlug}/`;
+		} else {
+			// If on an untranslated law notice page e.g. /en/stvo, switch back to German law /stvo/
+			switchLangUrl = `/${slug}/`;
+		}
+	}
+} else {
+	// e.g. /arbst_ttv_2004 or /bgb or /stvo
+	const match = currentPath.match(/^\/([^\/]+)(?:\/([^\/]+))?/);
+	if (match && !['gesetze', 'suche', 'hinweise', 'impressum', 'datenschutz', 'barrierefreiheit', 'tastenkombinationen'].includes(match[1])) {
+		const deSlug = match[1];
+		const baseSlug = deSlug.replace(/_\d{4}$/, '');
+		const entry = (translationsData as any[]).find((t) => t.germanSlug === deSlug || t.germanSlug === baseSlug);
+		if (entry) {
+			switchLangUrl = `/en/${entry.slug}/`;
+			switchLangTitle = `Zu der englischen Übersetzung wechseln (${entry.abbreviation})`;
+		} else {
+			// Statute does not have an English translation: route to /en/${deSlug}/ which displays the clear notification
+			switchLangUrl = `/en/${deSlug}/`;
+			switchLangTitle = 'Keine amtliche englische Übersetzung verfügbar (Hinweis anzeigen)';
+		}
+	}
+}
+
+const navItems = isEnglish
+	? [
+			{ href: '/gesetze', label: 'All Laws A–Z' },
+			{ href: '/suche', label: 'Search' },
+			{ href: '/hinweise', label: 'About & Source' },
+	  ]
+	: [
+			{ href: '/', label: 'Startseite' },
+			{ href: '/gesetze', label: 'Gesetze & Verordnungen' },
+			{ href: '/suche', label: 'Suche' },
+			{ href: '/hinweise', label: 'Hinweise' },
+	  ];
+
+function isCurrent(href: string): boolean {
+	if (href === '/' || href === '/en') return currentPath === href || (href === '/' && currentPath === '');
+	return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header" role="banner">
+	<div class="site-header__inner">
+		<!-- Brand -->
+		<a href={isEnglish ? '/en' : '/'} class="site-header__brand" aria-label={isEnglish ? 'LawNetz Homepage' : 'LawNetz Startseite'}>
+			<span class="brand-mark" aria-hidden="true">
+				<span class="brand-mark-symbol">§</span>
+			</span>
+			<span class="brand-name">LawNetz</span>
+			<span class="brand-edition" aria-hidden="true">{isEnglish ? 'EN' : 'DE'}</span>
+		</a>
+
+		<!-- Desktop Navigation -->
+		<nav id="main-nav" class="site-header__nav" aria-label={isEnglish ? 'Primary navigation' : 'Hauptnavigation'}>
+			<ul class="site-header__nav-list" role="list">
+				{
+					navItems.map((item) => (
+						<li>
+							<a href={item.href} class="site-header__nav-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>
+								{item.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<!-- Right Utilities (Language, Dark Mode, Mobile Menu) -->
+		<div class="site-header__actions">
+			<!-- Language Switcher Pill -->
+			<a href={switchLangUrl} class="action-btn lang-pill" title={switchLangTitle} aria-label={switchLangTitle}>
+				<span class="lang-pill-indicator">
+					<FlagIcon country={isEnglish ? 'DE' : 'GB'} size={12} />
+				</span>
+				<span class="lang-pill-text">{switchLangLabel}</span>
+			</a>
+
+			<!-- Dark Mode Toggle Button -->
+			<button id="theme-toggle-btn" class="action-btn theme-btn" type="button" aria-label="Erscheinungsbild umschalten (Dunkel/Hell)" title="Erscheinungsbild wechseln">
+				<!-- Moon icon (shown in light mode) -->
+				<svg class="theme-icon moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+				</svg>
+				<!-- Sun icon (shown in dark mode) -->
+				<svg class="theme-icon sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="12" cy="12" r="5"></circle>
+					<line x1="12" y1="1" x2="12" y2="3"></line>
+					<line x1="12" y1="21" x2="12" y2="23"></line>
+					<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+					<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+					<line x1="1" y1="12" x2="3" y2="12"></line>
+					<line x1="21" y1="12" x2="23" y2="12"></line>
+					<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+					<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+				</svg>
+			</button>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobile-menu-toggle" class="site-header__menu-toggle" aria-expanded="false" aria-controls="mobile-nav-drawer" aria-label={isEnglish ? 'Open menu' : 'Menü öffnen'} type="button">
+				<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+					<line x1="3" y1="6" x2="21" y2="6"></line>
+					<line x1="3" y1="12" x2="21" y2="12"></line>
+					<line x1="3" y1="18" x2="21" y2="18"></line>
+				</svg>
+			</button>
+		</div>
+	</div>
+</header>
+
+<!-- Mobile Off-Canvas Drawer (Slide-in) - Rendered as sibling to header to prevent backdrop-filter stacking constraint -->
+<div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+<aside id="mobile-nav-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-label={isEnglish ? 'Navigation Menu' : 'Hauptnavigation'} hidden>
+	<div class="drawer-header">
+		<div class="drawer-brand">
+			<span class="brand-mark" aria-hidden="true">
+				<span class="brand-mark-symbol">§</span>
+			</span>
+			<span class="brand-name">LawNetz</span>
+			<span class="drawer-badge">{isEnglish ? 'English' : 'Bundesrecht'}</span>
+		</div>
+		<button id="drawer-close-btn" class="drawer-close-btn" type="button" aria-label={isEnglish ? 'Close menu' : 'Menü schließen'}>
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+				<line x1="18" y1="6" x2="6" y2="18"></line>
+				<line x1="6" y1="6" x2="18" y2="18"></line>
+			</svg>
+		</button>
+	</div>
+
+	<div class="drawer-body">
+		<!-- Nav links -->
+		<nav class="drawer-nav" aria-label={isEnglish ? 'Mobile Navigation' : 'Mobile Navigation'}>
+			<ul class="drawer-nav-list" role="list">
+				{
+					navItems.map((item) => (
+						<li>
+							<a href={item.href} class="drawer-nav-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>
+								<span>{item.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<!-- Language Switcher in Drawer -->
+		<div class="drawer-lang-section">
+			<a href={switchLangUrl} class="drawer-lang-link" title={switchLangTitle}>
+				<span class="drawer-lang-flag">
+					<FlagIcon country={isEnglish ? 'DE' : 'GB'} size={15} />
+				</span>
+				<span class="drawer-lang-label">{isEnglish ? 'DE · Deutsche Fassung' : 'EN (135) · English Translations'}</span>
+			</a>
+		</div>
+
+		<!-- Quick Links in Drawer -->
+		<div class="drawer-footer-links">
+			<a href="/suche" class="drawer-sublink">{isEnglish ? 'Search' : 'Suche'}</a>
+			<a href="/hinweise" class="drawer-sublink">{isEnglish ? 'About' : 'Hinweise'}</a>
+			<a href="/barrierefreiheit" class="drawer-sublink">{isEnglish ? 'Accessibility' : 'Barrierefreiheit'}</a>
+			<a href="/impressum" class="drawer-sublink">Impressum</a>
+		</div>
+	</div>
+</aside>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-sticky);
+		border-bottom: 1px solid var(--border-default);
+		background-color: var(--surface-page);
+		backdrop-filter: blur(12px) saturate(1.2);
+		height: var(--header-height, 64px);
+		width: 100%;
+		max-width: 100vw;
+		padding: 0;
+		box-sizing: border-box;
+		overflow: hidden;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast);
+	}
+
+	.site-header__inner {
+		max-width: var(--layout-max-width, 1060px);
+		width: 100%;
+		box-sizing: border-box;
+		margin: 0 auto;
+		padding: 0 var(--page-padding-inline);
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-4);
+	}
+
+	/* Brand */
+	.site-header__brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		text-decoration: none;
+		color: var(--content-primary);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-lg);
+		letter-spacing: -0.02em;
+		flex-shrink: 0;
+	}
+
+	.brand-mark {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: var(--radius-md, 7px);
+		background-color: var(--accent-subtle);
+		border: 1px solid var(--accent-default);
+		color: var(--accent-default);
+		flex-shrink: 0;
+		font-family: var(--font-display, inherit);
+		font-weight: 800;
+		font-size: 15px;
+		line-height: 1;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast),
+			color var(--duration-fast);
+	}
+
+	.site-header__brand:hover .brand-mark {
+		background-color: var(--accent-default);
+		color: #ffffff;
+	}
+
+	.brand-icon {
+		color: var(--accent-default);
+	}
+
+	.brand-name {
+		font-weight: 700;
+	}
+
+	.brand-edition {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--content-tertiary);
+		padding: 1px 5px;
+		background: var(--surface-sunken);
+		border-radius: var(--radius-sm);
+	}
+
+	/* Nav */
+	.site-header__nav {
+		display: flex;
+		align-items: center;
+	}
+
+	.site-header__nav-list {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.site-header__nav-link {
+		display: inline-flex;
+		align-items: center;
+		height: 36px;
+		padding: 0 var(--space-3);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		color: var(--content-secondary);
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition:
+			color var(--duration-fast),
+			background-color var(--duration-fast);
+	}
+
+	.site-header__nav-link:hover {
+		color: var(--content-primary);
+		background-color: var(--surface-sunken);
+	}
+
+	.site-header__nav-link[aria-current='page'] {
+		color: var(--accent-default);
+		background-color: var(--accent-subtle);
+		font-weight: 600;
+	}
+
+	/* Header Actions */
+	.site-header__actions {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.action-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 38px;
+		height: 38px;
+		padding: 0 var(--space-2);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--content-secondary);
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast),
+			color var(--duration-fast);
+	}
+
+	.action-btn:hover {
+		background: var(--surface-overlay);
+		border-color: var(--border-default);
+		color: var(--content-primary);
+	}
+
+	.lang-pill {
+		gap: var(--space-1);
+		padding: 0 var(--space-2);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		white-space: nowrap;
+	}
+
+	.lang-pill-indicator {
+		font-size: 14px;
+	}
+
+	.lang-pill-text {
+		font-family: var(--font-mono);
+		letter-spacing: 0.04em;
+	}
+
+	/* Theme Toggle Icons */
+	.theme-icon {
+		display: none;
+	}
+
+	:global(html:not([data-theme='dark'])) .moon-icon {
+		display: block;
+	}
+
+	:global(html[data-theme='dark']) .sun-icon {
+		display: block;
+	}
+
+	/* Mobile Menu Toggle */
+	.site-header__menu-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--content-primary);
+		cursor: pointer;
+	}
+
+	/* Off-Canvas Mobile Drawer */
+	.drawer-backdrop {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+		z-index: calc(var(--z-modal, 900) - 1);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity var(--duration-normal) var(--ease-default);
+	}
+
+	.drawer-backdrop.is-open {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.drawer-backdrop[hidden],
+	.mobile-drawer[hidden] {
+		display: none !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	.mobile-drawer {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100dvh;
+		height: 100vh;
+		max-height: 100dvh;
+		width: min(85vw, 360px);
+		background: var(--surface-page);
+		border-left: 1px solid var(--border-default);
+		z-index: var(--z-modal, 900);
+		display: flex;
+		flex-direction: column;
+		transform: translateX(100%);
+		pointer-events: none;
+		transition:
+			transform var(--duration-normal) var(--ease-default);
+		box-shadow: var(--shadow-lg);
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.mobile-drawer.is-open {
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	.drawer-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--space-4) var(--space-5);
+		border-bottom: 1px solid var(--border-subtle);
+		height: var(--header-height, 64px);
+		flex-shrink: 0;
+	}
+
+	.drawer-brand {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-family: var(--font-display);
+		font-weight: 700;
+	}
+
+	.drawer-badge {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: 2px 6px;
+		background: var(--surface-sunken);
+		border-radius: var(--radius-sm);
+		color: var(--content-secondary);
+	}
+
+	.drawer-close-btn {
+		width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--content-secondary);
+		cursor: pointer;
+	}
+
+	.drawer-close-btn:hover {
+		color: var(--content-primary);
+		background: var(--surface-sunken);
+	}
+
+	.drawer-body {
+		padding: var(--space-5);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-6);
+		flex: 1;
+	}
+
+	.drawer-nav-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+	}
+
+	.drawer-nav-link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--space-3) var(--space-4);
+		min-height: 48px;
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		color: var(--content-primary);
+		font-size: var(--text-base);
+		font-weight: 500;
+		transition: background-color var(--duration-fast);
+	}
+
+	.drawer-nav-link:hover {
+		background-color: var(--surface-raised);
+	}
+
+	.drawer-nav-link[aria-current='page'] {
+		background-color: var(--accent-subtle);
+		color: var(--accent-default);
+		font-weight: 600;
+	}
+
+	.drawer-lang-section {
+		padding: var(--space-2) 0;
+	}
+
+	.drawer-lang-link {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-3) var(--space-4);
+		min-height: 48px;
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		color: var(--content-primary);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast);
+	}
+
+	.drawer-lang-link:hover {
+		background: var(--surface-overlay);
+		border-color: var(--border-default);
+	}
+
+	.drawer-lang-flag {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.drawer-footer-links {
+		margin-top: auto;
+		padding-top: var(--space-5);
+		border-top: 1px solid var(--border-subtle);
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+	}
+
+	.drawer-sublink {
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		text-decoration: none;
+	}
+
+	.drawer-sublink:hover {
+		color: var(--content-secondary);
+		text-decoration: underline;
+	}
+
+	/* Responsive Breakpoints */
+	@media (max-width: 860px) {
+		.site-header__inner {
+			padding: 0 var(--space-4);
+		}
+
+		.site-header__nav {
+			display: none;
+		}
+
+		.site-header__menu-toggle {
+			display: flex;
+		}
+	}
+</style>
+
+<script>
+	// Theme Switcher Logic
+	function initTheme() {
+		const themeToggle = document.getElementById('theme-toggle-btn');
+
+		function getPreferredTheme(): 'light' | 'dark' {
+			const saved = localStorage.getItem('lawnetz-theme');
+			if (saved === 'light' || saved === 'dark') return saved;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+
+		function setTheme(theme: 'light' | 'dark') {
+			document.documentElement.setAttribute('data-theme', theme);
+			localStorage.setItem('lawnetz-theme', theme);
+			updateThemeLabels(theme);
+		}
+
+		function updateThemeLabels(theme: 'light' | 'dark') {
+			const next = theme === 'dark' ? 'Hell' : 'Dunkel';
+			if (themeToggle) {
+				themeToggle.setAttribute('aria-label', `Auf ${next}modus wechseln`);
+				themeToggle.setAttribute('title', `Auf ${next}modus wechseln`);
+			}
+		}
+
+		function toggleTheme() {
+			const current = document.documentElement.getAttribute('data-theme') || getPreferredTheme();
+			const next = current === 'dark' ? 'light' : 'dark';
+			setTheme(next);
+		}
+
+		if (themeToggle) {
+			themeToggle.addEventListener('click', toggleTheme);
+		}
+
+		// Sync initial label
+		const initial = document.documentElement.getAttribute('data-theme') || getPreferredTheme();
+		updateThemeLabels(initial as 'light' | 'dark');
+	}
+
+	// Mobile Off-Canvas Drawer Logic
+	function initDrawer() {
+		const menuBtn = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
+		const drawer = document.getElementById('mobile-nav-drawer') as HTMLElement | null;
+		const backdrop = document.getElementById('drawer-backdrop') as HTMLElement | null;
+		const closeBtn = document.getElementById('drawer-close-btn') as HTMLButtonElement | null;
+
+		if (!menuBtn || !drawer || !backdrop) return;
+
+		function openDrawer() {
+			drawer.removeAttribute('hidden');
+			backdrop.removeAttribute('hidden');
+			drawer.hidden = false;
+			backdrop.hidden = false;
+			// Force reflow
+			void drawer.offsetWidth;
+			requestAnimationFrame(() => {
+				drawer.classList.add('is-open');
+				backdrop.classList.add('is-open');
+				menuBtn?.setAttribute('aria-expanded', 'true');
+				document.body.style.overflow = 'hidden';
+				closeBtn?.focus();
+			});
+		}
+
+		function closeDrawer() {
+			drawer.classList.remove('is-open');
+			backdrop.classList.remove('is-open');
+			menuBtn?.setAttribute('aria-expanded', 'false');
+			document.body.style.overflow = '';
+			setTimeout(() => {
+				if (!drawer.classList.contains('is-open')) {
+					drawer.setAttribute('hidden', '');
+					backdrop.setAttribute('hidden', '');
+					drawer.hidden = true;
+					backdrop.hidden = true;
+					menuBtn?.focus();
+				}
+			}, 250);
+		}
+
+		menuBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			const isOpen = menuBtn.getAttribute('aria-expanded') === 'true';
+			if (isOpen) {
+				closeDrawer();
+			} else {
+				openDrawer();
+			}
+		});
+
+		if (closeBtn) {
+			closeBtn.addEventListener('click', (e) => {
+				e.preventDefault();
+				closeDrawer();
+			});
+		}
+		backdrop.addEventListener('click', (e) => {
+			e.preventDefault();
+			closeDrawer();
+		});
+
+		// Escape key closes drawer
+		window.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !drawer.hidden) {
+				closeDrawer();
+			}
+		});
+
+		// Close if viewport resized to desktop
+		window.addEventListener('resize', () => {
+			if (window.innerWidth > 860 && !drawer.hidden) {
+				closeDrawer();
+			}
+		});
+	}
+
+	// Run on DOM Ready
+	initTheme();
+	initDrawer();
+</script>

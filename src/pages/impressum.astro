@@ -1,0 +1,161 @@
+---
+/**
+ * impressum.astro | Impressum
+ *
+ * Rechtliche Angaben gemäß § 5 DDG und § 18 Abs. 2 MStV.
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Impressum" description="Impressum und rechtliche Angaben für LawNetz.de gemäß § 5 DDG und § 18 Abs. 2 MStV.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Brotkrumen" class="breadcrumbs">
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Impressum</span>
+			</nav>
+
+			<h1 class="content-title">Impressum</h1>
+			<p class="content-lead">Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>Angaben gemäß § 5 DDG</h2>
+				<address class="address-block">
+					Dustin Tramm<br />
+					c/o Impressumservice Dein-Impressum<br />
+					Stettiner Str. 41<br />
+					35410 Hungen<br />
+					Deutschland
+				</address>
+			</section>
+
+			<section class="info-section">
+				<h2>Kontakt</h2>
+				<p>
+					E-Mail: <a href="mailto:info@lawnetz.de">info@lawnetz.de</a><br />
+					Web: <a href="https://www.lawnetz.de">https://www.lawnetz.de</a>
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+				<address class="address-block">
+					Dustin Tramm<br />
+					c/o Impressumservice Dein-Impressum<br />
+					Stettiner Str. 41<br />
+					35410 Hungen<br />
+					Deutschland
+				</address>
+			</section>
+
+			<section class="info-section">
+				<h2>Projektverantwortung & Gemeinfreiheit</h2>
+				<p>LawNetz.de ist ein freies, nicht-kommerzielles Open-Source-Projekt zur Förderung des freien Zugangs zum Recht und digitaler Barrierefreiheit.</p>
+				<p>
+					Die auf dieser Plattform bereitgestellten Gesetze, Rechtsverordnungen und amtlichen Erlasse sind gemäß <strong>§ 5 Absatz 1 des Urheberrechtsgesetzes (UrhG)</strong> gemeinfrei (amtliche Werke) und für jedermann frei zugänglich.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Haftungshinweis</h2>
+				<p>Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt recherchiert und aufbereitet. Die hier bereitgestellten Texte stellen jedoch keine amtliche Verkündung dar. Verbindlich sind ausschließlich die im Bundesgesetzblatt (BGBl.) verkündeten amtlichen Fassungen.</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.address-block {
+		font-style: normal;
+		font-size: var(--text-base);
+		line-height: var(--leading-relaxed);
+		color: var(--content-primary);
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+</style>

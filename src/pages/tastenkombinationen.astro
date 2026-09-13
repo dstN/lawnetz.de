@@ -1,0 +1,274 @@
+---
+/**
+ * tastenkombinationen.astro | Dokumentation der Barrierefreien Tastaturnavigation
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Tastenkombinationen & Barrierefreiheit" description="Übersicht aller sequenziellen Tastenkombinationen und Hilfsmittel zur barrierefreien Bedienung von LawNetz.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Brotkrumen" class="breadcrumbs">
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Tastenkombinationen</span>
+			</nav>
+
+			<h1 class="content-title">Barrierefreie Tastaturnavigation</h1>
+			<p class="content-lead">Übersicht über die Tastaturbedienung und Kurzbefehle zur Navigation ohne Maus.</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>Hinweise zu Tastatur-Kurzbefehlen und Accesskeys</h2>
+				<p>
+					Die Verwendung des HTML-Attributs <code>accesskey</code> (wie auf der Ursprungsseite mit Alt+0 bis Alt+9) führt in der Praxis häufig zu Überschneidungen mit Tastenkombinationen von Betriebssystemen, Webbrowsern oder Screenreadern (NVDA, JAWS, VoiceOver).
+				</p>
+				<p>
+					LawNetz setzt stattdessen auf sequenzielle Tastenkombinationen: Drücken Sie <kbd>g</kbd> gefolgt von einer zweiten Taste zur Navigation.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Sequenzielle Tastenkürzel</h2>
+				<div class="shortcuts-table-wrapper">
+					<table class="shortcuts-table">
+						<thead>
+							<tr>
+								<th scope="col">Tastenfolge</th>
+								<th scope="col">Aktion / Ziel</th>
+								<th scope="col">Altes Accesskey Äquivalent</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><kbd>?</kbd></td>
+								<td><strong>Hilfe-Modal öffnen</strong> (Übersicht der Kurzbefehle)</td>
+								<td><code>Alt + 7</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>h</kbd></td>
+								<td><strong>Startseite</strong> aufrufen</td>
+								<td><code>Alt + 0</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>g</kbd></td>
+								<td><strong>Gesetze A–Z</strong> Verzeichnis</td>
+								<td><code>Alt + 2</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>s</kbd></td>
+								<td><strong>Volltextsuche</strong> öffnen</td>
+								<td><code>Alt + 4</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>t</kbd></td>
+								<td><strong>Zum Seitenanfang</strong> springen</td>
+								<td><code>Alt + 1</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>i</kbd></td>
+								<td><strong>Hinweise & Datengrundlage</strong></td>
+								<td><code>Alt + 5</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>m</kbd></td>
+								<td><strong>Impressum</strong></td>
+								<td><code>Alt + 6</code></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> dann <kbd>d</kbd></td>
+								<td><strong>Datenschutz</strong></td>
+								<td><code>Alt + 8</code></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<section class="info-section">
+				<h2>Tasten in Gesetzestexten</h2>
+				<div class="shortcuts-table-wrapper">
+					<table class="shortcuts-table">
+						<thead>
+							<tr>
+								<th scope="col">Taste</th>
+								<th scope="col">Aktion</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><kbd>[</kbd> oder <kbd>p</kbd></td>
+								<td><strong>Vorherigen Paragrafen</strong> aufrufen</td>
+							</tr>
+							<tr>
+								<td><kbd>]</kbd> oder <kbd>n</kbd></td>
+								<td><strong>Nächsten Paragrafen</strong> aufrufen</td>
+							</tr>
+							<tr>
+								<td><kbd>c</kbd></td>
+								<td><strong>Fundstelle kopieren</strong> (z. B. „§ 138 BGB“)</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<section class="info-section">
+				<h2>Weitere Barrierefreiheits-Schichten</h2>
+				<dl class="a11y-layers">
+					<dt>Layer 1: Skip-Links</dt>
+					<dd>Drücken Sie beim Laden der Seite <kbd>Tab</kbd>, um Sprungmarken direkt zum Hauptinhalt, zur Navigation oder zur Suche einzublenden.</dd>
+
+					<dt>Layer 2: ARIA-Landmarks</dt>
+					<dd>Screenreader können mit Standard-Landmark-Tasten (z. B. <kbd>D</kbd> in NVDA) zwischen Header, Navigation, Inhalt und Footer springen.</dd>
+				</dl>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.shortcuts-table-wrapper {
+		overflow-x: auto;
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+	}
+
+	.shortcuts-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--text-sm);
+		text-align: left;
+	}
+
+	.shortcuts-table th,
+	.shortcuts-table td {
+		padding: var(--space-3) var(--space-4);
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	.shortcuts-table th {
+		background: var(--surface-overlay);
+		font-weight: 700;
+		color: var(--content-primary);
+	}
+
+	.shortcuts-table tr:last-child td {
+		border-bottom: none;
+	}
+
+	kbd {
+		display: inline-block;
+		padding: 2px 6px;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		font-weight: 700;
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
+		box-shadow: 0 1px 0 var(--border-default);
+		color: var(--content-primary);
+	}
+
+	code {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		background: var(--surface-sunken);
+		padding: 2px 5px;
+		border-radius: var(--radius-sm);
+	}
+
+	.a11y-layers dt {
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-top: var(--space-3);
+	}
+
+	.a11y-layers dd {
+		margin-left: 0;
+		margin-bottom: var(--space-3);
+		color: var(--content-secondary);
+		line-height: var(--leading-normal);
+	}
+</style>

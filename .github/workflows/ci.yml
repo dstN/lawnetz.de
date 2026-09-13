@@ -1,0 +1,46 @@
+name: CI - Build, Test & Accessibility
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build & Run Automated A11y Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 26
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Astro Application
+        run: npm run build
+
+      - name: Run A11y & Smoke Test Suite
+        run: npm test
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lawnetz-build
+          path: dist/
+          retention-days: 7

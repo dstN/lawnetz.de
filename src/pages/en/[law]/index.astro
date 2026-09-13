@@ -1,0 +1,678 @@
+---
+/**
+ * src/pages/en/[law]/index.astro | English Law View & Table of Contents
+ *
+ * Implements:
+ * - Apple HIG hairline layout matching the German law index
+ * - Instant client-side search filtering
+ * - Non-official translation badge & legal safety disclaimer
+ * - Translator attribution credit
+ * - Seamless switch back to German official text
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FlagIcon from '@components/FlagIcon.astro';
+import translationsData from '../../../data/translations.json';
+import tocData from '../../../data/toc.json';
+import { getLaw, getLawNorms } from '../../../db/index';
+
+const { law: lawSlug } = Astro.params;
+
+if (!lawSlug) {
+	return Astro.redirect('/en');
+}
+
+// Find translation entry
+const entry = (translationsData as any[]).find((t) => t.slug === lawSlug || t.germanSlug === lawSlug);
+
+let germanLawFallback: any = null;
+if (!entry) {
+	const deSlug = lawSlug.toLowerCase().replace(/_\d{4}$/, '');
+	germanLawFallback = (tocData.laws as any[]).find(
+		(l) => l.slug === lawSlug || l.slug.replace(/_\d{4}$/, '') === deSlug
+	);
+	if (!germanLawFallback) {
+		const dbDe = await getLaw(lawSlug, 'de');
+		if (dbDe) {
+			germanLawFallback = { title: dbDe.title, slug: dbDe.slug };
+		}
+	}
+	if (!germanLawFallback) {
+		return Astro.redirect('/404');
+	}
+}
+
+// Redirect canonical URL if needed
+if (entry && lawSlug !== entry.slug) {
+	return Astro.redirect(`/en/${entry.slug}/`);
+}
+
+// Filter out spurious nav items
+const dbNorms = entry
+	? (await getLawNorms(entry.slug)).filter((norm) => {
+			const identLower = norm.identifier.toLowerCase().trim();
+			const titleLower = norm.title.toLowerCase().trim();
+			if (['contents', 'table of contents', 'inhaltsverzeichnis', 'seitenanfang', 'zum seitenanfang', 'translations'].includes(identLower)) return false;
+			if (['contents', 'table of contents', 'inhaltsverzeichnis', 'seitenanfang', 'zum seitenanfang'].includes(titleLower)) return false;
+			return true;
+	  })
+	: [];
+
+const pageTitle = entry
+	? `${entry.abbreviation} (English) | ${entry.title} (Non-official Translation) | LawNetz`
+	: `No English Translation | ${germanLawFallback?.title || ''} | LawNetz`;
+
+const description = entry
+	? `Official English translation of ${entry.title} (${entry.abbreviation}). ${dbNorms.length} sections, non-official translation for informational purposes.`
+	: `No official English translation is available for ${germanLawFallback?.title || ''}. Translations are provided for 135 selected German statutes.`;
+
+const canonicalUrl = entry ? `https://www.lawnetz.de/en/${entry.slug}/` : undefined;
+
+const STRUCTURE_PREFIX_REGEX = /^(Book|Part|Division|Subdivision|Title|Subtitle|Chapter|Subchapter)\s+/i;
+
+function parseNormItem(identifier: string, title: string) {
+	let cleanId = identifier.trim();
+	let cleanTitle = title.trim();
+
+	// If title is empty, check if identifier contains glued heading e.g. "Book 1General part"
+	if (!cleanTitle) {
+		const match = cleanId.match(/^((?:Book|Division|Subdivision|Title|Subtitle|Chapter|Subchapter|Part|Annex|Schedule|Appendix)\s+(?:[0-9]+[a-z]?|[IVXLCDM]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|ELEVEN|TWELVE|[A-Za-z]+))(?=[A-Z][a-z]|(?<=[0-9][a-z]?)[A-Z])(.*)$/);
+		if (match) {
+			cleanId = match[1].trim();
+			cleanTitle = match[2].trim();
+		}
+	}
+
+	const isStructure = STRUCTURE_PREFIX_REGEX.test(cleanId);
+	return { identifier: cleanId, title: cleanTitle, isStructure };
+}
+---
+
+<BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
+	{
+		germanLawFallback ? (
+			<article class="law-container">
+				<nav aria-label="Breadcrumb" class="breadcrumbs">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<a href="/en">English Translations</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">{germanLawFallback.slug.toUpperCase()}</span>
+				</nav>
+
+				<div class="no-trans-card">
+					<div class="no-trans-badge-row">
+						<span class="no-trans-badge">Notice</span>
+						<span class="law-badge">{germanLawFallback.slug.toUpperCase()}</span>
+					</div>
+
+					<h1 class="no-trans-heading">No Official English Translation Available</h1>
+
+					<p class="no-trans-lead">
+						For <strong>{germanLawFallback.title}</strong>, no official English translation has been provided by the German Federal Ministry of Justice.
+					</p>
+
+					<div class="no-trans-explanation">
+						<p>
+							In the Federal Republic of Germany, official English translations are commissioned for only <strong>135 selected federal statutes and ordinances</strong> (such as the Civil Code, Commercial Code, Criminal Code, and Workplace Ordinance). All other German legal codes are officially promulgated solely in German.
+						</p>
+					</div>
+
+					<div class="no-trans-actions">
+						<a href={`/${germanLawFallback.slug}/`} class="btn-german-action">
+							<FlagIcon country="DE" size={15} />
+							<span>Deutsche Fassung aufrufen ({germanLawFallback.slug.toUpperCase()}) →</span>
+						</a>
+						<a href="/en" class="btn-browse-action">
+							<FlagIcon country="GB" size={15} />
+							<span>Alle 135 verfügbaren englischen Gesetze ansehen</span>
+						</a>
+					</div>
+				</div>
+			</article>
+		) : entry ? (
+			<article class="law-container">
+				<!-- Navigation -->
+				<nav aria-label="Breadcrumb" class="breadcrumbs">
+					<a href="/en" class="back-link" title="Back to all English translations">
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+						<span>Translations</span>
+					</a>
+					<span class="bc-sep" aria-hidden="true">/</span>
+					<span class="bc-current" aria-current="page">{entry.abbreviation}</span>
+				</nav>
+
+				<!-- Law Header -->
+				<header class="law-header">
+					<div class="law-header-eyebrow">
+						<span class="law-abbr-pill">{entry.abbreviation}</span>
+						<span class="law-jurisdiction">Federal Law</span>
+						<span class="eyebrow-dot" aria-hidden="true">·</span>
+						<span class="law-meta-disclaimer">Non-official Translation</span>
+					</div>
+
+					<h1 class="law-main-title">{entry.title}</h1>
+
+					<div class="law-metadata-row">
+						{
+							entry.credit && (
+								<span class="meta-item">
+									<span class="meta-label">Translator:</span> {entry.credit}
+								</span>
+							)
+						}
+						<span class="meta-item">
+							{entry.credit && <span class="meta-sep" aria-hidden="true">·</span>}
+							<a href={entry.sourceUrl} target="_blank" rel="noopener noreferrer" class="meta-source-link">
+								gesetze-im-internet.de ↗
+							</a>
+						</span>
+					</div>
+				</header>
+
+				<!-- Section Search / Quick Filter -->
+				{
+					dbNorms.length > 0 && (
+						<section class="law-search-box" aria-label="Search sections">
+							<div class="search-input-wrapper">
+								<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<circle cx="11" cy="11" r="8"></circle>
+									<path d="m21 21-4.3-4.3"></path>
+								</svg>
+								<label for="norm-search" class="visually-hidden">Search section or title</label>
+								<input
+									id="norm-search"
+									type="search"
+									placeholder={`Search in ${entry.abbreviation}…`}
+									autocomplete="off"
+									spellcheck="false"
+								/>
+								<span id="norm-count" class="norm-count-badge" aria-live="polite">
+									{dbNorms.length} Sections
+								</span>
+							</div>
+						</section>
+					)
+				}
+
+				<!-- Norms outline list -->
+				<section class="law-outline" aria-label="Table of Contents">
+					{
+						dbNorms.length > 0 ? (
+							<div id="norm-list-container" class="norm-list">
+								{dbNorms.map((rawNorm) => {
+									const item = parseNormItem(rawNorm.identifier, rawNorm.title);
+									if (item.isStructure) {
+										return (
+											<div class="structure-heading-item">
+												<h2 class="structure-title">
+													<span class="structure-desig">{item.identifier}</span>
+													{item.title ? <span class="structure-name">: {item.title}</span> : ''}
+												</h2>
+											</div>
+										);
+									}
+
+									const isSpecial = /table of contents|overview|preamble|annex/i.test(item.identifier);
+									const displayTitle = item.title || (isSpecial ? '' : '(No official heading)');
+
+									return (
+										<div
+											class="norm-row-item"
+											data-identifier={item.identifier.toLowerCase()}
+											data-title={item.title.toLowerCase()}
+										>
+											<a href={`/en/${entry.slug}/${rawNorm.normSlug}`} class="norm-row-link">
+												<span class="norm-id">{item.identifier}</span>
+												{displayTitle && <span class="norm-title">{displayTitle}</span>}
+											</a>
+										</div>
+									);
+								})}
+							</div>
+						) : (
+							<div class="translation-notice">
+								<p>This statute translation is currently being indexed or available on the official mirror:</p>
+								<a href={entry.sourceUrl} target="_blank" rel="noopener noreferrer" class="btn-primary-action">
+									Open on gesetze-im-internet.de ↗
+								</a>
+							</div>
+						)
+					}
+				</section>
+			</article>
+		) : null
+	}
+</BaseLayout>
+
+<style>
+	.law-container {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		margin-bottom: var(--space-4);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		color: var(--content-secondary);
+		text-decoration: none;
+		font-weight: 500;
+		padding: 2px 4px;
+		margin-left: -4px;
+		border-radius: var(--radius-sm);
+		transition: color var(--duration-fast);
+	}
+
+	.back-link:hover {
+		color: var(--accent-default);
+	}
+
+	.bc-sep {
+		color: var(--border-strong);
+	}
+
+	.bc-current {
+		color: var(--content-tertiary);
+	}
+
+	/* No Translation Card */
+	.no-trans-card {
+		padding: var(--space-6) 0 var(--space-12);
+		max-width: 780px;
+	}
+
+	.no-trans-badge-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin-bottom: var(--space-4);
+	}
+
+	.no-trans-badge {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: 3px 8px;
+		background: var(--surface-sunken);
+		color: var(--content-tertiary);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--border-subtle);
+	}
+
+	.no-trans-heading {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		line-height: var(--leading-tight);
+		letter-spacing: -0.02em;
+		margin-bottom: var(--space-4);
+	}
+
+	.no-trans-lead {
+		font-size: var(--text-lg);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-4);
+	}
+
+	.no-trans-lead strong {
+		color: var(--content-primary);
+	}
+
+	.no-trans-explanation {
+		padding: var(--space-4) var(--space-5);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--content-secondary);
+		font-size: var(--text-sm);
+		line-height: var(--leading-normal);
+		margin-bottom: var(--space-6);
+	}
+
+	.no-trans-explanation strong {
+		color: var(--content-primary);
+	}
+
+	.no-trans-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-3);
+	}
+
+	.btn-german-action {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-3) var(--space-5);
+		background: var(--accent-default);
+		color: #ffffff;
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: var(--text-sm);
+		transition: background-color var(--duration-fast), opacity var(--duration-fast);
+	}
+
+	.btn-german-action:hover {
+		opacity: 0.9;
+		text-decoration: none;
+	}
+
+	.btn-browse-action {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-3) var(--space-5);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-default);
+		color: var(--content-primary);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		font-weight: 500;
+		font-size: var(--text-sm);
+		transition: background-color var(--duration-fast), border-color var(--duration-fast);
+	}
+
+	.btn-browse-action:hover {
+		background: var(--surface-overlay);
+		border-color: var(--border-strong);
+		text-decoration: none;
+	}
+
+	.law-header {
+		border-bottom: 1px solid var(--border-subtle);
+		padding-bottom: var(--space-5);
+		margin-bottom: var(--space-5);
+	}
+
+	.law-header-eyebrow {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+	}
+
+	.law-abbr-pill {
+		display: inline-block;
+		padding: 2px 7px;
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 11px;
+		border-radius: var(--radius-sm);
+		letter-spacing: 0.05em;
+	}
+
+	.law-jurisdiction {
+		font-weight: 500;
+		color: var(--content-secondary);
+	}
+
+	.eyebrow-dot {
+		color: var(--border-strong);
+	}
+
+	.law-meta-disclaimer {
+		color: var(--content-tertiary);
+	}
+
+	.law-main-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.law-main-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.law-metadata-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 6px var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.meta-item {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 4px;
+	}
+
+	.meta-label {
+		color: var(--content-tertiary);
+		font-weight: 500;
+	}
+
+	.meta-sep {
+		color: var(--border-strong);
+		margin-right: 2px;
+	}
+
+	.meta-source-link {
+		color: var(--content-secondary);
+		text-decoration: none;
+		border-bottom: 1px dotted var(--border-strong);
+		transition: color var(--duration-fast), border-color var(--duration-fast);
+	}
+
+	.meta-source-link:hover {
+		color: var(--accent-default);
+		border-color: var(--accent-default);
+	}
+
+	/* Search */
+	.law-search-box {
+		margin-bottom: var(--space-5);
+	}
+
+	.search-input-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 100%;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 14px;
+		color: var(--content-tertiary);
+		pointer-events: none;
+	}
+
+	#norm-search {
+		width: 100%;
+		height: 44px;
+		padding: 0 110px 0 38px;
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-full);
+		outline: none;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	#norm-search:focus-visible {
+		background: var(--surface-raised);
+		border-color: var(--accent-default);
+		box-shadow: 0 0 0 3px var(--accent-focus);
+	}
+
+	.norm-count-badge {
+		position: absolute;
+		right: 14px;
+		font-size: var(--text-xs);
+		font-weight: 500;
+		color: var(--content-tertiary);
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	/* Outline list */
+	.norm-list {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.norm-row-item {
+		border-radius: var(--radius-sm);
+		transition: background-color var(--duration-fast);
+	}
+
+	.norm-row-item:hover,
+	.norm-row-item:focus-within {
+		background: var(--surface-raised);
+	}
+
+	.norm-row-link {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-3);
+		padding: var(--space-2) var(--space-3);
+		min-height: 40px;
+		text-decoration: none;
+		color: var(--content-primary);
+	}
+
+	.norm-id {
+		font-family: var(--font-mono);
+		font-weight: 600;
+		font-size: var(--text-xs);
+		min-width: 90px;
+		flex-shrink: 0;
+		color: var(--accent-default);
+	}
+
+	.norm-title {
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		line-height: var(--leading-normal);
+	}
+
+	.norm-row-item.hidden {
+		display: none !important;
+	}
+
+	/* Structural Headings */
+	.structure-heading-item {
+		margin-top: var(--space-5);
+		margin-bottom: var(--space-2);
+		padding-top: var(--space-2);
+	}
+
+	.structure-heading-item:first-child {
+		margin-top: var(--space-2);
+	}
+
+	.structure-heading-item.hidden {
+		display: none !important;
+	}
+
+	.structure-title {
+		font-family: var(--font-display);
+		font-size: var(--text-base);
+		font-weight: 700;
+		color: var(--content-primary);
+		letter-spacing: -0.01em;
+	}
+
+	.structure-desig {
+		color: var(--content-secondary);
+		font-weight: 600;
+	}
+
+	.structure-name {
+		color: var(--content-primary);
+		font-weight: 700;
+	}
+
+	.translation-notice {
+		padding: var(--space-6) 0;
+		color: var(--content-secondary);
+	}
+
+	.btn-primary-action {
+		display: inline-block;
+		margin-top: var(--space-4);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		padding: var(--space-2) var(--space-4);
+		background: var(--accent-default);
+		color: #ffffff;
+		border-radius: var(--radius-md);
+		text-decoration: none;
+	}
+</style>
+
+<script>
+	const searchInput = document.getElementById('norm-search') as HTMLInputElement | null;
+	const countNotice = document.getElementById('norm-count') as HTMLSpanElement | null;
+	const normRows = Array.from(document.querySelectorAll<HTMLElement>('.norm-row-item'));
+	const structureRows = Array.from(document.querySelectorAll<HTMLElement>('.structure-heading-item'));
+	const total = normRows.length;
+
+	if (searchInput) {
+		searchInput.addEventListener('input', () => {
+			const q = searchInput.value.trim().toLowerCase();
+			if (!q) {
+				normRows.forEach((r) => r.classList.remove('hidden'));
+				structureRows.forEach((s) => s.classList.remove('hidden'));
+				if (countNotice) countNotice.textContent = `${total} Sections`;
+				return;
+			}
+
+			let matches = 0;
+			structureRows.forEach((s) => s.classList.add('hidden'));
+			normRows.forEach((row) => {
+				const id = row.getAttribute('data-identifier') || '';
+				const title = row.getAttribute('data-title') || '';
+				const hit = id.includes(q) || title.includes(q);
+				if (hit) {
+					row.classList.remove('hidden');
+					matches++;
+				} else {
+					row.classList.add('hidden');
+				}
+			});
+
+			if (countNotice) {
+				countNotice.textContent = `${matches} / ${total}`;
+			}
+		});
+	}
+</script>

@@ -1,0 +1,266 @@
+/* ==========================================================================
+   LawNetz.de — Design Tokens
+   
+   Token system following Apple HIG Design Improvement Mode:
+   - 6 named colors with roles (surface, content, accent, signal)
+   - Light & dark variants with computed contrast ratios
+   - WCAG AAA: ≥7:1 for body text, ≥4.5:1 for large/bold text
+   
+   Typography:
+   - Display:  Atkinson Hyperlegible — used with restraint (hero, section heads)
+   - Body:     Lexend — optimized for reading fluency in dense legal text
+   - Utility:  System monospace — for section numbers, references, metadata
+
+   Signature element:
+   - The left-edge "Gesetzesrand" — a 3px primary-colored inline-start border
+     on every law article, evoking the vertical margin line of German legal
+     print editions. This is specific to a legal platform and would not appear
+     in a different product brief.
+   ========================================================================== */
+
+:root {
+  /* ── Named Color Roles ─────────────────────────────────────────────────
+     6 colors, each with a purpose. Contrast ratios computed against their
+     intended surface and noted inline.
+     ───────────────────────────────────────────────────────────────────── */
+
+  /* Surface — the page background and elevated containers */
+  --c-surface:          #ffffff;
+  --c-surface-raised:   #f7f8fa;
+  --c-surface-sunken:   #f0f1f4;
+
+  /* Content — text and icons on surface */
+  --c-content:          #1a1d23;  /* on #fff → 16.1:1 ✓ AAA */
+  --c-content-secondary:#525866;  /* on #fff →  7.1:1 ✓ AAA */
+  --c-content-tertiary: #8b919e;  /* on #fff →  3.6:1 — decorative only, not for text */
+
+  /* Primary — the "Gesetzesrand" accent, interactive elements, links */
+  --c-primary:          #1a4a8a;  /* on #fff → 8.5:1 ✓ AAA */
+  --c-primary-hover:    #133a6e;  /* on #fff → 11.0:1 ✓ AAA */
+  --c-primary-subtle:   #e8f0fb;  /* background tint for active states */
+
+  /* Signal — destructive, success, warning */
+  --c-signal-error:     #c42b1c;  /* on #fff → 5.9:1 ✓ AA large */
+  --c-signal-success:   #107c41;  /* on #fff → 4.6:1 ✓ AA large */
+  --c-signal-warning:   #8a6914;  /* on #fff → 4.9:1 ✓ AA large */
+
+  /* Border & separators */
+  --c-border:           #dcdfe5;
+  --c-border-strong:    #b0b5bf;
+  --c-border-focus:     var(--c-primary);
+
+  /* ── Semantic Aliases ──────────────────────────────────────────────── */
+  --fg:                 var(--c-content);
+  --fg-secondary:       var(--c-content-secondary);
+  --fg-tertiary:        var(--c-content-tertiary);
+  --fg-link:            var(--c-primary);
+  --fg-link-visited:    #5b3a8c;  /* on #fff → 7.3:1 ✓ AAA */
+  --fg-on-primary:      #ffffff;
+
+  --bg:                 var(--c-surface);
+  --bg-raised:          var(--c-surface-raised);
+  --bg-sunken:          var(--c-surface-sunken);
+
+  /* Component Semantic Bridge */
+  --accent-default:     var(--c-primary);
+  --accent-hover:       var(--c-primary-hover);
+  --accent-subtle:      var(--c-primary-subtle);
+  --accent-focus:       rgba(26, 74, 138, 0.25);
+  --surface-page:       var(--c-surface);
+  --surface-raised:     var(--c-surface-raised);
+  --surface-sunken:     var(--c-surface-sunken);
+  --surface-overlay:    var(--c-surface-raised);
+  --content-primary:    var(--c-content);
+  --content-secondary:  var(--c-content-secondary);
+  --content-tertiary:   var(--c-content-tertiary);
+  --border-subtle:      var(--c-border);
+  --border-default:     var(--c-border);
+  --border-strong:      var(--c-border-strong);
+  --font-sans:          var(--font-body);
+  --font-mono:          var(--font-utility);
+
+  /* ── Focus Ring ────────────────────────────────────────────────────── */
+  --focus-ring-color:   var(--c-primary);
+  --focus-ring-offset:  3px;
+  --focus-ring-width:   3px;
+  --focus-ring:         var(--focus-ring-width) solid var(--focus-ring-color);
+
+  /* ── Typography ────────────────────────────────────────────────────── 
+     Display (Atkinson Hyperlegible): hero, section headings — used with restraint.
+     Body (Lexend): all running text — optimized for reading fluency.
+     Utility (monospace): § numbers, reference codes, metadata.
+     ──────────────────────────────────────────────────────────────────── */
+  --font-display: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-body:    'Lexend', system-ui, -apple-system, sans-serif;
+  --font-utility: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+
+  /* Type Scale — fluid, min 1rem body on mobile, max 1.125rem on wide */
+  --text-xs:   clamp(0.75rem, 0.71rem + 0.18vw, 0.8125rem);
+  --text-sm:   clamp(0.8125rem, 0.78rem + 0.14vw, 0.875rem);
+  --text-base: clamp(1rem, 0.97rem + 0.14vw, 1.0625rem);
+  --text-lg:   clamp(1.125rem, 1.08rem + 0.18vw, 1.1875rem);
+  --text-xl:   clamp(1.3125rem, 1.22rem + 0.36vw, 1.5rem);
+  --text-2xl:  clamp(1.625rem, 1.48rem + 0.54vw, 1.875rem);
+  --text-3xl:  clamp(2rem, 1.78rem + 0.89vw, 2.5rem);
+  --text-4xl:  clamp(2.5rem, 2.14rem + 1.43vw, 3.25rem);
+
+  /* Line Heights — generous for legal text readability */
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.6;
+  --leading-relaxed: 1.75;
+  --leading-legal:   1.85;
+
+  /* Letter Spacing */
+  --tracking-tight:  -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.02em;
+
+  /* ── Spacing ───────────────────────────────────────────────────────── */
+  --space-1:  0.25rem;  /*  4px */
+  --space-2:  0.5rem;   /*  8px */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-5:  1.25rem;  /* 20px */
+  --space-6:  1.5rem;   /* 24px */
+  --space-8:  2rem;     /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+
+  /* ── Layout ────────────────────────────────────────────────────────── */
+  --content-width:      68ch;
+  --layout-max-width:    1060px;
+  --layout-detail-width: 860px;
+  --page-padding-inline: clamp(var(--space-4), 3vw, var(--space-8));
+  --header-height:       3.5rem;
+
+  /* ── Radii — subtle, not rounded-everything ────────────────────────── */
+  --radius-sm:   0.1875rem;  /* 3px */
+  --radius-md:   0.375rem;   /* 6px */
+  --radius-lg:   0.5rem;     /* 8px */
+  --radius-full: 9999px;
+
+  /* ── Shadows — minimal, purposeful ─────────────────────────────────── */
+  --shadow-sm:  0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-md:  0 2px 8px rgb(0 0 0 / 0.08);
+  --shadow-lg:  0 4px 16px rgb(0 0 0 / 0.1);
+
+  /* ── Transitions ───────────────────────────────────────────────────── */
+  --duration-fast:   100ms;
+  --duration-normal: 180ms;
+  --ease-default:    cubic-bezier(0.25, 0.1, 0.25, 1);  /* Apple ease */
+
+  /* ── Z-Index ───────────────────────────────────────────────────────── */
+  --z-base:     0;
+  --z-sticky:   100;
+  --z-overlay:  200;
+  --z-modal:    300;
+  --z-skiplink: 400;
+  --z-toast:    500;
+
+  /* ── Signature: Gesetzesrand ───────────────────────────────────────── 
+     A 3px inline-start border on law paragraphs, evoking the vertical
+     margin rule of German legal print. */
+  --gesetzesrand-width: 3px;
+  --gesetzesrand-color: var(--c-primary);
+}
+
+/* ==========================================================================
+   Dark Mode — semantic tokens only, no new raw colors
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --c-surface:          #121418;
+    --c-surface-raised:   #1a1d23;
+    --c-surface-sunken:   #0d0f12;
+
+    --c-content:          #e8eaed;  /* on #121418 → 14.2:1 ✓ AAA */
+    --c-content-secondary:#9da3ad;  /* on #121418 →  7.8:1 ✓ AAA */
+    --c-content-tertiary: #636975;  /* on #121418 →  4.1:1 — decorative */
+
+    --c-primary:          #6ea8e6;  /* on #121418 →  8.2:1 ✓ AAA */
+    --c-primary-hover:    #8dbcf0;  /* on #121418 → 10.1:1 ✓ AAA */
+    --c-primary-subtle:   #1a2a3f;
+    --accent-focus:       rgba(110, 168, 230, 0.35);
+
+    --c-signal-error:     #f28b82;
+    --c-signal-success:   #81c995;
+    --c-signal-warning:   #fdd663;
+
+    --c-border:           #2a2e35;
+    --c-border-strong:    #444a55;
+
+    --fg-link-visited:    #c0a0e0;  /* on #121418 → 7.6:1 ✓ AAA */
+
+    --shadow-sm:  0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md:  0 2px 8px rgb(0 0 0 / 0.4);
+    --shadow-lg:  0 4px 16px rgb(0 0 0 / 0.5);
+  }
+}
+
+:root[data-theme='dark'] {
+  --c-surface:          #121418;
+  --c-surface-raised:   #1a1d23;
+  --c-surface-sunken:   #0d0f12;
+
+  --c-content:          #e8eaed;
+  --c-content-secondary:#9da3ad;
+  --c-content-tertiary: #636975;
+
+  --c-primary:          #6ea8e6;
+  --c-primary-hover:    #8dbcf0;
+  --c-primary-subtle:   #1a2a3f;
+  --accent-focus:       rgba(110, 168, 230, 0.35);
+
+  --c-signal-error:     #f28b82;
+  --c-signal-success:   #81c995;
+  --c-signal-warning:   #fdd663;
+
+  --c-border:           #2a2e35;
+  --c-border-strong:    #444a55;
+
+  --fg-link-visited:    #c0a0e0;
+
+  --shadow-sm:  0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md:  0 2px 8px rgb(0 0 0 / 0.4);
+  --shadow-lg:  0 4px 16px rgb(0 0 0 / 0.5);
+}
+
+/* ==========================================================================
+   Increased Contrast — system preference
+   ========================================================================== */
+
+@media (prefers-contrast: more) {
+  :root {
+    --c-content:          #000000;
+    --c-content-secondary:#1a1a1a;
+    --fg-link:            #003380;
+    --c-border:           #555555;
+    --c-border-strong:    #000000;
+    --focus-ring-width:   4px;
+    --focus-ring-offset:  4px;
+    --focus-ring-color:   #000000;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-content:          #ffffff;
+      --c-content-secondary:#e5e5e5;
+      --fg-link:            #a0c8ff;
+      --c-border:           #aaaaaa;
+      --c-border-strong:    #ffffff;
+      --focus-ring-color:   #ffffff;
+    }
+  }
+}
+
+@media (max-width: 860px) {
+  :root {
+    --page-padding-inline: var(--space-4);
+  }
+}
+

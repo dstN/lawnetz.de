@@ -1,0 +1,499 @@
+---
+/**
+ * src/pages/en/index.astro | English Translations of German Federal Laws
+ *
+ * Official translations provided by the Federal Ministry of Justice (BMJ)
+ * and the Language Service of the Federal Authorities.
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FlagIcon from '@components/FlagIcon.astro';
+import translationsData from '../../data/translations.json';
+
+interface TranslationItem {
+	slug: string;
+	germanSlug: string;
+	abbreviation: string;
+	title: string;
+	sourceUrl: string;
+}
+
+const translations = translationsData as TranslationItem[];
+
+// Group alphabetically by abbreviation or title
+const grouped = new Map<string, TranslationItem[]>();
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+for (const t of translations) {
+	const firstLetter = (t.abbreviation[0] || t.title[0] || 'A').toUpperCase();
+	const letter = alphabet.includes(firstLetter) ? firstLetter : '#';
+	if (!grouped.has(letter)) {
+		grouped.set(letter, []);
+	}
+	grouped.get(letter)!.push(t);
+}
+
+// Sort lists
+for (const [letter, list] of grouped.entries()) {
+	list.sort((a, b) => a.abbreviation.localeCompare(b.abbreviation));
+}
+
+const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
+	if (a === '#') return 1;
+	if (b === '#') return -1;
+	return a.localeCompare(b);
+});
+---
+
+<BaseLayout title="English Translations of German Laws" description={`Official English translations of ${translations.length} major German federal laws and acts, published by the Federal Ministry of Justice.`}>
+	<div class="directory-container">
+		<header class="directory-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">English Translations</span>
+			</nav>
+
+			<div class="header-intro">
+				<span class="lang-flag-badge">
+					<FlagIcon country="GB" size={13} /> Official Translations
+				</span>
+				<h1 class="directory-title">German Federal Laws in English</h1>
+				<p class="directory-subtitle">
+					Official translations of <strong>{translations.length}</strong> federal statutes and regulations provided by the Federal Ministry of Justice (BMJ).
+				</p>
+			</div>
+
+			<!-- Instant Filter Bar -->
+			<div class="filter-wrapper" role="search">
+				<label for="law-filter-input" class="visually-hidden">Filter laws by English title or German abbreviation</label>
+				<div class="filter-input-box">
+					<svg class="filter-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<circle cx="11" cy="11" r="8"></circle>
+						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+					</svg>
+					<input id="law-filter-input" type="search" placeholder="Search translated laws (e.g. Civil Code, BGB, Whistleblower, HinSchG)..." autocomplete="off" spellcheck="false" />
+					<button id="filter-clear-btn" type="button" class="filter-clear-btn" aria-label="Clear filter" hidden> ✕ </button>
+				</div>
+				<p id="filter-status" class="filter-status" aria-live="polite">
+					Showing all {translations.length} translations
+				</p>
+			</div>
+
+			<!-- Alphabet Navigation -->
+			<nav class="alpha-nav" aria-label="Alphabet navigation">
+				<ul class="alpha-list">
+					{
+						activeLetters.map((letter) => (
+							<li>
+								<a href={`#letter-${letter}`} class="alpha-link" data-letter={letter}>
+									{letter}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Translations List by Letter -->
+		<div id="laws-content" class="laws-by-letter">
+			{
+				activeLetters.map((letter) => {
+					const list = grouped.get(letter) || [];
+					return (
+						<section id={`letter-${letter}`} class="letter-section" data-letter-section={letter}>
+							<header class="letter-header">
+								<h2 class="letter-title">{letter}</h2>
+								<span class="letter-count">{list.length} statutes</span>
+							</header>
+
+							<ul class="law-list" role="list">
+								{list.map((law) => (
+									<li class="law-item" data-title={law.title.toLowerCase()} data-abbr={law.abbreviation.toLowerCase()}>
+										<a href={`/en/${law.slug}/`} class="law-link">
+											<div class="law-title-wrap">
+												<span class="law-abbr-tag">{law.abbreviation}</span>
+												<span class="law-title-text">{law.title}</span>
+											</div>
+											<div class="law-meta-wrap">
+												<span class="badge-lang">English</span>
+												<a href={`/${law.germanSlug}/`} class="badge-de" title="Zur deutschen Originalfassung springen" onclick="event.stopPropagation();">
+													DE ↗
+												</a>
+											</div>
+										</a>
+									</li>
+								))}
+							</ul>
+						</section>
+					);
+				})
+			}
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	const input = document.getElementById('law-filter-input') as HTMLInputElement | null;
+	const clearBtn = document.getElementById('filter-clear-btn') as HTMLButtonElement | null;
+	const status = document.getElementById('filter-status');
+	const items = document.querySelectorAll<HTMLElement>('.law-item');
+	const sections = document.querySelectorAll<HTMLElement>('.letter-section');
+	const totalCount = items.length;
+
+	if (input && status && clearBtn) {
+		input.addEventListener('input', () => {
+			const q = input.value.trim().toLowerCase();
+			clearBtn.hidden = q.length === 0;
+
+			if (!q) {
+				items.forEach((el) => (el.hidden = false));
+				sections.forEach((sec) => (sec.hidden = false));
+				status.textContent = `Showing all ${totalCount} translations`;
+				return;
+			}
+
+			let visible = 0;
+			items.forEach((el) => {
+				const title = el.dataset.title || '';
+				const abbr = el.dataset.abbr || '';
+				const match = title.includes(q) || abbr.includes(q);
+				el.hidden = !match;
+				if (match) visible++;
+			});
+
+			sections.forEach((sec) => {
+				const hasVisible = Array.from(sec.querySelectorAll('.law-item')).some((el) => !(el as HTMLElement).hidden);
+				sec.hidden = !hasVisible;
+			});
+
+			status.textContent = `${visible} ${visible === 1 ? 'result' : 'results'} found for "${input.value}"`;
+		});
+
+		clearBtn.addEventListener('click', () => {
+			input.value = '';
+			input.dispatchEvent(new Event('input'));
+			input.focus();
+		});
+	}
+</script>
+
+<style>
+	.directory-container {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--content-secondary);
+		margin-bottom: var(--space-6);
+	}
+
+	.breadcrumbs a {
+		color: var(--content-secondary);
+		text-decoration: none;
+		transition: color var(--duration-fast);
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+
+	.header-intro {
+		margin-bottom: var(--space-8);
+	}
+
+	.lang-flag-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: var(--space-1) var(--space-2);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-full);
+		color: var(--content-secondary);
+		margin-bottom: var(--space-2);
+	}
+
+	.directory-title {
+		font-size: var(--text-3xl);
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	.directory-subtitle {
+		font-size: var(--text-lg);
+		color: var(--content-secondary);
+		max-width: 65ch;
+	}
+
+	.filter-wrapper {
+		margin: var(--space-6) 0 var(--space-4);
+	}
+
+	.filter-input-box {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.filter-icon {
+		position: absolute;
+		left: var(--space-3);
+		color: var(--content-tertiary);
+		pointer-events: none;
+	}
+
+	#law-filter-input {
+		width: 100%;
+		height: 48px;
+		padding: 0 var(--space-10) 0 var(--space-10);
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md);
+		outline: none;
+		transition:
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	#law-filter-input:focus-visible {
+		border-color: var(--accent-default);
+		box-shadow: 0 0 0 3px var(--accent-focus);
+	}
+
+	.filter-clear-btn {
+		position: absolute;
+		right: var(--space-3);
+		background: transparent;
+		border: none;
+		color: var(--content-tertiary);
+		cursor: pointer;
+		font-size: var(--text-base);
+		padding: var(--space-2);
+		min-width: 44px;
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.filter-status {
+		margin-top: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--content-tertiary);
+	}
+
+	.alpha-nav {
+		position: sticky;
+		top: 64px;
+		z-index: 10;
+		background: var(--surface-page);
+		padding: var(--space-3) 0;
+		border-bottom: 1px solid var(--border-subtle);
+		backdrop-filter: blur(8px);
+	}
+
+	.alpha-list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1);
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	.alpha-list li {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.alpha-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 32px;
+		height: 32px;
+		padding: 0 var(--space-1);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--content-secondary);
+		text-decoration: none;
+		border-radius: var(--radius-sm);
+		transition:
+			background-color var(--duration-fast),
+			color var(--duration-fast);
+	}
+
+	.alpha-link:hover,
+	.alpha-link:focus-visible {
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+	}
+
+	.letter-section {
+		margin-top: var(--space-10);
+	}
+
+	.letter-header {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-3);
+		border-bottom: 2px solid var(--accent-default);
+		padding-bottom: var(--space-2);
+		margin-bottom: var(--space-4);
+	}
+
+	.letter-title {
+		font-size: var(--text-2xl);
+		font-weight: 700;
+		color: var(--accent-default);
+	}
+
+	.letter-count {
+		font-size: var(--text-sm);
+		color: var(--content-tertiary);
+	}
+
+	.law-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: var(--space-1);
+	}
+
+	.law-item {
+		border-radius: var(--radius-sm);
+		transition: background-color var(--duration-fast);
+	}
+
+	.law-item:hover,
+	.law-item:focus-within {
+		background: var(--surface-raised);
+	}
+
+	.law-link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-4);
+		padding: var(--space-3) var(--space-4);
+		min-height: 44px;
+		text-decoration: none;
+		color: var(--content-primary);
+	}
+
+	.law-title-wrap {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-3);
+		min-width: 0;
+	}
+
+	.law-abbr-tag {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: var(--text-sm);
+		color: var(--accent-default);
+		min-width: 70px;
+		flex-shrink: 0;
+	}
+
+	.law-title-text {
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.law-meta-wrap {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		flex-shrink: 0;
+	}
+
+	.badge-lang {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: 2px 8px;
+		background: var(--surface-sunken);
+		border-radius: var(--radius-full);
+		color: var(--content-secondary);
+	}
+
+	.badge-de {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: 2px 8px;
+		background: var(--surface-sunken);
+		border-radius: var(--radius-full);
+		color: var(--content-secondary);
+		text-decoration: none;
+		transition:
+			background-color var(--duration-fast),
+			color var(--duration-fast);
+	}
+
+	.badge-de:hover {
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+	}
+
+	@media (max-width: 860px) {
+		.header-intro {
+			margin-bottom: var(--space-4);
+		}
+
+		.directory-title {
+			font-size: var(--text-2xl);
+		}
+
+		.directory-subtitle {
+			font-size: var(--text-sm);
+		}
+
+		#law-filter-input {
+			padding: 0 36px 0 36px;
+			font-size: var(--text-sm);
+			height: 44px;
+		}
+
+		.filter-icon {
+			left: 10px;
+			width: 16px;
+			height: 16px;
+		}
+
+		.filter-clear-btn {
+			right: 4px;
+		}
+
+		.law-link {
+			padding: 10px 12px;
+			gap: var(--space-2);
+		}
+	}
+</style>

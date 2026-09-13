@@ -1,0 +1,44 @@
+{
+  "name": "lawnetz.de",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "postbuild": "node -e \"const fs=require('fs'); if(fs.existsSync('public/pagefind')) fs.cpSync('public/pagefind', 'dist/client/pagefind', {recursive:true});\"",
+    "preview": "astro preview",
+    "fetch-toc": "npx tsx scripts/fetch-toc.ts",
+    "fonts:import": "npx @dstn/fli --font \"Atkinson Hyperlegible, Lexend\" --weight \"400,700\" --format woff2 --framework vanilla --css src/styles/fonts.css",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "scrape:all": "npx tsx scripts/scrape-all.ts",
+    "sync:daily": "npx tsx scripts/sync-daily.ts",
+    "sync:translations": "npx tsx scripts/fetch-translations-catalog.ts",
+    "build:full": "npm run fetch-toc && npm run sync:translations && npm run build",
+    "test": "npx tsx scripts/test-a11y-smoke.ts",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.5",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.2",
+    "country-flag-icons": "^1.6.20",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "fast-xml-parser": "^5.11.1",
+    "fflate": "^0.8.3",
+    "mysql2": "^3.24.4"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "devDependencies": {
+    "@dstn/fli": "^2.0.1",
+    "drizzle-kit": "^0.31.10",
+    "pagefind": "^1.5.2",
+    "typescript": "^7.0.2"
+  }
+}

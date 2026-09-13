@@ -1,0 +1,241 @@
+---
+/**
+ * 404.astro | Barrierefreie Fehlerseite
+ *
+ * Design nach .agents/SKILL.md (Apple HIG & Editorial Craft):
+ * - Klare typografische Hierarchie
+ * - Großzügiger Weißraum, Fokus auf Funktionalität & Suche
+ * - WCAG 2.2 AAA: Kontraste, Tastaturnavigation
+ */
+
+// Server-rendered 404 page for dynamic error routing
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+const QUICK_LAWS = [
+	{ slug: 'bgb', abbr: 'BGB' },
+	{ slug: 'gg', abbr: 'GG' },
+	{ slug: 'stgb', abbr: 'StGB' },
+	{ slug: 'zpo', abbr: 'ZPO' },
+	{ slug: 'hgb', abbr: 'HGB' },
+	{ slug: 'arbzg', abbr: 'ArbZG' },
+	{ slug: 'bdsg_2018', abbr: 'BDSG' },
+	{ slug: 'ddg', abbr: 'DDG' },
+];
+---
+
+<BaseLayout title="Seite nicht gefunden (404)" description="Die angeforderte Rechtsnorm oder Seite konnte nicht gefunden werden.">
+	<div class="error-page">
+		<div class="error-container">
+			<p class="error-eyebrow">404 · Nicht gefunden</p>
+			<h1 class="error-title">Rechtsnorm oder Seite nicht gefunden</h1>
+			<p class="error-lead">Die aufgerufene Adresse existiert nicht, der gesuchte Paragraf ist weggefallen oder die Schreibweise weicht ab.</p>
+
+			<!-- Direct Search Form -->
+			<form action="/suche" method="get" class="error-search-form" role="search">
+				<label for="error-search-input" class="visually-hidden">Gesetz oder Paragraf suchen</label>
+				<div class="error-input-wrap">
+					<svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+						<circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"></circle>
+						<path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+					</svg>
+					<input id="error-search-input" type="search" name="q" placeholder="Gesetz oder Paragraf suchen: z. B. BGB, § 138, Art. 1 GG..." class="error-search-input" autocomplete="off" autofocus />
+					<button type="submit" class="error-search-btn">Suchen</button>
+				</div>
+			</form>
+
+			<!-- Quick Access to Top Laws -->
+			<div class="quick-access">
+				<span class="quick-access-label">Direkt zu:</span>
+				<div class="quick-access-pills">
+					{
+						QUICK_LAWS.map((l) => (
+							<a href={`/${l.slug}`} class="law-pill" title={`${l.abbr} aufrufen`}>
+								{l.abbr}
+							</a>
+						))
+					}
+				</div>
+			</div>
+
+			<div class="error-nav-links">
+				<a href="/gesetze" class="nav-link">
+					<span>Alle Bundesgesetze von A bis Z</span>
+					<span aria-hidden="true">→</span>
+				</a>
+				<a href="/" class="nav-link">
+					<span>Zurück zur Startseite</span>
+					<span aria-hidden="true">→</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.error-page {
+		min-height: 60vh;
+		display: flex;
+		align-items: center;
+		padding: var(--space-12) var(--space-4);
+	}
+
+	.error-container {
+		max-width: 620px;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	.error-eyebrow {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--content-tertiary);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		margin-bottom: var(--space-2);
+	}
+
+	.error-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		line-height: var(--leading-tight);
+		letter-spacing: -0.02em;
+		margin-bottom: var(--space-3);
+	}
+
+	.error-lead {
+		font-size: var(--text-base);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-8);
+	}
+
+	/* Search Input */
+	.error-search-form {
+		margin-bottom: var(--space-6);
+	}
+
+	.error-input-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.search-icon {
+		position: absolute;
+		left: var(--space-3);
+		color: var(--content-tertiary);
+		pointer-events: none;
+	}
+
+	.error-search-input {
+		flex: 1;
+		padding: var(--space-3) var(--space-4);
+		padding-left: 2.75rem;
+		font-size: var(--text-sm);
+		font-family: var(--font-body);
+		background: var(--surface-default);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md);
+		color: var(--content-primary);
+		transition:
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	.error-search-input:focus {
+		border-color: var(--accent-default);
+		outline: none;
+		box-shadow: 0 0 0 3px var(--accent-subtle);
+	}
+
+	.error-search-btn {
+		padding: var(--space-3) var(--space-5);
+		background: var(--surface-raised);
+		color: var(--content-primary);
+		font-weight: 600;
+		font-size: var(--text-sm);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast);
+	}
+
+	.error-search-btn:hover {
+		background: var(--surface-overlay);
+		border-color: var(--border-strong);
+	}
+
+	/* Quick Access Pills */
+	.quick-access {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-8);
+	}
+
+	.quick-access-label {
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		margin-right: var(--space-1);
+	}
+
+	.quick-access-pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+	}
+
+	.law-pill {
+		display: inline-block;
+		padding: 3px 10px;
+		font-size: var(--text-xs);
+		font-weight: 600;
+		font-family: var(--font-mono);
+		color: var(--content-secondary);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-full);
+		text-decoration: none;
+		transition:
+			color var(--duration-fast),
+			border-color var(--duration-fast),
+			background-color var(--duration-fast);
+	}
+
+	.law-pill:hover {
+		color: var(--accent-default);
+		border-color: var(--accent-default);
+		background: var(--accent-subtle);
+	}
+
+	/* Footer Links */
+	.error-nav-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-6);
+		padding-top: var(--space-6);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.nav-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		font-size: var(--text-sm);
+		color: var(--content-secondary);
+		text-decoration: none;
+		transition: color var(--duration-fast);
+	}
+
+	.nav-link:hover {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+</style>

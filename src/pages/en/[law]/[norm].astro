@@ -1,0 +1,782 @@
+---
+/**
+ * src/pages/en/[law]/[norm].astro | English Translated Norm View
+ *
+ * Implements:
+ * - Apple HIG / Editorial Craft layout matching German norms
+ * - Non-official translation badge & legal disclaimer notice
+ * - Direct link back to Table of Contents & German Original
+ * - Conditional pager navigation
+ * - Copy Citation button
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FlagIcon from '@components/FlagIcon.astro';
+import { getLaw, getNorm, getAdjacentNorms } from '../../../db/index';
+import translationsData from '../../../data/translations.json';
+
+const { law: lawParam, norm: normParam } = Astro.params;
+
+if (!lawParam || !normParam) {
+	return Astro.redirect('/en');
+}
+
+const norm = await getNorm(lawParam, normParam);
+const law = await getLaw(lawParam, 'en');
+
+if (!norm || !law) {
+	return Astro.redirect(`/en/${lawParam}`);
+}
+
+const { prev: prevNorm, next: nextNorm } = await getAdjacentNorms(law.slug, norm.orderIndex);
+
+const entry = (translationsData as any[]).find((t) => t.slug === lawParam);
+const germanSlug = entry ? entry.germanSlug : law.slug.replace(/^englisch_/, '');
+
+const pageTitle = `${norm.identifier} ${law.abbreviation}${norm.title ? ` | ${norm.title}` : ''} (English Translation) | LawNetz`;
+const paragraphsList: string[] = Array.isArray(norm.paragraphs) ? norm.paragraphs.map((p: any) => (typeof p === 'string' ? p : p.text)) : [];
+const fullNormText = `${norm.identifier} ${law.abbreviation}${norm.title ? ` — ${norm.title}` : ''}\n\n${paragraphsList.join('\n\n')}`;
+const snippet = paragraphsList.slice(0, 2).join(' ').replace(/\s+/g, ' ').slice(0, 140);
+const description = `${norm.identifier} ${law.abbreviation}: ${norm.title || 'Official English Translation'}. ${snippet}… Non-official translation for informational purposes.`;
+
+const canonicalUrl = `https://www.lawnetz.de/en/${law.slug}/${norm.normSlug}`;
+const officialSourceUrl = `https://www.gesetze-im-internet.de/${law.slug}/${norm.normSlug}.html`;
+
+// Schema.org Legislation structured data
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Legislation',
+	name: `${norm.identifier} ${law.abbreviation}`,
+	headline: norm.title || `${norm.identifier} ${law.abbreviation}`,
+	legislationIdentifier: `${law.abbreviation} ${norm.identifier}`,
+	isPartOf: {
+		'@type': 'Legislation',
+		name: law.title,
+		alternateName: law.abbreviation,
+	},
+	inLanguage: 'en',
+	text: paragraphsList.join('\n\n'),
+};
+---
+
+<BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+	<article class="norm-container" data-pagefind-body>
+		<!-- Navigation -->
+		<nav aria-label="Breadcrumb" class="breadcrumbs">
+			<a href={`/en/${law.slug}/`} class="back-link" title={`Back to Table of Contents: ${law.title}`}>
+				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+				<span>{law.abbreviation}</span>
+			</a>
+			<span class="bc-sep" aria-hidden="true">/</span>
+			<span class="bc-current" aria-current="page">{norm.identifier}</span>
+		</nav>
+
+		<!-- Header -->
+		<header class="norm-header">
+			<div class="norm-header-eyebrow">
+				<a href={`/en/${law.slug}/`} class="norm-law-pill" title={`Back to Table of Contents: ${law.title}`}>
+					{law.abbreviation}
+				</a>
+				<span class="eyebrow-dot" aria-hidden="true">·</span>
+				<span class="norm-eyebrow-sub">Non-official Translation</span>
+			</div>
+
+			<h1 class="norm-heading">
+				<span class="norm-num">{norm.identifier}</span>
+				{norm.title && <span class="norm-name">{norm.title}</span>}
+			</h1>
+
+			<div class="norm-tools-bar" role="toolbar" aria-label="Actions">
+				<div class="norm-tools-left">
+					<button id="copy-citation-btn" class="tool-btn" type="button" aria-label="Copy citation to clipboard" title={`Copy citation: ${norm.identifier} ${law.abbreviation}`}>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+							<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+						</svg>
+						<span id="copy-btn-text">Copy Citation</span>
+					</button>
+
+					<button id="copy-full-norm-btn" class="tool-btn" type="button" aria-label="Copy entire section with all paragraphs" title="Copies the entire section with all paragraphs">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+							<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+						</svg>
+						<span id="copy-full-text">Copy Section</span>
+					</button>
+				</div>
+
+				<a href={officialSourceUrl} target="_blank" rel="noopener noreferrer" class="tool-link" title="Open on official federal portal">
+					<span>gesetze-im-internet.de ↗</span>
+				</a>
+			</div>
+		</header>
+
+		<!-- Main Norm Text with Gesetzesrand -->
+		<section class="norm-content-section" aria-label="Statute text">
+			<div class="gesetzesrand-wrapper">
+				<div class="norm-paragraphs">
+					{
+						paragraphsList.length > 0 ? (
+							paragraphsList.map((paraText, idx) => {
+								const match = paraText.match(/^\s*\((\d+[a-z]?)\)/);
+								const absNum = match ? match[1] : (paragraphsList.length > 1 ? `${idx + 1}` : '');
+								const paraCitation = absNum ? `${norm.identifier} (${absNum}) ${law.abbreviation}` : `${norm.identifier} ${law.abbreviation}`;
+								const fullParaText = `${paraCitation}\n${paraText}`;
+								return (
+									<div
+										class="norm-paragraph-wrap"
+										data-para-idx={idx + 1}
+										data-citation={paraCitation}
+										data-copy-text={fullParaText}
+									>
+										<p class="norm-paragraph" id={`section-${idx + 1}`}>
+											{paraText}
+										</p>
+										<button
+											type="button"
+											class="para-copy-btn"
+											aria-label={`Copy ${paraCitation}`}
+											title={`Copy ${paraCitation}`}
+										>
+											<svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+												<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+											</svg>
+											<svg class="check-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<polyline points="20 6 9 17 4 12"></polyline>
+											</svg>
+											<span class="para-copy-label">Copy paragraph</span>
+										</button>
+									</div>
+								);
+							})
+						) : (
+							<p class="empty-notice">(No text content available or norm repealed)</p>
+						)
+					}
+				</div>
+			</div>
+
+			<footer class="norm-legal-notice">
+				<p>
+					<strong>Notice:</strong> This is a non-official English translation provided for informational purposes only. Only the official German versions published in the Federal Law Gazette (Bundesgesetzblatt) are legally binding.
+				</p>
+			</footer>
+		</section>
+
+		<!-- Sequential Navigation (only rendered when adjacent norms exist) -->
+		{
+			(prevNorm || nextNorm) && (
+				<nav class="norm-pagination" aria-label="Adjacent sections">
+					{
+						prevNorm ? (
+							<a href={`/en/${law.slug}/${prevNorm.normSlug}`} class="page-link prev-link" rel="prev" title={`Previous: ${prevNorm.identifier}`}>
+								<span class="page-direction" aria-hidden="true">
+									← Previous
+								</span>
+								<span class="page-norm-name">{prevNorm.identifier}</span>
+								{prevNorm.title && <span class="page-norm-title">{prevNorm.title}</span>}
+							</a>
+						) : (
+							<div class="page-placeholder" />
+						)
+					}
+
+					{
+						nextNorm ? (
+							<a href={`/en/${law.slug}/${nextNorm.normSlug}`} class="page-link next-link" rel="next" title={`Next: ${nextNorm.identifier}`}>
+								<span class="page-direction" aria-hidden="true">
+									Next →
+								</span>
+								<span class="page-norm-name">{nextNorm.identifier}</span>
+								{nextNorm.title && <span class="page-norm-title">{nextNorm.title}</span>}
+							</a>
+						) : (
+							<div class="page-placeholder" />
+						)
+					}
+				</nav>
+			)
+		}
+	</article>
+</BaseLayout>
+
+<style>
+	.norm-container {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		gap: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		margin-bottom: var(--space-4);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		white-space: nowrap;
+		flex-shrink: 0;
+		gap: var(--space-1);
+		color: var(--content-secondary);
+		text-decoration: none;
+		font-weight: 500;
+		padding: 2px 4px;
+		margin-left: -4px;
+		border-radius: var(--radius-sm);
+		transition: color var(--duration-fast);
+	}
+
+	.back-link:hover {
+		color: var(--accent-default);
+	}
+
+	.bc-sep {
+		color: var(--border-strong);
+		flex-shrink: 0;
+	}
+
+	.bc-current {
+		color: var(--content-tertiary);
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.norm-header {
+		border-bottom: 1px solid var(--border-subtle);
+		padding-bottom: var(--space-5);
+		margin-bottom: var(--space-6);
+	}
+
+	.norm-header-eyebrow {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-2);
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+	}
+
+	.norm-law-pill {
+		display: inline-block;
+		padding: 2px 7px;
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 11px;
+		border-radius: var(--radius-sm);
+		letter-spacing: 0.05em;
+		text-decoration: none;
+		transition: background-color var(--duration-fast);
+	}
+
+	.norm-law-pill:hover {
+		background: var(--surface-overlay);
+	}
+
+	.eyebrow-dot {
+		color: var(--border-strong);
+	}
+
+	.norm-eyebrow-sub {
+		color: var(--content-tertiary);
+	}
+
+	.norm-heading {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin-bottom: var(--space-4);
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
+	}
+
+	@media (max-width: 860px) {
+		.norm-heading {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.norm-num {
+		color: var(--c-primary);
+		font-size: inherit;
+	}
+
+	.norm-name {
+		font-size: var(--text-xl);
+		font-weight: 600;
+		color: var(--c-content);
+		line-height: var(--leading-snug);
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
+	}
+
+	@media (max-width: 860px) {
+		.norm-name {
+			font-size: var(--text-lg);
+		}
+	}
+
+	.norm-tools-bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		margin-top: var(--space-3);
+		flex-wrap: wrap;
+	}
+
+	.norm-tools-left {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+	}
+
+	.tool-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px;
+		min-height: 36px;
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-full);
+		color: var(--content-primary);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			background-color var(--duration-fast),
+			border-color var(--duration-fast);
+	}
+
+	.tool-btn:hover {
+		background: var(--surface-raised);
+		border-color: var(--border-strong);
+	}
+
+	.tool-btn:focus-visible {
+		outline: 2px solid var(--accent-default);
+		outline-offset: 2px;
+	}
+
+	.tool-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+		text-decoration: none;
+		border-bottom: 1px dotted var(--border-strong);
+		transition: color var(--duration-fast), border-color var(--duration-fast);
+	}
+
+	.tool-link:hover {
+		color: var(--accent-default);
+		border-color: var(--accent-default);
+	}
+
+	@media (max-width: 640px) {
+		.norm-tools-bar {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-2);
+		}
+
+		.norm-tools-left {
+			width: 100%;
+			display: flex;
+			gap: var(--space-2);
+		}
+
+		.norm-tools-left .tool-btn {
+			flex: 1;
+			justify-content: center;
+		}
+
+		.tool-link {
+			padding-top: 0;
+			font-size: var(--text-xs);
+		}
+	}
+
+	.gesetzesrand-wrapper {
+		position: relative;
+		border-left: 2px solid var(--border-default);
+		padding-left: var(--space-4);
+		margin-bottom: var(--space-8);
+	}
+
+	.norm-paragraphs {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+	}
+
+	/* Paragraph container with desktop hover copy & mobile tap activation */
+	.norm-paragraph-wrap {
+		position: relative;
+		border-radius: var(--radius-md);
+		padding: var(--space-2) var(--space-3);
+		margin-left: calc(-1 * var(--space-3));
+		margin-right: calc(-1 * var(--space-3));
+		transition:
+			background-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	/* Desktop Hover: reveal copy button */
+	@media (hover: hover) and (pointer: fine) {
+		.norm-paragraph-wrap:hover {
+			background-color: var(--surface-sunken);
+		}
+
+		.norm-paragraph-wrap:hover .para-copy-btn {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
+		}
+	}
+
+	.norm-paragraph {
+		font-family: var(--font-body);
+		font-size: var(--text-base);
+		line-height: var(--leading-legal);
+		color: var(--content-primary);
+		margin: 0;
+	}
+
+	/* Copy Button on Paragraph */
+	.para-copy-btn {
+		position: absolute;
+		top: var(--space-2);
+		right: var(--space-2);
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		height: 28px;
+		padding: 0 var(--space-2);
+		background: var(--surface-raised);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
+		color: var(--content-secondary);
+		font-size: var(--text-xs);
+		font-weight: 500;
+		cursor: pointer;
+		opacity: 0;
+		transform: translateY(2px);
+		pointer-events: none;
+		transition:
+			opacity var(--duration-fast),
+			transform var(--duration-fast),
+			background-color var(--duration-fast),
+			border-color var(--duration-fast),
+			color var(--duration-fast);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+		user-select: none;
+		white-space: nowrap;
+		z-index: 2;
+	}
+
+	.para-copy-btn:hover {
+		background: var(--surface-overlay);
+		border-color: var(--accent-default);
+		color: var(--content-primary);
+	}
+
+	.para-copy-btn:focus-visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+		outline: 2px solid var(--accent-default);
+		outline-offset: 2px;
+	}
+
+	.para-copy-btn .check-icon {
+		display: none;
+		color: var(--accent-default);
+	}
+
+	.para-copy-btn.copied {
+		opacity: 1 !important;
+		transform: translateY(0) !important;
+		pointer-events: auto !important;
+		background: var(--accent-subtle);
+		border-color: var(--accent-default);
+		color: var(--accent-default);
+	}
+
+	.para-copy-btn.copied .copy-icon {
+		display: none;
+	}
+
+	.para-copy-btn.copied .check-icon {
+		display: inline-block;
+	}
+
+	/* Mobile / Touch Activated State */
+	@media (hover: none), (max-width: 768px) {
+		.norm-paragraph-wrap {
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		.norm-paragraph-wrap.is-active {
+			background-color: var(--surface-raised);
+			box-shadow: 0 0 0 1px var(--border-default);
+		}
+
+		.norm-paragraph-wrap.is-active .para-copy-btn {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
+			min-height: 34px;
+			padding: 0 var(--space-3);
+			border-radius: var(--radius-sm);
+			font-weight: 600;
+		}
+	}
+
+	/* Copied Paragraph Flash */
+	.norm-paragraph-wrap.flash-copied {
+		background-color: var(--accent-subtle) !important;
+		transition: background-color 0.2s ease;
+	}
+
+	.empty-notice {
+		color: var(--content-tertiary);
+		font-style: italic;
+	}
+
+	.norm-legal-notice {
+		margin-top: var(--space-8);
+		padding: var(--space-4);
+		background: var(--surface-sunken);
+		border-radius: var(--radius-sm);
+		border-left: 3px solid var(--border-default);
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.norm-legal-notice p {
+		margin: 0;
+	}
+
+	.norm-pagination {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: var(--space-4);
+		margin-top: var(--space-10);
+		padding-top: var(--space-6);
+		border-top: 1px solid var(--border-subtle);
+		width: 100%;
+		max-width: var(--layout-detail-width, 860px);
+		min-width: 0;
+	}
+
+	.page-link {
+		display: flex;
+		flex-direction: column;
+		text-decoration: none;
+		color: inherit;
+		padding: var(--space-3) var(--space-4);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
+		width: 100%;
+		min-width: 0;
+		transition: background var(--duration-fast), border-color var(--duration-fast);
+		overflow: hidden;
+	}
+
+	.page-link:hover {
+		background: var(--surface-raised);
+		border-color: var(--border-strong);
+	}
+
+	.page-direction {
+		font-size: var(--text-xs);
+		color: var(--content-tertiary);
+		margin-bottom: 2px;
+		white-space: nowrap;
+	}
+
+	.page-norm-name {
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--accent-default);
+		white-space: nowrap;
+	}
+
+	.page-norm-title {
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.next-link {
+		text-align: right;
+		margin-left: auto;
+	}
+
+	.page-placeholder {
+		visibility: hidden;
+	}
+
+	@media (max-width: 640px) {
+		.norm-pagination {
+			display: flex;
+			flex-direction: column;
+			gap: var(--space-2);
+		}
+
+		.page-link {
+			max-width: 100%;
+		}
+
+		.page-norm-title {
+			white-space: normal;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			line-height: var(--leading-tight);
+		}
+	}
+</style>
+
+<script define:vars={{
+	citationText: `${norm.identifier} ${law.abbreviation}`,
+	fullNormText,
+	prevUrl: prevNorm ? `/en/${law.slug}/${prevNorm.normSlug}` : null,
+	nextUrl: nextNorm ? `/en/${law.slug}/${nextNorm.normSlug}` : null
+}}>
+	// 1. Citation Button
+	const copyBtn = document.getElementById('copy-citation-btn');
+	const copyBtnText = document.getElementById('copy-btn-text');
+
+	if (copyBtn && copyBtnText) {
+		copyBtn.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(citationText);
+				copyBtnText.textContent = 'Copied!';
+				setTimeout(() => {
+					copyBtnText.textContent = 'Copy Citation';
+				}, 2000);
+			} catch {
+				prompt('Copy citation:', citationText);
+			}
+		});
+	}
+
+	// 2. Full Section Copy Button
+	const copyFullBtn = document.getElementById('copy-full-norm-btn');
+	const copyFullText = document.getElementById('copy-full-text');
+
+	if (copyFullBtn && copyFullText) {
+		copyFullBtn.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(fullNormText);
+				copyFullText.textContent = 'Copied!';
+				setTimeout(() => {
+					copyFullText.textContent = 'Copy Section';
+				}, 2000);
+			} catch {
+				prompt('Copy section:', fullNormText);
+			}
+		});
+	}
+
+	// 3. Paragraph-level copy & mobile touch activation
+	const paraWraps = Array.from(document.querySelectorAll('.norm-paragraph-wrap'));
+
+	paraWraps.forEach((wrap) => {
+		const btn = wrap.querySelector('.para-copy-btn');
+		const label = btn?.querySelector('.para-copy-label');
+		const copyPayload = wrap.dataset.copyText || '';
+
+		if (btn) {
+			btn.addEventListener('click', async (e) => {
+				e.stopPropagation();
+				try {
+					await navigator.clipboard.writeText(copyPayload);
+					btn.classList.add('copied');
+					if (label) label.textContent = 'Copied!';
+					wrap.classList.add('flash-copied');
+
+					setTimeout(() => {
+						wrap.classList.remove('flash-copied');
+					}, 400);
+
+					setTimeout(() => {
+						btn.classList.remove('copied');
+						if (label) label.textContent = 'Copy paragraph';
+						wrap.classList.remove('is-active');
+					}, 2000);
+				} catch {
+					prompt('Copy paragraph:', copyPayload);
+				}
+			});
+		}
+
+		// Mobile touch tap activation
+		wrap.addEventListener('click', (e) => {
+			if ((e.target).closest('.para-copy-btn')) return;
+
+			const isCurrentlyActive = wrap.classList.contains('is-active');
+			paraWraps.forEach((w) => w.classList.remove('is-active'));
+
+			if (!isCurrentlyActive) {
+				wrap.classList.add('is-active');
+			}
+		});
+	});
+
+	// Tap outside clears active state
+	document.addEventListener('click', (e) => {
+		if (!e.target.closest('.norm-paragraph-wrap')) {
+			paraWraps.forEach((w) => w.classList.remove('is-active'));
+		}
+	});
+
+	// Keyboard navigation
+	window.addEventListener('keydown', (e) => {
+		const tag = (e.target?.tagName || '').toLowerCase();
+		if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target?.isContentEditable) {
+			return;
+		}
+
+		if (e.key === '[' || e.key === 'p') {
+			if (prevUrl) window.location.href = prevUrl;
+		} else if (e.key === ']' || e.key === 'n') {
+			if (nextUrl) window.location.href = nextUrl;
+		} else if (e.key === 'c' && !e.ctrlKey && !e.metaKey) {
+			if (copyBtn) copyBtn.click();
+		}
+	});
+</script>

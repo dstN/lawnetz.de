@@ -1,0 +1,500 @@
+---
+/**
+ * index.astro | Startseite
+ *
+ * Design thesis: "The fastest, most legible way to find a German federal law."
+ * Signature: The Gesetzesrand (left margin rule) appears on hover in the index,
+ * connecting the landing page to the reading experience.
+ * One bold element (the title), everything else quiet.
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+let lawCount = 0;
+try {
+	const tocData = await import('@data/toc.json');
+	lawCount = tocData.default?.laws?.length ?? 0;
+} catch {
+	// TOC not yet generated
+}
+---
+
+<BaseLayout title="Startseite">
+	<section class="hero" aria-labelledby="hero-title">
+		<h1 id="hero-title" class="hero__title">Bundesrecht.</h1>
+		<p class="hero__subtitle">
+			{lawCount > 0 ? <>{lawCount.toLocaleString('de-DE')} Gesetze und Rechtsverordnungen</> : <>Gesetze und Rechtsverordnungen</>} des Bundes im Volltext.
+		</p>
+
+		<form action="/suche" method="get" class="search-box" role="search" id="search-form">
+			<button type="submit" class="search-box__submit-btn" aria-label="Gesetz suchen" id="search-submit-btn">
+				<svg class="search-box__icon" aria-hidden="true" viewBox="0 0 20 20" fill="none">
+					<circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"></circle>
+					<path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+				</svg>
+			</button>
+
+			<input type="search" id="search-input" name="q" class="search-box__input" placeholder="Gesetz oder Paragraf suchen: z. B. BGB, § 138, Art. 1 GG..." aria-label="Gesetzessuche" autocomplete="off" spellcheck="false" />
+
+			<button type="button" id="search-clear-btn" class="search-box__clear-btn" aria-label="Eingabe löschen" hidden> ✕ </button>
+
+			<span class="search-box__hint" aria-hidden="true" id="search-kbd-hint">
+				<kbd class="shortcut-dialog__key">/</kbd>
+			</span>
+
+			<!-- Instant Search Suggestions Dropdown -->
+			<div id="search-dropdown" class="search-dropdown" role="listbox" aria-label="Suchvorschläge" hidden>
+				<!-- Injected via JavaScript -->
+			</div>
+		</form>
+	</section>
+
+	<nav class="law-index" aria-label="Alphabetischer Index">
+		<div class="law-index__alpha-nav" role="navigation" aria-label="Buchstaben-Navigation">
+			{
+				'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('').map((letter) => (
+					<a href={`/gesetze#${letter === '0' ? 'ziffern' : letter.toLowerCase()}`} class="law-index__alpha-link" aria-label={letter === '0' ? 'Gesetze mit Ziffern' : `Buchstabe ${letter}`}>
+						{letter === '0' ? '0–9' : letter}
+					</a>
+				))
+			}
+		</div>
+	</nav>
+</BaseLayout>
+
+<script>
+	interface LawPreset {
+		slug: string;
+		abbr: string;
+		title: string;
+		aliases?: string[];
+		isArticle?: boolean;
+	}
+
+	// Core federal laws catalog for 0ms instant autocomplete
+	const POPULAR_LAWS: LawPreset[] = [
+		{ slug: 'bgb', abbr: 'BGB', title: 'Bürgerliches Gesetzbuch' },
+		{ slug: 'gg', abbr: 'GG', title: 'Grundgesetz für die Bundesrepublik Deutschland', isArticle: true },
+		{ slug: 'stgb', abbr: 'StGB', title: 'Strafgesetzbuch' },
+		{ slug: 'hgb', abbr: 'HGB', title: 'Handelsgesetzbuch' },
+		{ slug: 'zpo', abbr: 'ZPO', title: 'Zivilprozessordnung' },
+		{ slug: 'stpo', abbr: 'StPO', title: 'Strafprozessordnung' },
+		{ slug: 'vwgo', abbr: 'VwGO', title: 'Verwaltungsgerichtsordnung' },
+		{ slug: 'vwvfg', abbr: 'VwVfG', title: 'Verwaltungsverfahrensgesetz' },
+		{ slug: 'bdsg_2018', abbr: 'BDSG', title: 'Bundesdatenschutzgesetz', aliases: ['bdsg'] },
+		{ slug: 'urhg', abbr: 'UrhG', title: 'Urheberrechtsgesetz' },
+		{ slug: 'ddg', abbr: 'DDG', title: 'Digitale-Dienste-Gesetz', aliases: ['tmg'] },
+		{ slug: 'tkg_2021', abbr: 'TKG', title: 'Telekommunikationsgesetz', aliases: ['tkg'] },
+		{ slug: 'arbzg', abbr: 'ArbZG', title: 'Arbeitszeitgesetz' },
+		{ slug: 'kschg', abbr: 'KSchG', title: 'Kündigungsschutzgesetz' },
+		{ slug: 'betrvg', abbr: 'BetrVG', title: 'Betriebsverfassungsgesetz' },
+		{ slug: 'burlg', abbr: 'BUrlG', title: 'Bundesurlaubsgesetz' },
+		{ slug: 'entgfg', abbr: 'EntgFG', title: 'Entgeltfortzahlungsgesetz' },
+		{ slug: 'tzbfg', abbr: 'TzBfG', title: 'Teilzeit- und Befristungsgesetz' },
+		{ slug: 'agg', abbr: 'AGG', title: 'Allgemeines Gleichbehandlungsgesetz' },
+		{ slug: 'ao_1977', abbr: 'AO', title: 'Abgabenordnung', aliases: ['ao'] },
+		{ slug: 'estg', abbr: 'EStG', title: 'Einkommensteuergesetz' },
+		{ slug: 'ustg_1980', abbr: 'UStG', title: 'Umsatzsteuergesetz', aliases: ['ustg'] },
+		{ slug: 'gewstg', abbr: 'GewStG', title: 'Gewerbesteuergesetz' },
+		{ slug: 'gmbhg', abbr: 'GmbHG', title: 'Gesetz betreffend die Gesellschaften mit beschränkter Haftung' },
+		{ slug: 'aktg', abbr: 'AktG', title: 'Aktiengesetz' },
+		{ slug: 'inso', abbr: 'InsO', title: 'Insolvenzordnung' },
+		{ slug: 'uwg_2004', abbr: 'UWG', title: 'Gesetz gegen den unlauteren Wettbewerb', aliases: ['uwg'] },
+		{ slug: 'gwb', abbr: 'GWB', title: 'Gesetz gegen Wettbewerbsbeschränkungen' },
+		{ slug: 'stvo_2013', abbr: 'StVO', title: 'Straßenverkehrs-Ordnung', aliases: ['stvo'] },
+		{ slug: 'stvg', abbr: 'StVG', title: 'Straßenverkehrsgesetz' },
+		{ slug: 'bimschg', abbr: 'BImSchG', title: 'Bundes-Immissionsschutzgesetz' },
+		{ slug: 'aufenthg_2004', abbr: 'AufenthG', title: 'Aufenthaltsgesetz', aliases: ['aufenthg'] },
+		{ slug: 'sgb_1', abbr: 'SGB I', title: 'Sozialgesetzbuch Erstes Buch (Allgemeiner Teil)', aliases: ['sgb1', 'sgb i'] },
+		{ slug: 'sgb_4', abbr: 'SGB IV', title: 'Sozialgesetzbuch Viertes Buch (Gemeinsame Vorschriften)', aliases: ['sgb4', 'sgb iv'] },
+		{ slug: 'sgb_5', abbr: 'SGB V', title: 'Sozialgesetzbuch Fünftes Buch (Gesetzliche Krankenversicherung)', aliases: ['sgb5', 'sgb v'] },
+		{ slug: 'sgb_9_2018', abbr: 'SGB IX', title: 'Sozialgesetzbuch Neuntes Buch (Rehabilitation und Teilhabe)', aliases: ['sgb9', 'sgb ix'] },
+		{ slug: 'milog', abbr: 'MiLoG', title: 'Mindestlohngesetz' },
+		{ slug: 'muschg_2018', abbr: 'MuSchG', title: 'Mutterschutzgesetz', aliases: ['muschg'] },
+		{ slug: 'beeg', abbr: 'BEEG', title: 'Bundeselterngeld- und Elternzeitgesetz' },
+		{ slug: 'gwg_2017', abbr: 'GwG', title: 'Geldwäschegesetz', aliases: ['gwg'] },
+		{ slug: 'geschgehg', abbr: 'GeschGehG', title: 'Geschäftsgeheimnisgesetz' },
+		{ slug: 'wphg', abbr: 'WpHG', title: 'Wertpapierhandelsgesetz' },
+		{ slug: 'famfg', abbr: 'FamFG', title: 'Gesetz über das Verfahren in Familiensachen' },
+		{ slug: 'gvg', abbr: 'GVG', title: 'Gerichtsverfassungsgesetz' },
+		{ slug: 'jgg', abbr: 'JGG', title: 'Jugendgerichtsgesetz' },
+		{ slug: 'owig_1968', abbr: 'OWiG', title: 'Gesetz über Ordnungswidrigkeiten', aliases: ['owig'] },
+	];
+
+	function findLaw(query: string): LawPreset | undefined {
+		const q = query.trim().toLowerCase();
+		return POPULAR_LAWS.find((l) => l.abbr.toLowerCase() === q || l.slug.toLowerCase() === q || (l.aliases && l.aliases.some((a) => a.toLowerCase() === q)));
+	}
+
+	function parseDirectNorm(rawQuery: string): { lawSlug: string; normSlug: string; label: string; lawTitle: string } | null {
+		let q = rawQuery.trim();
+		if (!q) return null;
+
+		// Insert space between number and trailing law if attached like "138bgb"
+		q = q.replace(/^([§\s]*\d+)([a-zäöüß]{2,})$/i, '$1 $2');
+
+		// Strip inner paragraph qualifiers like "Abs. 1", "Absatz 2", "Satz 1", "S. 2", "I", "II"
+		const cleaned = q
+			.replace(/\s+(?:abs(?:atz)?\.?\s*\d+|s(?:atz)?\.?\s*\d+|nr\.?\s*\d+|i{1,3}|iv|v)\b/gi, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+
+		// Pattern 1: Number + Law, e.g.:
+		// "§ 138 BGB", "§138 BGB", "138 BGB", "Art. 1 GG", "Art 1 GG", "1 GG", "§ 1 im BGB", "138 des BGB"
+		const m1 = cleaned.match(/^(?:§+|art\.?|artikel)?\s*(\d+[a-z]?)\s*(?:im|in|des)?\s*([a-zäöüß0-9_\s]+)$/i);
+		if (m1) {
+			const num = m1[1].toLowerCase();
+			const lawCandidate = m1[2].trim();
+			const found = findLaw(lawCandidate);
+			if (found) {
+				const isArt = found.isArticle || found.slug === 'gg';
+				const normSlug = isArt ? `art_${num}` : `__${num}`;
+				const label = `${found.abbr} ${isArt ? 'Art.' : '§'} ${m1[1].toUpperCase()}`;
+				return { lawSlug: found.slug, normSlug, label, lawTitle: found.title };
+			}
+		}
+
+		// Pattern 2: Law + Number, e.g.:
+		// "BGB 138", "BGB § 138", "BGB §138", "BGB 138a", "GG 1", "GG Art 1", "GG Art. 1"
+		const m2 = cleaned.match(/^([a-zäöüß0-9_\s]+?)\s*(?:§+|art\.?|artikel)?\s*(\d+[a-z]?)$/i);
+		if (m2) {
+			const lawCandidate = m2[1].trim();
+			const num = m2[2].toLowerCase();
+			const found = findLaw(lawCandidate);
+			if (found) {
+				const isArt = found.isArticle || found.slug === 'gg';
+				const normSlug = isArt ? `art_${num}` : `__${num}`;
+				const label = `${found.abbr} ${isArt ? 'Art.' : '§'} ${m2[2].toUpperCase()}`;
+				return { lawSlug: found.slug, normSlug, label, lawTitle: found.title };
+			}
+		}
+
+		return null;
+	}
+
+	const form = document.getElementById('search-form') as HTMLFormElement | null;
+	const input = document.getElementById('search-input') as HTMLInputElement | null;
+	const dropdown = document.getElementById('search-dropdown') as HTMLElement | null;
+	const clearBtn = document.getElementById('search-clear-btn') as HTMLButtonElement | null;
+	const kbdHint = document.getElementById('search-kbd-hint') as HTMLElement | null;
+
+	if (form && input && dropdown) {
+		let selectedIndex = -1;
+		let currentItems: Array<{ url: string; title: string; subtitle?: string; badge?: string }> = [];
+
+		function renderDropdown(items: typeof currentItems) {
+			currentItems = items;
+			selectedIndex = -1;
+
+			if (items.length === 0) {
+				dropdown.hidden = true;
+				dropdown.innerHTML = '';
+				return;
+			}
+
+			dropdown.hidden = false;
+			dropdown.innerHTML = items
+				.map(
+					(item, idx) => `
+          <a href="${item.url}" class="suggestion-item" role="option" data-index="${idx}">
+            <div class="suggestion-main">
+              <span class="suggestion-title">${item.title}</span>
+              ${item.subtitle ? `<span class="suggestion-sub">${item.subtitle}</span>` : ''}
+            </div>
+            ${item.badge ? `<span class="suggestion-badge">${item.badge}</span>` : ''}
+          </a>
+        `
+				)
+				.join('');
+		}
+
+		function updateSuggestions() {
+			const q = input.value.trim();
+
+			if (clearBtn) clearBtn.hidden = q.length === 0;
+			if (kbdHint) kbdHint.hidden = q.length > 0;
+
+			if (!q) {
+				renderDropdown([]);
+				return;
+			}
+
+			const items: typeof currentItems = [];
+
+			// 1. Check for direct norm query (e.g. § 138 BGB, 138 BGB, BGB 138, Art 1 GG)
+			const directNorm = parseDirectNorm(q);
+			if (directNorm) {
+				items.push({
+					url: `/${directNorm.lawSlug}/${directNorm.normSlug}`,
+					title: directNorm.label,
+					subtitle: `${directNorm.lawTitle} | Direkt aufrufen`,
+					badge: 'Norm ↗',
+				});
+			}
+
+			// 2. Pure Norm Number Check (e.g. "§ 138", "138", "Art. 1")
+			const singleNormMatch = q.match(/^(§+|art\.?|artikel)?\s*(\d+[a-z]?)$/i);
+			if (singleNormMatch) {
+				const prefix = (singleNormMatch[1] || '').toLowerCase();
+				const num = singleNormMatch[2].toLowerCase();
+				let candidates = ['bgb', 'stgb', 'zpo', 'hgb'];
+
+				if (prefix.startsWith('art')) {
+					candidates = parseInt(num, 10) <= 146 ? ['gg'] : [];
+				} else if (!prefix.startsWith('§')) {
+					if (parseInt(num, 10) <= 146) candidates.unshift('gg');
+				}
+
+				for (const slug of candidates) {
+					const law = POPULAR_LAWS.find((l) => l.slug === slug);
+					if (law) {
+						const isArt = law.isArticle || law.slug === 'gg';
+						const normSlug = isArt ? `art_${num}` : `__${num}`;
+						items.push({
+							url: `/${law.slug}/${normSlug}`,
+							title: `${law.abbr} ${isArt ? 'Art.' : '§'} ${singleNormMatch[2].toUpperCase()}`,
+							subtitle: `${law.title} | Direkt aufrufen`,
+							badge: 'Norm ↗',
+						});
+					}
+				}
+			}
+
+			// 3. Matching laws by abbreviation, title, or aliases
+			const qLower = q.toLowerCase();
+			const matchedLaws = POPULAR_LAWS.filter((l) => l.abbr.toLowerCase().includes(qLower) || l.title.toLowerCase().includes(qLower) || (l.aliases && l.aliases.some((a) => a.toLowerCase().includes(qLower)))).slice(0, 4);
+
+			for (const law of matchedLaws) {
+				items.push({
+					url: `/${law.slug}`,
+					title: `${law.abbr} | ${law.title}`,
+					subtitle: 'Gesetz aufrufen & Inhaltsübersicht ansehen',
+					badge: 'Gesetz',
+				});
+			}
+
+			// 4. Fulltext search option
+			items.push({
+				url: `/suche?q=${encodeURIComponent(q)}`,
+				title: `Volltextsuche nach „${q}“`,
+				subtitle: 'Alle Bundesgesetze und Paragrafen durchsuchen',
+				badge: 'Suche ↵',
+			});
+
+			renderDropdown(items);
+		}
+
+		input.addEventListener('input', updateSuggestions);
+		input.addEventListener('focus', () => {
+			if (input.value.trim().length > 0) {
+				updateSuggestions();
+			}
+		});
+
+		if (clearBtn) {
+			clearBtn.addEventListener('click', () => {
+				input.value = '';
+				updateSuggestions();
+				input.focus();
+			});
+		}
+
+		// Keyboard navigation in dropdown
+		input.addEventListener('keydown', (e) => {
+			if (dropdown.hidden || currentItems.length === 0) return;
+
+			if (e.key === 'ArrowDown') {
+				e.preventDefault();
+				selectedIndex = (selectedIndex + 1) % currentItems.length;
+				highlightItem();
+			} else if (e.key === 'ArrowUp') {
+				e.preventDefault();
+				selectedIndex = (selectedIndex - 1 + currentItems.length) % currentItems.length;
+				highlightItem();
+			} else if (e.key === 'Escape') {
+				dropdown.hidden = true;
+			}
+		});
+
+		function highlightItem() {
+			const elements = dropdown.querySelectorAll('.suggestion-item');
+			elements.forEach((el, i) => {
+				if (i === selectedIndex) {
+					el.classList.add('is-active');
+					el.setAttribute('aria-selected', 'true');
+				} else {
+					el.classList.remove('is-active');
+					el.removeAttribute('aria-selected');
+				}
+			});
+		}
+
+		// Form submission handling (Enter or click Submit)
+		form.addEventListener('submit', (e) => {
+			const q = input.value.trim();
+			if (!q) {
+				e.preventDefault();
+				return;
+			}
+
+			// 1. If an item is actively highlighted with arrow keys
+			if (selectedIndex >= 0 && selectedIndex < currentItems.length) {
+				e.preventDefault();
+				window.location.href = currentItems[selectedIndex].url;
+				return;
+			}
+
+			// 2. If direct norm pattern matches (e.g. 138 BGB, § 138 BGB, Art 1 GG)
+			const direct = parseDirectNorm(q);
+			if (direct) {
+				e.preventDefault();
+				window.location.href = `/${direct.lawSlug}/${direct.normSlug}`;
+				return;
+			}
+
+			// 3. If exact law matches (e.g. BGB, GG, StGB, DDG)
+			const exactLaw = findLaw(q);
+			if (exactLaw) {
+				e.preventDefault();
+				window.location.href = `/${exactLaw.slug}`;
+				return;
+			}
+
+			// 4. Default: allow standard GET submission to /suche?q=...
+		});
+
+		// Close dropdown on click outside
+		document.addEventListener('click', (e) => {
+			if (!form.contains(e.target as Node)) {
+				dropdown.hidden = true;
+			}
+		});
+
+		// Press '/' key to focus search input anywhere on the page
+		window.addEventListener('keydown', (e) => {
+			if (e.key === '/' && document.activeElement !== input) {
+				const target = e.target as HTMLElement | null;
+				if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+					return;
+				}
+				e.preventDefault();
+				input.focus();
+				input.select();
+			}
+		});
+	}
+</script>
+
+<style>
+	.search-dropdown {
+		position: absolute;
+		top: calc(100% + var(--space-2));
+		left: 0;
+		right: 0;
+		background-color: var(--c-surface-raised);
+		border: 1.5px solid var(--c-border-strong);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		z-index: var(--z-overlay);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		max-height: 420px;
+		overflow-y: auto;
+	}
+
+	.search-box__submit-btn {
+		position: absolute;
+		top: 50%;
+		left: var(--space-2);
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		padding: var(--space-2);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--fg-tertiary);
+		cursor: pointer;
+		border-radius: var(--radius-sm);
+		z-index: 2;
+		transition:
+			color var(--duration-fast),
+			background-color var(--duration-fast);
+	}
+
+	.search-box__submit-btn:hover {
+		color: var(--c-primary);
+		background-color: var(--c-primary-subtle);
+	}
+
+	.search-box__clear-btn {
+		position: absolute;
+		top: 50%;
+		right: var(--space-10);
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		font-size: var(--text-sm);
+		color: var(--fg-tertiary);
+		cursor: pointer;
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		z-index: 2;
+		transition: color var(--duration-fast);
+	}
+
+	.search-box__clear-btn:hover {
+		color: var(--fg);
+	}
+
+	:global(.suggestion-item) {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--space-3) var(--space-4);
+		text-decoration: none;
+		color: var(--fg);
+		border-bottom: 1px solid var(--c-border);
+		transition: background-color var(--duration-fast);
+	}
+
+	:global(.suggestion-item:last-child) {
+		border-bottom: none;
+	}
+
+	:global(.suggestion-item:hover),
+	:global(.suggestion-item.is-active) {
+		background-color: var(--c-primary-subtle);
+		color: var(--c-primary);
+	}
+
+	:global(.suggestion-main) {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		text-align: left;
+	}
+
+	:global(.suggestion-title) {
+		font-weight: 600;
+		font-size: var(--text-sm);
+	}
+
+	:global(.suggestion-sub) {
+		font-size: var(--text-xs);
+		color: var(--fg-secondary);
+	}
+
+	:global(.suggestion-badge) {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: 2px 8px;
+		background: var(--bg-sunken);
+		border-radius: var(--radius-sm);
+		color: var(--fg-secondary);
+		white-space: nowrap;
+	}
+</style>

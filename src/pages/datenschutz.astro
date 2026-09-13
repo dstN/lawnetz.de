@@ -1,0 +1,136 @@
+---
+/**
+ * datenschutz.astro | Datenschutzerklärung
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Datenschutz" description="Datenschutzerklärung für LawNetz.de: Kein Tracking, keine Cookies, keine externen Schriftarten-Server.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Brotkrumen" class="breadcrumbs">
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Datenschutz</span>
+			</nav>
+
+			<h1 class="content-title">Datenschutzerklärung</h1>
+			<p class="content-lead">Informationen zur Verarbeitung personenbezogener Daten beim Besuch von LawNetz.de.</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>1. Grundsatz</h2>
+				<p>LawNetz.de ist darauf ausgelegt, ohne die Erhebung personenbezogener Daten auszukommen. Eine Profilbildung oder Weitergabe von Nutzungsdaten an Dritte findet nicht statt.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>2. Cookies und Analyse-Dienste</h2>
+				<p>Auf LawNetz.de werden keine Tracking-Cookies, Werbecookies oder Analysetools (wie Google Analytics oder Matomo) eingesetzt. Es werden keine Nutzerprofile erstellt und keine Verhaltensdaten verarbeitet.</p>
+				<p>Da keine einwilligungspflichtigen Daten auf dem Endgerät gespeichert oder ausgelesen werden, ist die Einbindung eines Einwilligungsbanners (Cookie-Banner) gemäß § 25 Abs. 2 TDDDG und Art. 6 DSGVO nicht erforderlich.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>3. Lokale Speicherung der Darstellungspräferenz (LocalStorage)</h2>
+				<p>Um die gewählte Darstellungspräferenz (Dunkel- oder Hellmodus) für nachfolgende Seitenaufrufe zu erhalten, wird dieser Wert lokal im Speicher des Browsers abgelegt (<code>localStorage</code>). Es erfolgt keine Übertragung dieses Wertes an Server oder Drittanbieter.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>4. Volltextsuche</h2>
+				<p>Die Volltextsuche (Pagefind) arbeitet clientseitig im Webbrowser. Eingegebene Suchbegriffe werden nicht an einen externen Server übermittelt.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>5. Schriftarten und Verzicht auf externe CDNs</h2>
+				<p>Alle Schriftarten (Atkinson Hyperlegible, Lexend) und statischen Ressourcen werden direkt vom eigenen Webserver ausgeliefert. Es erfolgt keine Verbindung zu Google Fonts, Content Delivery Networks (CDNs) oder sonstigen Drittanbietern.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>6. Server-Logdateien</h2>
+				<p>Beim Aufruf dieser Website verarbeitet der Webserver technisch notwendige Verbindungsdaten (IP-Adresse, Datum und Uhrzeit, aufgerufene URL, User-Agent) zur Aufrechterhaltung des technischen Betriebs und zur Abwehr von Angriffen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--c-content);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+</style>
