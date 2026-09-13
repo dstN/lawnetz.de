@@ -17,15 +17,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     if: github.repository_owner == 'dstN'
+    environment:
+      name: main
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 22
+      - name: Setup Node.js 26
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26
           cache: 'npm'
 
       - name: Install Dependencies
