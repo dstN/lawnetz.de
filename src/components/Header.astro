@@ -699,16 +699,19 @@ function isCurrent(href: string): boolean {
 
 		if (!menuBtn || !drawer || !backdrop) return;
 
+		const drawerEl = drawer;
+		const backdropEl = backdrop;
+
 		function openDrawer() {
-			drawer.removeAttribute('hidden');
-			backdrop.removeAttribute('hidden');
-			drawer.hidden = false;
-			backdrop.hidden = false;
+			drawerEl.removeAttribute('hidden');
+			backdropEl.removeAttribute('hidden');
+			drawerEl.hidden = false;
+			backdropEl.hidden = false;
 			// Force reflow
-			void drawer.offsetWidth;
+			void drawerEl.offsetWidth;
 			requestAnimationFrame(() => {
-				drawer.classList.add('is-open');
-				backdrop.classList.add('is-open');
+				drawerEl.classList.add('is-open');
+				backdropEl.classList.add('is-open');
 				menuBtn?.setAttribute('aria-expanded', 'true');
 				document.body.style.overflow = 'hidden';
 				closeBtn?.focus();
@@ -716,16 +719,16 @@ function isCurrent(href: string): boolean {
 		}
 
 		function closeDrawer() {
-			drawer.classList.remove('is-open');
-			backdrop.classList.remove('is-open');
+			drawerEl.classList.remove('is-open');
+			backdropEl.classList.remove('is-open');
 			menuBtn?.setAttribute('aria-expanded', 'false');
 			document.body.style.overflow = '';
 			setTimeout(() => {
-				if (!drawer.classList.contains('is-open')) {
-					drawer.setAttribute('hidden', '');
-					backdrop.setAttribute('hidden', '');
-					drawer.hidden = true;
-					backdrop.hidden = true;
+				if (!drawerEl.classList.contains('is-open')) {
+					drawerEl.setAttribute('hidden', '');
+					backdropEl.setAttribute('hidden', '');
+					drawerEl.hidden = true;
+					backdropEl.hidden = true;
 					menuBtn?.focus();
 				}
 			}, 250);
