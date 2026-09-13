@@ -286,8 +286,11 @@
 
   /* Cohesive shortened measure for detail & content pages inside the 1060px vertical layout rail */
   .norm-container .norm-header,
+  .norm-container .norm-content-section,
   .norm-container .gesetzesrand-wrapper,
   .norm-container .norm-paragraphs,
+  .norm-container .norm-footnotes,
+  .norm-container .norm-legal-notice,
   .norm-container .norm-disclaimer,
   .norm-container .norm-pager,
   .norm-container .norm-pagination,

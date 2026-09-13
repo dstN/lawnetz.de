@@ -24,7 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .agents/
-public/pagefind/
 data/sample/
 
 # Playwright test results
