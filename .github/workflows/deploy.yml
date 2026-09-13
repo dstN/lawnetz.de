@@ -12,53 +12,206 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
-    name: Build & Deploy to Netcup
+  deploy:
+    name: Deploy to Netcup
     runs-on: ubuntu-latest
-    # Only run deploy if the SSH secrets are configured in the GitHub repository
+    timeout-minutes: 15
     if: github.repository_owner == 'dstN'
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 26
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 26
+          node-version: 22
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Application
-        run: npm run build
-
       - name: Run A11y & Smoke Tests
         run: npm test
 
-      - name: Deploy to Netcup Server via SSH / Rsync
-        if: env.NETCUP_SSH_HOST != ''
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_KEY }}
-          ARGS: "-rlgoDzvc -i --delete --exclude='.env' --exclude='node_modules'"
-          SOURCE: "dist/ app.js package.json package-lock.json scripts/ src/data/"
-          REMOTE_HOST: ${{ secrets.NETCUP_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.NETCUP_SSH_USER }}
-          TARGET: ${{ secrets.NETCUP_SSH_TARGET || '/var/www/vhosts/lawnetz.de/httpdocs' }}
-          SCRIPT_AFTER: |
-            cd ${{ secrets.NETCUP_SSH_TARGET || '/var/www/vhosts/lawnetz.de/httpdocs' }}
-            npm install --omit=dev
-            mkdir -p tmp
-            touch tmp/restart.txt
-        with:
-          NETCUP_SSH_HOST: ${{ secrets.NETCUP_SSH_HOST }}
+      - name: Build Application
+        run: npm run build
 
-      - name: Deployment Notice (if secrets not yet set)
-        if: env.NETCUP_SSH_HOST == ''
-        run: |
-          echo "Deployment skipped: NETCUP_SSH_HOST secret is not configured yet."
-          echo "Refer to NETCUP_DEPLOYMENT.md for setup instructions."
+      - name: Check Deploy Secrets
+        id: check_secrets
         env:
-          NETCUP_SSH_HOST: ${{ secrets.NETCUP_SSH_HOST }}
+          DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
+          DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}
+          DEPLOY_SSH_PASSWORD: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
+        run: |
+          if [ -z "$DEPLOY_SSH_HOST" ] || [ -z "$DEPLOY_SSH_USER" ] || [ -z "$DEPLOY_SSH_PASSWORD" ]; then
+            echo "::warning::DEPLOY_SSH_HOST, DEPLOY_SSH_USER oder DEPLOY_SSH_PASSWORD ist nicht in den GitHub Secrets hinterlegt."
+            echo "::warning::Deployment wird uebersprungen. Siehe NETCUP_DEPLOYMENT.md."
+            echo "configured=false" >> $GITHUB_OUTPUT
+          else
+            echo "All required deploy secrets are present."
+            echo "configured=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up SSH (password auth + host key)
+        if: steps.check_secrets.outputs.configured == 'true'
+        env:
+          DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
+          DEPLOY_SSH_HOSTKEY: ${{ secrets.DEPLOY_SSH_HOSTKEY }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass
+          mkdir -p ~/.ssh
+          if [ -n "${DEPLOY_SSH_HOSTKEY:-}" ]; then
+            printf '%s\n' "$DEPLOY_SSH_HOSTKEY" > ~/.ssh/known_hosts_deploy
+            echo "Host key pinned from DEPLOY_SSH_HOSTKEY."
+          else
+            ssh-keyscan -t ed25519,rsa "$DEPLOY_SSH_HOST" > ~/.ssh/known_hosts_deploy 2>/dev/null
+            echo "::warning::DEPLOY_SSH_HOSTKEY ist nicht gesetzt; Host Key wurde via ssh-keyscan bezogen."
+          fi
+          chmod 600 ~/.ssh/known_hosts_deploy
+
+      - name: Upload release to staging directory
+        if: steps.check_secrets.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
+          REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+        run: |
+          set -euo pipefail
+          SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no -o Compression=yes"
+
+          # Netcup chroot vorbereiten (tar/sh/mkdir/rm - keine rsync-Abhaengigkeit)
+          sshpass -e ssh $SSH_OPTS "$REMOTE" sh -s "$REMOTE_PATH" <<'REMOTE'
+          set -eu
+          rm -rf "$1/dist.new"
+          mkdir -p "$1/dist.new" "$1/scripts" "$1/src/data"
+          REMOTE
+
+          # Gebautes dist/-Verzeichnis unkomprimiert via SSH-Transport uebertragen
+          tar cf - -C dist . | sshpass -e ssh $SSH_OPTS "$REMOTE" "tar xf - -C '$REMOTE_PATH/dist.new'"
+
+          # Anwendungsdateien uebertragen
+          sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/app.js'" < app.js
+          sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package.json'" < package.json
+          sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package-lock.json'" < package-lock.json
+
+          # Synchronisationsskripte & Stammdaten
+          tar cf - -C scripts . | sshpass -e ssh $SSH_OPTS "$REMOTE" "tar xf - -C '$REMOTE_PATH/scripts'"
+          tar cf - -C src/data . | sshpass -e ssh $SSH_OPTS "$REMOTE" "tar xf - -C '$REMOTE_PATH/src/data'"
+
+          echo "Release in $REMOTE_PATH/dist.new bereitgestellt."
+
+      - name: Activate release and restart Passenger
+        if: steps.check_secrets.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
+          REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+        run: |
+          set -euo pipefail
+          SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no"
+
+          sshpass -e ssh $SSH_OPTS "$REMOTE" sh -s "$REMOTE_PATH" <<'REMOTE'
+          set -eu
+          cd "$1"
+
+          test -d dist.new || { echo "Staging-Verzeichnis dist.new fehlt"; exit 1; }
+          test -d dist.new/client || { echo "dist.new/client fehlt"; exit 1; }
+          test -d dist.new/server || { echo "dist.new/server fehlt"; exit 1; }
+
+          rm -rf dist.prev
+          if [ -d dist ]; then
+            mv dist dist.prev
+          fi
+          mv dist.new dist
+
+          # Produktions-Abhaengigkeiten auf dem Server installieren
+          npm install --omit=dev
+
+          # Phusion Passenger Neustart ausloesen
+          mkdir -p tmp
+          touch tmp/restart.txt
+
+          echo "Release aktiviert und Passenger-Neustart ausgeloest."
+          REMOTE
+
+      - name: Smoke test
+        id: smoke
+        if: steps.check_secrets.outputs.configured == 'true'
+        env:
+          DEPLOY_DOMAIN: ${{ secrets.DEPLOY_DOMAIN || 'www.lawnetz.de' }}
+        run: |
+          ok=0
+          for i in $(seq 1 8); do
+            sleep 10
+            BODY=$(curl -s -m 20 "https://${DEPLOY_DOMAIN}/" || true)
+            STATUS=$(curl -s -m 20 -o /dev/null -w "%{http_code}" "https://${DEPLOY_DOMAIN}/" || true)
+            if [ "$STATUS" = "200" ] && printf '%s' "$BODY" | grep -qi 'lawnetz'; then
+              echo "Startseite OK (HTTP $STATUS) nach $((i * 10))s"
+              ok=1
+              break
+            fi
+            echo "Versuch $i/8 ($((i * 10))s): / lieferte HTTP $STATUS"
+          done
+          if [ "$ok" != 1 ]; then
+            echo "::error::https://${DEPLOY_DOMAIN}/ lieferte nach 80s nicht den erwarteten Inhalt (letzter Status: $STATUS)."
+            exit 1
+          fi
+
+          for path in /robots.txt /sitemap-index.xml; do
+            CODE=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "https://${DEPLOY_DOMAIN}$path" || true)
+            if [ "$CODE" != "200" ]; then
+              echo "::error::$path lieferte HTTP $CODE, erwartet wurde 200."
+              exit 1
+            fi
+          done
+          echo "Smoke Test erfolgreich: Web-App und statische Ressourcen sind online."
+
+      - name: Verify Application Root is not web-readable
+        if: steps.check_secrets.outputs.configured == 'true' && steps.smoke.outcome == 'success'
+        env:
+          DEPLOY_DOMAIN: ${{ secrets.DEPLOY_DOMAIN || 'www.lawnetz.de' }}
+        run: |
+          set -uo pipefail
+          fail=0
+          for path in /.env /package.json /app.js; do
+            code=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "https://${DEPLOY_DOMAIN}$path" || true)
+            if [ "$code" = "200" ]; then
+              echo "::error::$path ist oeffentlich lesbar (HTTP 200)! Document Root muss auf dist/client/ zeigen!"
+              fail=1
+            else
+              echo "ok   $path -> $code (geschuetzt)"
+            fi
+          done
+          [ "$fail" = 0 ] || exit 1
+
+      - name: Roll back to previous release on failure
+        if: steps.check_secrets.outputs.configured == 'true' && failure() && steps.smoke.outcome == 'failure'
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
+          REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+        run: |
+          set -euo pipefail
+          SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no"
+
+          sshpass -e ssh $SSH_OPTS "$REMOTE" sh -s "$REMOTE_PATH" <<'REMOTE'
+          set -eu
+          cd "$1"
+
+          if [ ! -d dist.prev ]; then
+            echo "Kein dist.prev vorhanden (erster Deploy?). Rollback nicht moeglich."
+            exit 1
+          fi
+
+          rm -rf dist.failed
+          mv dist dist.failed
+          mv dist.prev dist
+
+          mkdir -p tmp
+          touch tmp/restart.txt
+
+          echo "Automatischer Rollback auf vorherigen Release ausgefuehrt."
+          REMOTE

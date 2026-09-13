@@ -140,17 +140,26 @@ In Plesk unter **Node.js** auf **App neu starten** klicken (bzw. `touch tmp/rest
 
 ## 6. Automatisches Deployment über GitHub Actions (CI/CD)
 
-Im Repository ist ein Workflow für kontinuierliche Integration und automatisches Deployment eingerichtet (`.github/workflows/deploy.yml`):
+Im Repository ist ein Workflow für kontinuierliche Integration und automatisches Deployment eingerichtet (`.github/workflows/deploy.yml`), der nach dem bewährten **Bewerby-Muster** arbeitet:
 
-1. **CI-Pipeline** (`.github/workflows/ci.yml`):
-   - Führt bei jedem Push und Pull Request auf `main` den Build (`npm run build`) und die automatisierte Test-Suite (`npm test`, barrierefreie WCAG 2.2 AAA Validierung) aus.
-2. **Deploy-Pipeline** (`.github/workflows/deploy.yml`):
-   - Überträgt bei Pushes auf den `main`-Branch die gebauten Dateien automatisch via SSH/Rsync auf den Netcup-Server.
-   - Installiert Produktions-Dependencies und löst den Passenger-Neustart (`touch tmp/restart.txt`) aus.
+- **Passwortbasierte Authentifizierung**: Netcup-Webhosting bietet im WCP/Plesk primär Passwort-Authentifizierung für SSH/FTP. Die Verbindung erfolgt sicher über `sshpass` direkt mit OpenSSH (ohne unsichere Drittanbieter-Actions).
+- **Chroot-kompatibles Tar-Streaming**: Da in der Netcup-Chroot-Umgebung häufig kein `rsync` installiert ist, wird das gebaute Release als Tar-Stream über SSH direkt in ein Staging-Verzeichnis (`dist.new`) entpackt.
+- **Atomare Umschaltung (Zero-Downtime)**: `dist.new` wird blitzschnell zu `dist` umbenannt (der vorherige Release bleibt als `dist.prev` für Rollbacks erhalten).
+- **Automatischer Smoke-Test & Rollback**: Nach dem Neustart von Phusion Passenger prüft die Pipeline per `curl`, ob die Website erreichbar ist (HTTP 200) und ob Sicherheitsgrenzen eingehalten werden (die `.env` und `package.json` dürfen nicht öffentlich abrufbar sein). Bei Fehlern schlägt automatisch ein Rollback auf `dist.prev` an.
 
 ### Erforderliche GitHub Secrets
-Unter **Settings** → **Secrets and variables** → **Actions**:
-- `NETCUP_SSH_HOST`: IP-Adresse oder Hostname des Servers.
-- `NETCUP_SSH_USER`: SSH-Benutzername des Webhosting-Pakets.
-- `NETCUP_SSH_KEY`: Privater SSH-Schlüssel (OpenSSH-Format).
-- `NETCUP_SSH_TARGET` (optional): Zielverzeichnis auf dem Server (Standard: `/var/www/vhosts/deinedomain.de/httpdocs`).
+
+Hinterlege unter **Settings** → **Secrets and variables** → **Actions** (oder unter **Environments** → `production`):
+
+| Secret | Beispielwert | Beschreibung |
+| :--- | :--- | :--- |
+| `DEPLOY_SSH_HOST` | `lawnetz.de` *(oder Server-IP)* | Hostname oder IP-Adresse deines Netcup-Servers |
+| `DEPLOY_SSH_USER` | `hosting123456` *(oder `k123456`)* | Der SSH- / FTP-Benutzername deines Webhosting-Pakets |
+| `DEPLOY_SSH_PASSWORD` | `DeinSicheresPasswort` | Das Passwort dieses Zugangs (**kein SSH-Schlüssel nötig!**) |
+| `DEPLOY_PATH` | `/httpdocs` *(oder `/lawnetz.de`)* | Anwendungsstamm im Netcup-Chroot (was `pwd` nach dem SSH-Login ausgibt) |
+| `DEPLOY_DOMAIN` | `www.lawnetz.de` | Domain für den automatischen Smoke-Test nach dem Deployment |
+| `DEPLOY_SSH_HOSTKEY` | *(optional)* | Ausgabe von `ssh-keyscan -t ed25519 lawnetz.de` zur Pinning-Prüfung |
+
+> [!TIP]
+> Die bestehende `.env`-Datei auf dem Server bleibt unangetastet: Sie liegt dauerhaft in deinem Anwendungsstamm auf Netcup und wird von GitHub Actions weder überschrieben noch gelöscht.
+> In den GitHub Secrets müssen daher **keine** Datenbank-Zugangsdaten gespeichert werden.
