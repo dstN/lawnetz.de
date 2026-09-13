@@ -19,7 +19,7 @@ import path from 'node:path';
 import { fetchAndParseLaw } from './fetch-law';
 import { db, isDatabaseConfigured } from '../src/db/index';
 import * as schema from '../src/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 const args = process.argv.slice(2);
 function getArg(flag: string, fallback: string = ''): string {
@@ -75,6 +75,11 @@ async function main() {
           totalLawsProcessed++;
           totalNormsProcessed += law.norms.length;
 
+          // Save local JSON cache for offline/local development
+          const lawsDir = path.resolve('src/data/laws');
+          if (!fs.existsSync(lawsDir)) fs.mkdirSync(lawsDir, { recursive: true });
+          fs.writeFileSync(path.join(lawsDir, `${law.slug}.json`), JSON.stringify(law, null, 2), 'utf-8');
+
           // Save to MySQL if active
           if (db) {
             await db
@@ -101,6 +106,21 @@ async function main() {
             // Batch insert norms
             for (const norm of law.norms) {
               const normId = `${law.slug}:${norm.slug}`;
+              const paragraphsJson = norm.paragraphs.map((p: any) => {
+                if (typeof p === 'string') {
+                  const m = p.match(/^\s*\((\d+[a-z]?)\)/);
+                  return { number: m ? m[1] : null, text: p, html: p };
+                }
+                return {
+                  number: p.number ?? null,
+                  text: p.text || '',
+                  html: p.html || p.text || '',
+                };
+              });
+              const contentText = norm.paragraphs
+                .map((p: any) => (typeof p === 'string' ? p : p.text || ''))
+                .join('\n');
+
               await db
                 .insert(schema.norms)
                 .values({
@@ -109,8 +129,8 @@ async function main() {
                   normSlug: norm.slug,
                   identifier: norm.identifier,
                   title: norm.title,
-                  paragraphs: norm.paragraphs.map((p) => ({ number: null, text: p })),
-                  contentText: norm.paragraphs.join('\n'),
+                  paragraphs: paragraphsJson,
+                  contentText,
                   orderIndex: norm.orderIndex,
                   language: 'de',
                   createdAt: new Date(),
