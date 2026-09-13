@@ -39,6 +39,9 @@ jobs:
       - name: Build Application
         run: npm run build
 
+      - name: Prune devDependencies for Production
+        run: npm prune --omit=dev
+
       - name: Check Deploy Secrets
         id: check_secrets
         env:
@@ -107,6 +110,9 @@ jobs:
           sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package.json'" < package.json
           sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package-lock.json'" < package-lock.json
 
+          # Produktions-Node-Module uebertragen (damit der Server kein npm benoetigt)
+          tar cf - -C node_modules . | sshpass -e ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_PATH/node_modules' && tar xf - -C '$REMOTE_PATH/node_modules'"
+
           # Synchronisationsskripte & Stammdaten
           tar cf - -C scripts . | sshpass -e ssh $SSH_OPTS "$REMOTE" "tar xf - -C '$REMOTE_PATH/scripts'"
           tar cf - -C src/data . | sshpass -e ssh $SSH_OPTS "$REMOTE" "tar xf - -C '$REMOTE_PATH/src/data'"
@@ -136,9 +142,6 @@ jobs:
             mv dist dist.prev
           fi
           mv dist.new dist
-
-          # Produktions-Abhaengigkeiten auf dem Server installieren
-          npm install --omit=dev
 
           # Phusion Passenger Neustart ausloesen
           mkdir -p tmp
