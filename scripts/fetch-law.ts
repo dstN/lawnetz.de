@@ -24,8 +24,7 @@
 
 import { XMLParser } from 'fast-xml-parser';
 import * as fflate from 'fflate';
-import { mkdir, writeFile, readFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

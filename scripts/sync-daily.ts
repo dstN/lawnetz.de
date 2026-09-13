@@ -65,10 +65,10 @@ async function asyncPool<T, R>(
 async function main() {
   const startTime = Date.now();
   const args = process.argv.slice(2);
-  const limitArg = args.find((a, i) => args[i - 1] === '--limit');
+  const limitArg = args.find((_, i) => args[i - 1] === '--limit');
   const maxLimit = limitArg ? parseInt(limitArg, 10) : Infinity;
   const force = args.includes('--force');
-  const specificSlug = args.find((a, i) => args[i - 1] === '--slug');
+  const specificSlug = args.find((_, i) => args[i - 1] === '--slug');
 
   console.log(`[${new Date().toISOString()}] 🔄 Starting LawNetz Daily Delta Sync (ALL laws)...`);
 
@@ -117,7 +117,7 @@ async function main() {
   console.log(`[sync-daily] Performing delta HEAD checks across ${targetLaws.length} laws (concurrency: 15)...`);
 
   // Step 1: Rapid HTTP HEAD checks with concurrency 15
-  await asyncPool(targetLaws, 15, async (law, idx) => {
+  await asyncPool(targetLaws, 15, async (law) => {
     const slug = law.slug;
     checkedCount++;
 
