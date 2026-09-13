@@ -9,7 +9,14 @@
     "astro.config.mjs",
     "playwright.config.ts"
   ],
-  "exclude": ["dist", "node_modules", "scratch", "scratch/**/*", ".tempmediaStorage", ".tempmediaStorage/**/*"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "scratch",
+    "scratch/**/*",
+    ".tempmediaStorage",
+    ".tempmediaStorage/**/*"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

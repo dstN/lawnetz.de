@@ -29,3 +29,7 @@ data/sample/
 # Playwright test results
 test-results/
 playwright-report/
+
+# Temporary / scratch
+scratch/
+.tempmediaStorage/
