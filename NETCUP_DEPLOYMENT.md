@@ -42,7 +42,7 @@ Unter dem Menüpunkt **Node.js**:
 | **Anwendungsmodus** | `production` | Produktionsmodus |
 | **Anwendungsstamm** | `/httpdocs` (bzw. Projektverzeichnis) | Verzeichnis mit `app.js` und `package.json` |
 | **Dokument-Stamm** | `/httpdocs/dist/client` | Statische Dateien (CSS, JS, Fonts) direkt ausliefern |
-| **Anwendungsstartdatei** | `app.js` | Einstiegspunkt für Phusion Passenger |
+| **Anwendungsstartdatei** | `app.cjs` (bzw. `app.js`) | Einstiegspunkt für Phusion Passenger (CommonJS-Wrapper für ESM) |
 
 ---
 

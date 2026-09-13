@@ -94,6 +94,7 @@ jobs:
 
           # Anwendungsdateien uebertragen
           sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/app.js'" < app.js
+          sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/app.cjs'" < app.cjs
           sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package.json'" < package.json
           sshpass -e ssh $SSH_OPTS "$REMOTE" "cat > '$REMOTE_PATH/package-lock.json'" < package-lock.json
 
