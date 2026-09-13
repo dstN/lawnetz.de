@@ -1,0 +1,189 @@
+---
+/**
+ * en/accessibility.astro | Digital Accessibility Statement (WCAG 2.2 AAA)
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Accessibility Statement" description="Digital accessibility statement according to WCAG 2.2 Level AAA for LawNetz.de.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Accessibility</span>
+			</nav>
+
+			<h1 class="content-title">Accessibility Statement</h1>
+			<p class="content-lead">
+				This accessibility statement applies to the web offering of LawNetz.de and documents compliance with the Web Content Accessibility Guidelines (WCAG 2.2 Level AAA).
+			</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>1. Conformance Status</h2>
+				<p>This website complies with the Web Content Accessibility Guidelines (WCAG 2.2) at Conformance Level AAA.</p>
+			</section>
+
+			<section class="info-section">
+				<h2>2. Implemented Accessibility Measures</h2>
+				<dl class="measures-list">
+					<div class="measure-item">
+						<dt class="measure-title">Contrast Ratio ≥ 7:1 (AAA)</dt>
+						<dd class="measure-desc">Text colors and interactive controls meet Level AAA contrast ratios in both light and dark appearances.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Full Keyboard Operability</dt>
+						<dd class="measure-desc">All functionality is operable without a mouse: skip links, visible focus indicators, and sequential shortcuts.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Legible Typography</dt>
+						<dd class="measure-desc">Self-hosted Atkinson Hyperlegible (designed specifically for visual impairments) and Lexend.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Semantic HTML & ARIA</dt>
+						<dd class="measure-desc">Clean heading hierarchy with a single H1 element per page, distinct landmarks, and screen-reader-optimized labels.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">44px Minimum Touch Targets</dt>
+						<dd class="measure-desc">All buttons, links, and interactive elements feature a minimum touch target size of 44 × 44 pixels.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Zoom up to 400%</dt>
+						<dd class="measure-desc">The layout remains fully readable and operable up to 400% zoom without horizontal scrolling or content loss.</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section class="info-section">
+				<h2>3. Feedback & Contact</h2>
+				<p>If you encounter accessibility barriers on LawNetz, please contact us:</p>
+				<p>
+					Email: <a href="mailto:barrierefreiheit@lawnetz.de">barrierefreiheit@lawnetz.de</a>
+				</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-lg);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+
+	.measures-list {
+		margin-top: var(--space-6);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.measure-item {
+		display: grid;
+		grid-template-columns: 260px 1fr;
+		gap: var(--space-4);
+		padding: var(--space-4) 0;
+		border-bottom: 1px solid var(--border-subtle);
+		align-items: baseline;
+	}
+
+	@media (max-width: 640px) {
+		.measure-item {
+			grid-template-columns: 1fr;
+			gap: var(--space-1);
+		}
+	}
+
+	.measure-title {
+		font-family: var(--font-display);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--content-primary);
+	}
+
+	.measure-desc {
+		font-size: var(--text-sm);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+		margin: 0;
+	}
+</style>

@@ -1,46 +1,102 @@
 ---
 /**
  * Footer.astro
- * Site footer with legal links and accessibility info.
+ * Site footer with bilingual legal links, accessibility info, and open-source GitHub attribution.
  */
 
+interface Props {
+	currentPath?: string;
+}
+
+const { currentPath: propPath = '' } = Astro.props;
+const currentPath = propPath || Astro.url.pathname || '';
+const isEnglish = currentPath.startsWith('/en');
 const currentYear = new Date().getFullYear();
+
+const links = isEnglish
+	? [
+			{ href: '/en/legal-notice', label: 'Legal Notice' },
+			{ href: '/en/privacy', label: 'Privacy Policy' },
+			{ href: '/en/updates', label: 'Recent Updates' },
+			{ href: '/en/about', label: 'About & Source' },
+			{ href: '/en/accessibility', label: 'Accessibility' },
+			{ href: '/en/keyboard-shortcuts', label: 'Keyboard Shortcuts' },
+			{ href: 'https://github.com/dstN/lawnetz.de', label: 'GitHub ↗', external: true },
+	  ]
+	: [
+			{ href: '/impressum', label: 'Impressum' },
+			{ href: '/datenschutz', label: 'Datenschutz' },
+			{ href: '/aktualitaeten', label: 'Aktualitätendienst' },
+			{ href: '/hinweise', label: 'Hinweise' },
+			{ href: '/barrierefreiheit', label: 'Barrierefreiheit' },
+			{ href: '/tastenkombinationen', label: 'Tastenkombinationen' },
+			{ href: 'https://github.com/dstN/lawnetz.de', label: 'GitHub ↗', external: true },
+	  ];
 ---
 
 <footer class="site-footer" role="contentinfo">
 	<div class="site-footer__inner">
 		<div class="site-footer__info">
 			<p class="site-footer__copyright">
-				© {currentYear} LawNetz | Ein freies <a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer">Open-Source-Projekt auf GitHub</a>.
+				{
+					isEnglish ? (
+						<>
+							© {currentYear} LawNetz | An open-source project on{' '}
+							<a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer">
+								GitHub
+							</a>
+							.
+						</>
+					) : (
+						<>
+							© {currentYear} LawNetz | Ein freies{' '}
+							<a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer">
+								Open-Source-Projekt auf GitHub
+							</a>
+							.
+						</>
+					)
+				}
 			</p>
 			<p class="site-footer__source">
-				Datenquelle: <a href="https://www.gesetze-im-internet.de" target="_blank" rel="noopener noreferrer">gesetze-im-internet.de</a> (Bundesministerium der Justiz).
+				{
+					isEnglish ? (
+						<>
+							Data source:{' '}
+							<a href="https://www.gesetze-im-internet.de" target="_blank" rel="noopener noreferrer">
+								gesetze-im-internet.de
+							</a>{' '}
+							(Federal Ministry of Justice).
+						</>
+					) : (
+						<>
+							Datenquelle:{' '}
+							<a href="https://www.gesetze-im-internet.de" target="_blank" rel="noopener noreferrer">
+								gesetze-im-internet.de
+							</a>{' '}
+							(Bundesministerium der Justiz).
+						</>
+					)
+				}
 			</p>
 		</div>
 
-		<nav class="site-footer__nav" aria-label="Rechtliche Hinweise und Hilfe">
+		<nav class="site-footer__nav" aria-label={isEnglish ? 'Legal notices and assistance' : 'Rechtliche Hinweise und Hilfe'}>
 			<ul class="site-footer__links" role="list">
-				<li>
-					<a href="/impressum" class="site-footer__link">Impressum</a>
-				</li>
-				<li>
-					<a href="/datenschutz" class="site-footer__link">Datenschutz</a>
-				</li>
-				<li>
-					<a href="/aktualitaeten" class="site-footer__link">Aktualitätendienst</a>
-				</li>
-				<li>
-					<a href="/hinweise" class="site-footer__link">Hinweise</a>
-				</li>
-				<li>
-					<a href="/barrierefreiheit" class="site-footer__link">Barrierefreiheit</a>
-				</li>
-				<li>
-					<a href="/tastenkombinationen" class="site-footer__link">Tastenkombinationen</a>
-				</li>
-				<li>
-					<a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer" class="site-footer__link">GitHub ↗</a>
-				</li>
+				{
+					links.map((link) => (
+						<li>
+							<a
+								href={link.href}
+								class="site-footer__link"
+								target={link.external ? '_blank' : undefined}
+								rel={link.external ? 'noopener noreferrer' : undefined}
+							>
+								{link.label}
+							</a>
+						</li>
+					))
+				}
 			</ul>
 		</nav>
 	</div>

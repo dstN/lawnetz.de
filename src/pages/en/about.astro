@@ -1,0 +1,168 @@
+---
+/**
+ * en/about.astro | About, Data Sources & Legal Status
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About & Data Sources" description="Information regarding official data sources, translation status, copyright (§ 5 UrhG), and digital accessibility on LawNetz.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">About</span>
+			</nav>
+
+			<h1 class="content-title">About & Data Sources</h1>
+			<p class="content-lead">Information on the official data sources, translation status, and accessibility of LawNetz.</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>1. Official Data Source & Copyright Status</h2>
+				<p>
+					The statutes and regulations presented on this platform originate from the official repository of the <strong>Federal Ministry of Justice</strong> and the <strong>Federal Office of Justice</strong>, made accessible via <a href="https://www.gesetze-im-internet.de" target="_blank" rel="noopener noreferrer">gesetze-im-internet.de</a>.
+				</p>
+				<p>
+					Pursuant to <strong>Section 5(1) of the German Act on Copyright and Related Rights (UrhG)</strong>, statutes, statutory instruments, official decrees and notices do not enjoy copyright protection. They are official works and are freely accessible to the public.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>2. Status of English Translations</h2>
+				<p>
+					The English translations available on LawNetz are produced by the Language Service of the Federal Ministry of Justice and commissioned translation services. They cover <strong>135 selected federal acts and regulations</strong> (such as the Civil Code, Criminal Code, Commercial Code, and Workplace Ordinance).
+				</p>
+				<p>
+					<strong>Important Legal Notice:</strong> These translations are provided solely for informational purposes and are non-official. In all cases, only the German versions promulgated in the Federal Law Gazette (Bundesgesetzblatt, BGBl.) are legally authoritative and binding.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>3. Digital Accessibility (WCAG 2.2 AAA)</h2>
+				<p>LawNetz is built to adhere to the Web Content Accessibility Guidelines (WCAG 2.2 Level AAA):</p>
+				<ul>
+					<li><strong>Contrast Ratio:</strong> Text colors maintain a contrast ratio of at least 7:1 against backgrounds in both light and dark modes.</li>
+					<li><strong>Keyboard Navigation:</strong> Sequential shortcuts (<kbd>g</kbd> followed by a destination key, or <kbd>?</kbd> for the shortcuts dialog), skip links, and ARIA landmarks.</li>
+					<li><strong>Typography:</strong> Locally served fonts <em>Atkinson Hyperlegible</em> and <em>Lexend</em>.</li>
+					<li><strong>Data Minimization:</strong> No tracking cookies, no third-party CDN requests, and client-side fulltext search.</li>
+				</ul>
+			</section>
+
+			<section class="info-section">
+				<h2>4. Open Source</h2>
+				<p>
+					LawNetz is an independent open-source project. Source code, bug reports, and contributions are available on <a href="https://github.com/dstN/lawnetz.de" target="_blank" rel="noopener noreferrer">GitHub</a>.
+				</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section ul {
+		list-style: disc;
+		padding-left: var(--space-6);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-normal);
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+
+	kbd {
+		display: inline-block;
+		padding: 1px 5px;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
+	}
+</style>

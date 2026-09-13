@@ -1,0 +1,161 @@
+---
+/**
+ * en/legal-notice.astro | Legal Notice (Imprint)
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Legal Notice (Imprint)" description="Legal notice and imprint for LawNetz.de pursuant to Section 5 DDG and Section 18(2) MStV.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Legal Notice</span>
+			</nav>
+
+			<h1 class="content-title">Legal Notice (Imprint)</h1>
+			<p class="content-lead">Information pursuant to Section 5 DDG (Digital Services Act)</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>Information pursuant to Section 5 DDG</h2>
+				<address class="address-block">
+					Dustin Tramm<br />
+					c/o Impressumservice Dein-Impressum<br />
+					Stettiner Str. 41<br />
+					35410 Hungen<br />
+					Germany
+				</address>
+			</section>
+
+			<section class="info-section">
+				<h2>Contact</h2>
+				<p>
+					Email: <a href="mailto:info@lawnetz.de">info@lawnetz.de</a><br />
+					Web: <a href="https://www.lawnetz.de">https://www.lawnetz.de</a>
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Responsible for Editorial Content (Section 18(2) MStV)</h2>
+				<address class="address-block">
+					Dustin Tramm<br />
+					c/o Impressumservice Dein-Impressum<br />
+					Stettiner Str. 41<br />
+					35410 Hungen<br />
+					Germany
+				</address>
+			</section>
+
+			<section class="info-section">
+				<h2>Project Mission & Public Domain Notice</h2>
+				<p>LawNetz.de is an independent, non-commercial open-source project aimed at facilitating free access to law and promoting digital accessibility.</p>
+				<p>
+					The federal statutes, statutory instruments, and official notices provided on this platform are official works and in the public domain pursuant to <strong>Section 5(1) of the German Act on Copyright and Related Rights (UrhG)</strong>.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Disclaimer & Non-Official Character</h2>
+				<p>
+					The contents of this website have been compiled with diligence. However, the texts and translations provided do not constitute an official promulgation. Legally authoritative and binding are exclusively the official versions promulgated in the Federal Law Gazette (Bundesgesetzblatt, BGBl.).
+				</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.address-block {
+		font-style: normal;
+		font-size: var(--text-base);
+		line-height: var(--leading-relaxed);
+		color: var(--content-primary);
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+</style>

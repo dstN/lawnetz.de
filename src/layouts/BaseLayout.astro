@@ -21,7 +21,7 @@ interface Props {
 
 const { title, description = 'LawNetz | Deutsche Bundesgesetze und Rechtsverordnungen im Volltext.', canonical } = Astro.props;
 
-const currentPath = new URL(Astro.request.url).pathname;
+const currentPath = Astro.url.pathname || '';
 const isEnglish = currentPath.startsWith('/en');
 const fullTitle = title === 'Startseite' || title === 'Home' ? (isEnglish ? 'LawNetz | German Federal Law in English' : 'LawNetz | Bundesgesetze und Rechtsverordnungen') : `${title} | LawNetz`;
 const canonicalURL = canonical || new URL(currentPath, Astro.site).toString();
@@ -87,7 +87,7 @@ import '@styles/global.css';
 				<slot />
 			</main>
 
-			<Footer />
+			<Footer currentPath={currentPath} />
 		</div>
 
 		<ShortcutManager />

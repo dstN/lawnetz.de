@@ -1,0 +1,265 @@
+---
+/**
+ * en/keyboard-shortcuts.astro | Documentation of Accessible Keyboard Navigation
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Keyboard Shortcuts & Accessibility" description="Overview of sequential keyboard shortcuts and assistive navigation features on LawNetz.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Keyboard Shortcuts</span>
+			</nav>
+
+			<h1 class="content-title">Accessible Keyboard Navigation</h1>
+			<p class="content-lead">Overview of keyboard controls and shortcuts for navigating without a mouse.</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>Notes on Keyboard Shortcuts & Legacy Accesskeys</h2>
+				<p>
+					The legacy HTML <code>accesskey</code> attribute (such as Alt+0 through Alt+9 on traditional government portals) causes widespread conflicts with operating system commands, web browsers, and screen readers (NVDA, JAWS, VoiceOver).
+				</p>
+				<p>
+					LawNetz employs modern, sequential two-key combinations modeled after established web applications (such as GitHub and Gmail): Press <kbd>g</kbd> (for "go to") followed by a target key.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>Sequential Navigation Shortcuts</h2>
+				<div class="shortcuts-table-wrapper">
+					<table class="shortcuts-table">
+						<thead>
+							<tr>
+								<th scope="col">Key Sequence</th>
+								<th scope="col">Action / Destination</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><kbd>?</kbd></td>
+								<td><strong>Open Shortcuts Dialog</strong> (Quick reference modal)</td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>h</kbd></td>
+								<td><strong>Home</strong> (/en)</td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>g</kbd></td>
+								<td><strong>All German Laws (A–Z)</strong> Directory</td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>s</kbd></td>
+								<td><strong>Search</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>t</kbd></td>
+								<td><strong>Scroll to Top</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>i</kbd></td>
+								<td><strong>About & Sources</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>m</kbd></td>
+								<td><strong>Legal Notice (Imprint)</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>g</kbd> then <kbd>d</kbd></td>
+								<td><strong>Privacy Policy</strong></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<section class="info-section">
+				<h2>Shortcuts within Statutory Texts</h2>
+				<div class="shortcuts-table-wrapper">
+					<table class="shortcuts-table">
+						<thead>
+							<tr>
+								<th scope="col">Key</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><kbd>[</kbd> or <kbd>p</kbd></td>
+								<td><strong>Previous Section</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>]</kbd> or <kbd>n</kbd></td>
+								<td><strong>Next Section</strong></td>
+							</tr>
+							<tr>
+								<td><kbd>c</kbd></td>
+								<td><strong>Copy Citation</strong> (e.g. "Section 138 Civil Code")</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<section class="info-section">
+				<h2>Accessibility Architecture</h2>
+				<dl class="a11y-layers">
+					<dt>Layer 1: Skip Links</dt>
+					<dd>Press <kbd>Tab</kbd> immediately upon page load to reveal skip links directing focus straight to main content or navigation.</dd>
+
+					<dt>Layer 2: ARIA Landmarks</dt>
+					<dd>Screen reader users can navigate directly between the header, primary navigation, main article content, and footer.</dd>
+				</dl>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	.shortcuts-table-wrapper {
+		overflow-x: auto;
+		background: var(--surface-raised);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+	}
+
+	.shortcuts-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--text-sm);
+		text-align: left;
+	}
+
+	.shortcuts-table th,
+	.shortcuts-table td {
+		padding: var(--space-3) var(--space-4);
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	.shortcuts-table th {
+		background: var(--surface-overlay);
+		font-weight: 700;
+		color: var(--content-primary);
+	}
+
+	.shortcuts-table tr:last-child td {
+		border-bottom: none;
+	}
+
+	kbd {
+		display: inline-block;
+		padding: 2px 6px;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		font-weight: 700;
+		background: var(--surface-sunken);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
+		box-shadow: 0 1px 0 var(--border-default);
+		color: var(--content-primary);
+	}
+
+	code {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		background: var(--surface-sunken);
+		padding: 2px 5px;
+		border-radius: var(--radius-sm);
+	}
+
+	.a11y-layers dt {
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-top: var(--space-3);
+	}
+
+	.a11y-layers dd {
+		margin-left: 0;
+		margin-bottom: var(--space-3);
+		color: var(--content-secondary);
+		line-height: var(--leading-normal);
+	}
+</style>

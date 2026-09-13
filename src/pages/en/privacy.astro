@@ -1,0 +1,158 @@
+---
+/**
+ * en/privacy.astro | Privacy Policy
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy" description="Privacy policy for LawNetz.de: Zero tracking, no cookies, self-hosted fonts, and client-side search.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Privacy</span>
+			</nav>
+
+			<h1 class="content-title">Privacy Policy</h1>
+			<p class="content-lead">Information regarding the processing of personal data when visiting LawNetz.de.</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section">
+				<h2>1. Fundamental Principle</h2>
+				<p>
+					LawNetz.de is engineered to operate without collecting personal data. No user profiles are created, and no usage data is transferred to third parties or advertising networks.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>2. Cookies & Analytics Services</h2>
+				<p>
+					LawNetz.de does not use any tracking cookies, marketing cookies, or web analytics services (such as Google Analytics or Matomo).
+				</p>
+				<p>
+					Because no non-essential information is accessed or stored on your terminal device, no cookie consent banner is required pursuant to Section 25(2) TDDDG and Article 6 GDPR.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>3. Local Storage of Theme Preferences (LocalStorage)</h2>
+				<p>
+					To persist your chosen appearance preference (dark or light mode) across visits, this value is stored exclusively in your local browser storage (<code>localStorage</code>). This value is never transmitted to our servers or third-party entities.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>4. Client-Side Fulltext Search</h2>
+				<p>
+					The fulltext search function (Pagefind) operates entirely in your web browser. Search queries entered into the search field are not transmitted to or logged on external servers.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>5. Self-Hosted Fonts & No External CDNs</h2>
+				<p>
+					All typography assets (Atkinson Hyperlegible, Lexend) and static files are served directly from our own web server. At no point is a connection established to Google Fonts, external CDNs, or third-party servers.
+				</p>
+			</section>
+
+			<section class="info-section">
+				<h2>6. Server Log Files</h2>
+				<p>
+					When accessing this website, the web server processes technically necessary connection data (IP address, date and time, requested URL, user-agent string) solely to maintain secure technical operations and prevent cyberattacks pursuant to Article 6(1)(f) GDPR. These data points are not merged with other data sources.
+				</p>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--c-content);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-3);
+	}
+
+	code {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		background: var(--surface-sunken);
+		padding: 2px 5px;
+		border-radius: var(--radius-sm);
+	}
+</style>

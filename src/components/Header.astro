@@ -17,7 +17,8 @@ interface Props {
 	currentPath?: string;
 }
 
-const { currentPath = '' } = Astro.props;
+const { currentPath: propPath = '' } = Astro.props;
+const currentPath = propPath || Astro.url.pathname || '';
 
 const isEnglish = currentPath.startsWith('/en');
 
@@ -26,42 +27,77 @@ let switchLangUrl = isEnglish ? '/' : '/en';
 let switchLangLabel = isEnglish ? 'DE' : 'EN (135)';
 let switchLangTitle = isEnglish ? 'Zu den deutschen Gesetzestexten wechseln' : 'Offizielle englische Übersetzungen (135 Bundesgesetze)';
 
+// Static pages bidirectional route mapping
+const cleanPath = currentPath.replace(/\/+$/, '') || '/';
+
+const deToEnMap: Record<string, string> = {
+	'/': '/en',
+	'/gesetze': '/en/laws',
+	'/suche': '/en/search',
+	'/aktualitaeten': '/en/updates',
+	'/hinweise': '/en/about',
+	'/barrierefreiheit': '/en/accessibility',
+	'/datenschutz': '/en/privacy',
+	'/impressum': '/en/legal-notice',
+	'/tastenkombinationen': '/en/keyboard-shortcuts',
+};
+
+const enToDeMap: Record<string, string> = {
+	'/en': '/',
+	'/en/laws': '/gesetze',
+	'/en/search': '/suche',
+	'/en/updates': '/aktualitaeten',
+	'/en/about': '/hinweise',
+	'/en/accessibility': '/barrierefreiheit',
+	'/en/privacy': '/datenschutz',
+	'/en/legal-notice': '/impressum',
+	'/en/keyboard-shortcuts': '/tastenkombinationen',
+};
+
 if (isEnglish) {
-	// e.g. /en/englisch_arbst_ttv or /en/englisch_arbst_ttv/section_1 or /en/stvo
-	const match = currentPath.match(/^\/en\/([^\/]+)(?:\/([^\/]+))?/);
-	if (match) {
-		const slug = match[1];
-		const entry = (translationsData as any[]).find((t) => t.slug === slug || t.germanSlug === slug);
-		if (entry && entry.germanSlug) {
-			switchLangUrl = `/${entry.germanSlug}/`;
-		} else {
-			// If on an untranslated law notice page e.g. /en/stvo, switch back to German law /stvo/
-			switchLangUrl = `/${slug}/`;
+	if (enToDeMap[cleanPath]) {
+		switchLangUrl = enToDeMap[cleanPath];
+	} else {
+		// e.g. /en/englisch_arbst_ttv or /en/englisch_arbst_ttv/section_1 or /en/stvo
+		const match = currentPath.match(/^\/en\/([^\/]+)(?:\/([^\/]+))?/);
+		if (match) {
+			const slug = match[1];
+			const entry = (translationsData as any[]).find((t) => t.slug === slug || t.germanSlug === slug);
+			if (entry && entry.germanSlug) {
+				switchLangUrl = `/${entry.germanSlug}/`;
+			} else {
+				switchLangUrl = `/${slug}/`;
+			}
 		}
 	}
 } else {
-	// e.g. /arbst_ttv_2004 or /bgb or /stvo
-	const match = currentPath.match(/^\/([^\/]+)(?:\/([^\/]+))?/);
-	if (match && !['gesetze', 'suche', 'hinweise', 'impressum', 'datenschutz', 'barrierefreiheit', 'tastenkombinationen'].includes(match[1])) {
-		const deSlug = match[1];
-		const baseSlug = deSlug.replace(/_\d{4}$/, '');
-		const entry = (translationsData as any[]).find((t) => t.germanSlug === deSlug || t.germanSlug === baseSlug);
-		if (entry) {
-			switchLangUrl = `/en/${entry.slug}/`;
-			switchLangTitle = `Zu der englischen Übersetzung wechseln (${entry.abbreviation})`;
-		} else {
-			// Statute does not have an English translation: route to /en/${deSlug}/ which displays the clear notification
-			switchLangUrl = `/en/${deSlug}/`;
-			switchLangTitle = 'Keine amtliche englische Übersetzung verfügbar (Hinweis anzeigen)';
+	if (deToEnMap[cleanPath]) {
+		switchLangUrl = deToEnMap[cleanPath];
+	} else {
+		// e.g. /arbst_ttv_2004 or /bgb or /stvo
+		const match = currentPath.match(/^\/([^\/]+)(?:\/([^\/]+))?/);
+		if (match && !['gesetze', 'suche', 'hinweise', 'impressum', 'datenschutz', 'barrierefreiheit', 'tastenkombinationen', 'aktualitaeten'].includes(match[1])) {
+			const deSlug = match[1];
+			const baseSlug = deSlug.replace(/_\d{4}$/, '');
+			const entry = (translationsData as any[]).find((t) => t.germanSlug === deSlug || t.germanSlug === baseSlug);
+			if (entry) {
+				switchLangUrl = `/en/${entry.slug}/`;
+				switchLangTitle = `Zu der englischen Übersetzung wechseln (${entry.abbreviation})`;
+			} else {
+				// Statute does not have an English translation: route to /en/${deSlug}/ which displays the clear notification
+				switchLangUrl = `/en/${deSlug}/`;
+				switchLangTitle = 'Keine amtliche englische Übersetzung verfügbar (Hinweis anzeigen)';
+			}
 		}
 	}
 }
 
 const navItems = isEnglish
 	? [
-			{ href: '/gesetze', label: 'All Laws A–Z' },
-			{ href: '/suche', label: 'Search' },
-			{ href: '/hinweise', label: 'About & Source' },
+			{ href: '/en', label: 'Home' },
+			{ href: '/en/laws', label: 'All Laws A–Z' },
+			{ href: '/en/search', label: 'Search' },
+			{ href: '/en/about', label: 'About & Source' },
 	  ]
 	: [
 			{ href: '/', label: 'Startseite' },
@@ -191,10 +227,10 @@ function isCurrent(href: string): boolean {
 
 		<!-- Quick Links in Drawer -->
 		<div class="drawer-footer-links">
-			<a href="/suche" class="drawer-sublink">{isEnglish ? 'Search' : 'Suche'}</a>
-			<a href="/hinweise" class="drawer-sublink">{isEnglish ? 'About' : 'Hinweise'}</a>
-			<a href="/barrierefreiheit" class="drawer-sublink">{isEnglish ? 'Accessibility' : 'Barrierefreiheit'}</a>
-			<a href="/impressum" class="drawer-sublink">Impressum</a>
+			<a href={isEnglish ? '/en/search' : '/suche'} class="drawer-sublink">{isEnglish ? 'Search' : 'Suche'}</a>
+			<a href={isEnglish ? '/en/about' : '/hinweise'} class="drawer-sublink">{isEnglish ? 'About' : 'Hinweise'}</a>
+			<a href={isEnglish ? '/en/accessibility' : '/barrierefreiheit'} class="drawer-sublink">{isEnglish ? 'Accessibility' : 'Barrierefreiheit'}</a>
+			<a href={isEnglish ? '/en/legal-notice' : '/impressum'} class="drawer-sublink">{isEnglish ? 'Legal Notice' : 'Impressum'}</a>
 		</div>
 	</div>
 </aside>

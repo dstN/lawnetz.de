@@ -1,0 +1,482 @@
+---
+/**
+ * en/search.astro | Fulltext Search across Federal Laws (English UI)
+ *
+ * Powered by Pagefind:
+ * - 100% static & client-side (no backend queries, no tracking)
+ * - WCAG 2.2 AAA: aria-live announcements, keyboard operability
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search Federal Law" description="Fulltext search across German federal statutes and official English translations.">
+	<div class="search-page-container">
+		<header class="search-page-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Search</span>
+			</nav>
+
+			<h1 class="search-title">Search Federal Law</h1>
+			<p class="search-description">Client-side fulltext search across indexed federal statutes and English translations.</p>
+
+			<!-- Main Search Form -->
+			<form id="search-form" class="search-form" role="search" onsubmit="return false;">
+				<label for="global-search-input" class="visually-hidden">Search term</label>
+				<div class="search-input-group">
+					<svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<circle cx="11" cy="11" r="8"></circle>
+						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+					</svg>
+					<input id="global-search-input" type="search" placeholder="e.g. Civil Code, BGB, § 138, Art. 1 GG, Whistleblower..." autocomplete="off" autofocus spellcheck="false" />
+					<button id="search-clear-btn" type="button" class="search-clear-btn" aria-label="Clear search input" hidden> ✕ </button>
+				</div>
+			</form>
+
+			<!-- Live status region for screenreaders -->
+			<p id="search-live-status" class="search-status" aria-live="polite" aria-atomic="true">Enter a term to begin searching.</p>
+		</header>
+
+		<!-- Search Results Container -->
+		<main id="search-results-area" class="search-results-area" aria-label="Search Results">
+			<div id="results-list" class="results-list" role="feed" aria-busy="false">
+				<!-- Injected via JavaScript -->
+			</div>
+		</main>
+
+		<!-- Search Helper Guidance -->
+		<footer class="search-guidance" aria-label="Search guidance">
+			<div class="guidance-content">
+				<span class="guidance-label">Search Tips:</span>
+				<div class="guidance-items">
+					<span class="guidance-item"><strong>Direct section:</strong> <code>§ 138 BGB</code> or <code>Art. 1 GG</code></span>
+					<span class="guidance-item"><strong>English keywords:</strong> <em>Civil Code</em>, <em>Whistleblower</em>, <em>Trade Tax</em></span>
+					<span class="guidance-item"><strong>Privacy:</strong> Search executes entirely in your browser without transmitting queries</span>
+				</div>
+			</div>
+		</footer>
+	</div>
+</BaseLayout>
+
+<style>
+	.search-page-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.search-page-header {
+		margin-bottom: var(--space-6);
+	}
+
+	.search-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.search-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.search-description {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-6);
+	}
+
+	/* Search Input */
+	.search-form {
+		margin-bottom: var(--space-3);
+	}
+
+	.search-input-group {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: var(--space-4);
+		color: var(--content-tertiary);
+		pointer-events: none;
+	}
+
+	#global-search-input {
+		width: 100%;
+		height: 56px;
+		padding: 0 var(--space-12) 0 var(--space-12);
+		font-size: var(--text-lg);
+		color: var(--content-primary);
+		background: var(--surface-raised);
+		border: 2px solid var(--border-default);
+		border-radius: var(--radius-md);
+		outline: none;
+		transition:
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	#global-search-input:focus-visible {
+		border-color: var(--accent-default);
+		box-shadow: 0 0 0 4px var(--accent-focus);
+	}
+
+	.search-clear-btn {
+		position: absolute;
+		right: var(--space-3);
+		min-width: 44px;
+		min-height: 44px;
+		background: transparent;
+		border: none;
+		color: var(--content-tertiary);
+		cursor: pointer;
+		font-size: var(--text-lg);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.search-clear-btn:hover {
+		color: var(--content-primary);
+	}
+
+	.search-status {
+		font-size: var(--text-sm);
+		color: var(--content-tertiary);
+		min-height: 24px;
+	}
+
+	/* Results List */
+	.search-results-area {
+		margin-bottom: var(--space-10);
+	}
+
+	.results-list {
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	:global(.search-result-item) {
+		padding: var(--space-4) var(--space-3);
+		border-bottom: 1px solid var(--border-subtle);
+		text-decoration: none;
+		display: block;
+		border-radius: var(--radius-sm);
+		transition: background-color var(--duration-fast);
+	}
+
+	:global(.search-result-item:hover),
+	:global(.search-result-item:focus-visible) {
+		background-color: var(--surface-raised);
+		outline: none;
+	}
+
+	:global(.search-result-title) {
+		font-family: var(--font-display);
+		font-size: var(--text-base);
+		font-weight: 600;
+		color: var(--content-primary);
+		margin-bottom: var(--space-1);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+	}
+
+	:global(.search-result-item:hover .search-result-title) {
+		color: var(--accent-default);
+	}
+
+	:global(.search-result-snippet) {
+		font-size: var(--text-sm);
+		line-height: var(--leading-relaxed);
+		color: var(--content-secondary);
+	}
+
+	:global(.search-result-snippet mark) {
+		background: var(--accent-subtle);
+		color: var(--accent-default);
+		font-weight: 600;
+		padding: 0 3px;
+		border-radius: 2px;
+	}
+
+	:global(.search-result-item--direct) {
+		background-color: var(--surface-raised);
+		margin-bottom: var(--space-3);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md);
+	}
+
+	:global(.direct-badge) {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--accent-default);
+		background: var(--accent-subtle);
+		padding: 2px 8px;
+		border-radius: var(--radius-full);
+	}
+
+	/* Guidance */
+	.search-guidance {
+		margin-top: var(--space-10);
+		padding-top: var(--space-6);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.guidance-content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.guidance-label {
+		font-size: var(--text-xs);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--content-tertiary);
+	}
+
+	.guidance-items {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3) var(--space-6);
+		font-size: var(--text-xs);
+		color: var(--content-secondary);
+	}
+
+	.guidance-item strong {
+		color: var(--content-primary);
+	}
+
+	.guidance-item code,
+	.guidance-item em {
+		font-family: var(--font-mono);
+		padding: 1px 4px;
+		background: var(--surface-raised);
+		border-radius: var(--radius-sm);
+		color: var(--accent-default);
+	}
+</style>
+
+<script is:inline>
+	(function () {
+		let pagefindInstance = null;
+		const input = document.getElementById('global-search-input');
+		const clearBtn = document.getElementById('search-clear-btn');
+		const statusEl = document.getElementById('search-live-status');
+		const resultsContainer = document.getElementById('results-list');
+
+		async function loadPagefind() {
+			if (pagefindInstance) return pagefindInstance;
+			try {
+				const pfPath = '/pagefind/pagefind.js';
+				pagefindInstance = await import(pfPath);
+				if (pagefindInstance && typeof pagefindInstance.init === 'function') {
+					await pagefindInstance.init();
+				}
+				return pagefindInstance;
+			} catch (err) {
+				console.warn('[Pagefind] Index not yet available:', err);
+				return null;
+			}
+		}
+
+		const POPULAR_LAWS = [
+			{ slug: 'bgb', abbr: 'BGB', title: 'Civil Code (Bürgerliches Gesetzbuch)', enSlug: 'englisch_bgb' },
+			{ slug: 'gg', abbr: 'GG', title: 'Basic Law for the Federal Republic of Germany', isArticle: true },
+			{ slug: 'stgb', abbr: 'StGB', title: 'Criminal Code (Strafgesetzbuch)', enSlug: 'englisch_stgb' },
+			{ slug: 'hgb', abbr: 'HGB', title: 'Commercial Code (Handelsgesetzbuch)', enSlug: 'englisch_hgb' },
+			{ slug: 'zpo', abbr: 'ZPO', title: 'Code of Civil Procedure', enSlug: 'englisch_zpo' },
+			{ slug: 'stpo', abbr: 'StPO', title: 'Code of Criminal Procedure', enSlug: 'englisch_stpo' },
+			{ slug: 'arbzg', abbr: 'ArbZG', title: 'Working Hours Act', enSlug: 'englisch_arbzg' },
+			{ slug: 'bdsg_2018', abbr: 'BDSG', title: 'Federal Data Protection Act', enSlug: 'englisch_bdsg' },
+		];
+
+		function findLaw(raw) {
+			const s = raw.trim().toLowerCase();
+			return POPULAR_LAWS.find(function (l) {
+				return (
+					l.abbr.toLowerCase() === s ||
+					l.slug.toLowerCase() === s ||
+					l.title.toLowerCase().includes(s)
+				);
+			});
+		}
+
+		function parseDirectNorm(rawQuery) {
+			let q = (rawQuery || '').trim();
+			if (!q) return null;
+
+			q = q.replace(/^([§\s]*\d+)([a-zäöüß]{2,})$/i, '$1 $2');
+			const cleaned = q
+				.replace(/\s+(?:section|sec\.?|art\.?|article|par\.?)\s*/gi, ' ')
+				.replace(/\s+/g, ' ')
+				.trim();
+
+			const m1 = cleaned.match(/^(?:§+|art\.?|section)?\s*(\d+[a-z]?)\s*(?:of|in)?\s*([a-zäöüß0-9_\s]+)$/i);
+			if (m1) {
+				const num = m1[1].toLowerCase();
+				const found = findLaw(m1[2]);
+				if (found) {
+					const targetSlug = found.enSlug ? found.enSlug : found.slug;
+					const targetPrefix = found.enSlug ? '/en/' : '/';
+					const isArt = found.isArticle || found.slug === 'gg';
+					const normSlug = isArt ? 'art_' + num : (found.enSlug ? 'section_' + num : '__' + num);
+					const label = found.abbr + ' ' + (isArt ? 'Art.' : 'Section') + ' ' + m1[1].toUpperCase();
+					return { url: targetPrefix + targetSlug + '/' + normSlug, label: label, lawTitle: found.title };
+				}
+			}
+
+			const m2 = cleaned.match(/^([a-zäöüß0-9_\s]+?)\s*(?:§+|art\.?|section)?\s*(\d+[a-z]?)$/i);
+			if (m2) {
+				const num = m2[2].toLowerCase();
+				const found = findLaw(m2[1]);
+				if (found) {
+					const targetSlug = found.enSlug ? found.enSlug : found.slug;
+					const targetPrefix = found.enSlug ? '/en/' : '/';
+					const isArt = found.isArticle || found.slug === 'gg';
+					const normSlug = isArt ? 'art_' + num : (found.enSlug ? 'section_' + num : '__' + num);
+					const label = found.abbr + ' ' + (isArt ? 'Art.' : 'Section') + ' ' + m2[2].toUpperCase();
+					return { url: targetPrefix + targetSlug + '/' + normSlug, label: label, lawTitle: found.title };
+				}
+			}
+
+			return null;
+		}
+
+		async function runSearch(query) {
+			const q = (query || '').trim();
+			if (clearBtn) clearBtn.hidden = q.length === 0;
+
+			if (!q) {
+				if (resultsContainer) resultsContainer.innerHTML = '';
+				if (statusEl) statusEl.textContent = 'Enter a term to begin searching.';
+				return;
+			}
+
+			if (statusEl) statusEl.textContent = 'Searching for „' + q + '“…';
+
+			const direct = parseDirectNorm(q);
+			const exactLaw = findLaw(q);
+			let directHtml = '';
+
+			if (direct) {
+				directHtml += '<a href="' + direct.url + '" class="search-result-item search-result-item--direct">' + '<h3 class="search-result-title"><span>' + direct.label + ' | ' + direct.lawTitle + '</span><span class="direct-badge">Direct Jump</span></h3>' + '<p class="search-result-snippet">Open this statute directly ↗</p>' + '</a>';
+			} else if (exactLaw) {
+				const url = exactLaw.enSlug ? '/en/' + exactLaw.enSlug : '/' + exactLaw.slug;
+				directHtml += '<a href="' + url + '" class="search-result-item search-result-item--direct">' + '<h3 class="search-result-title"><span>' + exactLaw.abbr + ' | ' + exactLaw.title + '</span><span class="direct-badge">Statute</span></h3>' + '<p class="search-result-snippet">View table of contents and sections ↗</p>' + '</a>';
+			}
+
+			const pf = await loadPagefind();
+			if (!pf) {
+				if (resultsContainer && directHtml) {
+					resultsContainer.innerHTML = directHtml;
+					if (statusEl) statusEl.textContent = 'Direct match found.';
+				} else if (statusEl) {
+					statusEl.textContent = 'Search index is initializing...';
+				}
+				return;
+			}
+
+			const searchResult = await pf.search(q);
+			const total = searchResult.results ? searchResult.results.length : 0;
+
+			if (total === 0) {
+				if (resultsContainer) {
+					resultsContainer.innerHTML = directHtml;
+				}
+				if (statusEl) {
+					statusEl.textContent = directHtml ? 'Direct match for „' + q + '“' : 'No results found for „' + q + '“. Check spelling or try a broader term.';
+				}
+				return;
+			}
+
+			if (statusEl) {
+				statusEl.textContent = total + (total === 1 ? ' result' : ' results') + ' for „' + q + '“' + (directHtml ? ' (incl. direct jump)' : '');
+			}
+
+			const topResults = searchResult.results.slice(0, 25);
+			const dataPromises = topResults.map(function (r) {
+				return r.data();
+			});
+			const items = await Promise.all(dataPromises);
+
+			if (resultsContainer) {
+				const resultsHtml = items
+					.map(function (item) {
+						let title = (item.meta && item.meta.title) || item.raw_url || 'Statutory Section';
+						title = title.replace(/^(§+\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
+						title = title.replace(/^(Art\.?\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
+						title = title.replace(/^(Section\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
+						const excerpt = item.excerpt || '';
+						const cleanUrl = (item.url || '').replace(/\/+$/, '') || '/';
+						return '<a href="' + cleanUrl + '" class="search-result-item">' + '<h3 class="search-result-title">' + title + '</h3>' + '<p class="search-result-snippet">' + excerpt + '</p>' + '</a>';
+					})
+					.join('');
+
+				resultsContainer.innerHTML = directHtml + resultsHtml;
+			}
+		}
+
+		if (input) {
+			let debounceTimer;
+			input.addEventListener('input', function () {
+				clearTimeout(debounceTimer);
+				debounceTimer = window.setTimeout(function () {
+					runSearch(input.value);
+				}, 150);
+			});
+
+			if (clearBtn) {
+				clearBtn.addEventListener('click', function () {
+					input.value = '';
+					runSearch('');
+					input.focus();
+				});
+			}
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const initialQuery = urlParams.get('q');
+			if (initialQuery) {
+				input.value = initialQuery;
+				runSearch(initialQuery);
+			}
+		}
+	})();
+</script>
