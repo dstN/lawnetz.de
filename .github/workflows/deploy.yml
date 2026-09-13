@@ -43,13 +43,20 @@ jobs:
           DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
           DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}
           DEPLOY_SSH_PASSWORD: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET }}
         run: |
-          if [ -z "$DEPLOY_SSH_HOST" ] || [ -z "$DEPLOY_SSH_USER" ] || [ -z "$DEPLOY_SSH_PASSWORD" ]; then
-            echo "::warning::DEPLOY_SSH_HOST, DEPLOY_SSH_USER oder DEPLOY_SSH_PASSWORD ist nicht in den GitHub Secrets hinterlegt."
-            echo "::warning::Deployment wird uebersprungen. Siehe NETCUP_DEPLOYMENT.md."
+          missing=''
+          for name in DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PASSWORD DEPLOY_PATH; do
+            if [ -z "${!name:-}" ]; then
+              missing="$missing $name"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::warning::Deployment uebersprungen — fehlende Secrets:$missing"
+            echo "::warning::Bitte trage DEPLOY_PATH (z. B. /lawnetz.de/httpdocs) in den GitHub Secrets ein."
             echo "configured=false" >> $GITHUB_OUTPUT
           else
-            echo "All required deploy secrets are present."
+            echo "All required deploy secrets are present (Target: $DEPLOY_PATH)."
             echo "configured=true" >> $GITHUB_OUTPUT
           fi
 
@@ -77,7 +84,7 @@ jobs:
         env:
           SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
           REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
-          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET }}
         run: |
           set -euo pipefail
           SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no -o Compression=yes"
@@ -109,7 +116,7 @@ jobs:
         env:
           SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
           REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
-          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET }}
         run: |
           set -euo pipefail
           SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no"
@@ -193,7 +200,7 @@ jobs:
         env:
           SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD || secrets.NETCUP_SSH_PASSWORD }}
           REMOTE: ${{ secrets.DEPLOY_SSH_USER || secrets.NETCUP_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST || secrets.NETCUP_SSH_HOST }}
-          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET || '/httpdocs' }}
+          REMOTE_PATH: ${{ secrets.DEPLOY_PATH || secrets.NETCUP_SSH_TARGET }}
         run: |
           set -euo pipefail
           SSH_OPTS="-o UserKnownHostsFile=$HOME/.ssh/known_hosts_deploy -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no"
