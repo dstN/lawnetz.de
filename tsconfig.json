@@ -1,7 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "src/env.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "scratch", ".tempmediaStorage"],
+  "include": [
+    ".astro/types.d.ts",
+    "src/env.d.ts",
+    "src/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "astro.config.mjs",
+    "playwright.config.ts"
+  ],
+  "exclude": ["dist", "node_modules", "scratch", "scratch/**/*", ".tempmediaStorage", ".tempmediaStorage/**/*"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
