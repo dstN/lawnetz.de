@@ -1,0 +1,99 @@
+---
+/**
+ * kontakt.astro | Kontaktseite
+ *
+ * Barrierefreies Kontaktformular für LawNetz.de gemäß § 5 DDG.
+ */
+
+export const prerender = true;
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ContactForm from '@components/ContactForm.astro';
+---
+
+<BaseLayout
+	title="Kontakt"
+	description="Kontaktieren Sie das Team von LawNetz.de über unser sicheres und barrierefreies Kontaktformular oder per E-Mail."
+>
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Brotkrumen" class="breadcrumbs">
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Kontakt</span>
+			</nav>
+
+			<h1 class="content-title">Kontakt</h1>
+			<p class="content-lead">
+				Haben Sie Fragen, Feedback oder Anmerkungen zur Barrierefreiheit von LawNetz? Schreiben Sie uns gerne.
+			</p>
+		</header>
+
+		<div class="content-body">
+			<ContactForm lang="de" />
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumbs a {
+		color: var(--c-content-secondary);
+		text-decoration: none;
+	}
+
+	.breadcrumbs a:hover {
+		color: var(--c-primary);
+		text-decoration: underline;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-title {
+		font-family: var(--font-display);
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--c-content);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		margin-bottom: var(--space-2);
+	}
+
+	@media (max-width: 860px) {
+		.content-title {
+			font-size: var(--text-2xl);
+		}
+	}
+
+	.content-lead {
+		font-size: var(--text-base);
+		color: var(--c-content-secondary);
+		line-height: var(--leading-normal);
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-6);
+	}
+</style>

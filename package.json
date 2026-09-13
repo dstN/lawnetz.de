@@ -19,6 +19,7 @@
     "sync:translations": "npx tsx scripts/fetch-translations-catalog.ts",
     "build:full": "npm run fetch-toc && npm run sync:translations && npm run build",
     "test": "npx tsx scripts/test-a11y-smoke.ts",
+    "test:a11y": "npx playwright test",
     "astro": "astro"
   },
   "dependencies": {
@@ -37,7 +38,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
     "@dstn/fli": "^2.0.1",
+    "@playwright/test": "^1.63.0",
     "drizzle-kit": "^0.31.10",
     "pagefind": "^1.5.2",
     "typescript": "^5.9.3"

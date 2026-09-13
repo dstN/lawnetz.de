@@ -26,3 +26,7 @@ pnpm-debug.log*
 .agents/
 public/pagefind/
 data/sample/
+
+# Playwright test results
+test-results/
+playwright-report/

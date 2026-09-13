@@ -42,14 +42,14 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		</header>
 
 		<!-- Search Results Container -->
-		<main id="search-results-area" class="search-results-area" aria-label="Search Results">
-			<div id="results-list" class="results-list" role="feed" aria-busy="false">
+		<section id="search-results-area" class="search-results-area" aria-label="Search Results">
+			<div id="results-list" class="results-list" aria-live="polite" aria-busy="false">
 				<!-- Injected via JavaScript -->
 			</div>
-		</main>
+		</section>
 
 		<!-- Search Helper Guidance -->
-		<footer class="search-guidance" aria-label="Search guidance">
+		<section class="search-guidance" aria-label="Search guidance">
 			<div class="guidance-content">
 				<span class="guidance-label">Search Tips:</span>
 				<div class="guidance-items">
@@ -58,7 +58,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 					<span class="guidance-item"><strong>Privacy:</strong> Search executes entirely in your browser without transmitting queries</span>
 				</div>
 			</div>
-		</footer>
+		</section>
 	</div>
 </BaseLayout>
 

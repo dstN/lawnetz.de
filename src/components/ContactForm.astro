@@ -1,0 +1,452 @@
+---
+/**
+ * ContactForm.astro
+ *
+ * Accessible contact form for LawNetz.de:
+ * - Direct integration with shared mail relay (https://contact.yinside.de/phpmailer.php)
+ * - Honeypot anti-spam protection (invisible field 'website')
+ * - GDPR / DSGVO consent checkbox with link to privacy policy
+ * - Accessible status banners (role="status", role="alert", aria-live="polite")
+ * - WCAG 2.2 AAA compliant contrast and focus indicators
+ */
+
+interface Props {
+	lang?: 'de' | 'en';
+}
+
+const { lang = 'de' } = Astro.props;
+const isEnglish = lang === 'en';
+
+const t = {
+	isEnglish,
+	title: isEnglish ? 'Contact LawNetz' : 'Kontakt zu LawNetz',
+	subtitle: isEnglish
+		? 'Questions, feedback, or accessibility remarks? We look forward to your message.'
+		: 'Fragen, Feedback oder Hinweise zur Barrierefreiheit? Wir freuen uns über Ihre Nachricht.',
+	nameLabel: isEnglish ? 'Name' : 'Name',
+	namePlaceholder: isEnglish ? 'Your name' : 'Ihr Name',
+	emailLabel: isEnglish ? 'Email' : 'E-Mail-Adresse',
+	emailPlaceholder: isEnglish ? 'your@email.com' : 'ihre@email.de',
+	messageLabel: isEnglish ? 'Message' : 'Nachricht',
+	messagePlaceholder: isEnglish ? 'Your message...' : 'Ihre Nachricht...',
+	consentPrefix: isEnglish ? 'I have read the ' : 'Ich habe die ',
+	privacyLinkText: isEnglish ? 'Privacy Policy' : 'Datenschutzerklärung',
+	privacyLinkHref: isEnglish ? '/en/privacy' : '/datenschutz',
+	consentSuffix: isEnglish
+		? ' and agree to the transmission of my data to process this inquiry.'
+		: ' zur Kenntnis genommen und stimme der Übermittlung meiner Daten zur Bearbeitung meiner Anfrage zu.',
+	submitText: isEnglish ? 'Send Message' : 'Nachricht absenden',
+	sendingText: isEnglish ? 'Sending …' : 'Wird gesendet …',
+	successMessage: isEnglish
+		? 'Your message has been sent successfully. Thank you!'
+		: 'Ihre Nachricht wurde erfolgreich versendet. Vielen Dank!',
+	errorMessage: isEnglish
+		? 'Message could not be sent. Please try again or write directly to info@lawnetz.de.'
+		: 'Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie direkt an info@lawnetz.de.',
+	formHint: isEnglish
+		? 'Alternatively, you can reach us directly at'
+		: 'Alternativ erreichen Sie uns direkt über die E-Mail-Adresse',
+};
+---
+
+<div class="contact-card">
+	<form id="contact-form" class="contact-form" novalidate>
+		<!-- Honeypot field (hidden from assistive tech, traps automated spambots) -->
+		<div class="honeypot-field" aria-hidden="true">
+			<label for="website">Website</label>
+			<input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+		</div>
+
+		<!-- Name -->
+		<div class="form-group">
+			<label for="contact-name" class="form-label">
+				{t.nameLabel} <span class="required-star" aria-hidden="true">*</span>
+			</label>
+			<input
+				id="contact-name"
+				name="name"
+				type="text"
+				required
+				autocomplete="name"
+				placeholder={t.namePlaceholder}
+				class="form-input"
+			/>
+		</div>
+
+		<!-- Email -->
+		<div class="form-group">
+			<label for="contact-email" class="form-label">
+				{t.emailLabel} <span class="required-star" aria-hidden="true">*</span>
+			</label>
+			<input
+				id="contact-email"
+				name="email"
+				type="email"
+				required
+				autocomplete="email"
+				placeholder={t.emailPlaceholder}
+				class="form-input"
+			/>
+		</div>
+
+		<!-- Message -->
+		<div class="form-group">
+			<label for="contact-message" class="form-label">
+				{t.messageLabel} <span class="required-star" aria-hidden="true">*</span>
+			</label>
+			<textarea
+				id="contact-message"
+				name="message"
+				required
+				rows="6"
+				placeholder={t.messagePlaceholder}
+				class="form-textarea"
+			></textarea>
+		</div>
+
+		<!-- Privacy Consent Checkbox -->
+		<div class="form-checkbox-group">
+			<input
+				id="contact-consent"
+				name="consent"
+				type="checkbox"
+				required
+				class="form-checkbox"
+			/>
+			<label for="contact-consent" class="checkbox-label">
+				<span>
+					{t.consentPrefix}
+					<a href={t.privacyLinkHref} target="_blank" rel="noopener noreferrer" class="privacy-link">
+						{t.privacyLinkText}
+					</a>
+					{t.consentSuffix}
+					<span class="required-star" aria-hidden="true"> *</span>
+				</span>
+			</label>
+		</div>
+
+		<!-- Accessible Live Feedback Banner -->
+		<div id="form-status-banner" class="form-banner" role="status" aria-live="polite" hidden></div>
+
+		<!-- Submit Button -->
+		<div class="form-actions">
+			<button type="submit" id="contact-submit-btn" class="btn-submit">
+				<span class="btn-text">{t.submitText}</span>
+			</button>
+		</div>
+	</form>
+
+	<p class="form-hint">
+		{t.formHint} <a href="mailto:info@lawnetz.de" class="email-link">info@lawnetz.de</a>.
+	</p>
+</div>
+
+<style>
+	.contact-card {
+		background-color: var(--surface-raised);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg, 12px);
+		padding: var(--space-6) var(--space-6);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-6);
+		max-width: 640px;
+		box-sizing: border-box;
+	}
+
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-5);
+	}
+
+	/* Honeypot field completely hidden from real users & screenreaders */
+	.honeypot-field {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		position: absolute !important;
+		left: -9999px !important;
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.form-label {
+		font-family: var(--font-body);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--content-primary);
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+	}
+
+	.required-star {
+		color: #e53e3e;
+	}
+
+	.form-input,
+	.form-textarea {
+		width: 100%;
+		padding: var(--space-3) var(--space-4);
+		box-sizing: border-box;
+		background-color: var(--surface-page);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md, 8px);
+		color: var(--content-primary);
+		font-family: var(--font-body);
+		font-size: var(--text-base);
+		line-height: var(--leading-normal);
+		transition:
+			border-color var(--duration-fast),
+			box-shadow var(--duration-fast);
+	}
+
+	.form-input:focus,
+	.form-textarea:focus {
+		outline: 2px solid var(--c-primary);
+		outline-offset: 2px;
+		border-color: var(--c-primary);
+	}
+
+	.form-textarea {
+		resize: vertical;
+		min-height: 140px;
+	}
+
+	/* Checkbox styling */
+	.form-checkbox-group {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-3);
+		margin-top: var(--space-1);
+	}
+
+	.form-checkbox {
+		width: 20px;
+		height: 20px;
+		margin-top: 2px;
+		flex-shrink: 0;
+		cursor: pointer;
+		accent-color: var(--c-primary);
+	}
+
+	.form-checkbox:focus-visible {
+		outline: 2px solid var(--c-primary);
+		outline-offset: 2px;
+	}
+
+	.checkbox-label {
+		font-size: var(--text-sm);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		cursor: pointer;
+	}
+
+	.privacy-link {
+		color: var(--accent-default);
+		text-decoration: underline;
+		font-weight: 600;
+	}
+
+	.privacy-link:hover {
+		color: var(--content-primary);
+	}
+
+	/* Status Banners */
+	.form-banner {
+		padding: var(--space-3) var(--space-4);
+		border-radius: var(--radius-md, 8px);
+		font-size: var(--text-sm);
+		line-height: var(--leading-normal);
+		font-weight: 500;
+	}
+
+	.form-banner[hidden] {
+		display: none;
+	}
+
+	.form-banner.banner-success {
+		background-color: rgba(34, 197, 94, 0.15);
+		border: 1px solid #16a34a;
+		color: var(--content-primary);
+	}
+
+	.form-banner.banner-error {
+		background-color: rgba(239, 68, 68, 0.15);
+		border: 1px solid #dc2626;
+		color: var(--content-primary);
+	}
+
+	/* Submit Button */
+	.form-actions {
+		display: flex;
+		align-items: center;
+	}
+
+	.btn-submit {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--space-3) var(--space-6);
+		background-color: var(--c-primary);
+		color: var(--fg-on-primary, #ffffff);
+		border: none;
+		border-radius: var(--radius-md, 8px);
+		font-family: var(--font-body);
+		font-size: var(--text-base);
+		font-weight: 600;
+		cursor: pointer;
+		min-height: 44px;
+		transition:
+			background-color var(--duration-fast),
+			opacity var(--duration-fast);
+	}
+
+	.btn-submit:hover:not(:disabled) {
+		filter: brightness(1.1);
+	}
+
+	.btn-submit:focus-visible {
+		outline: 2px solid var(--c-primary);
+		outline-offset: 3px;
+	}
+
+	.btn-submit:disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+
+	.form-hint {
+		font-size: var(--text-sm);
+		color: var(--content-secondary);
+		border-top: 1px solid var(--border-subtle);
+		padding-top: var(--space-4);
+		margin: 0;
+		line-height: var(--leading-relaxed);
+	}
+
+	.email-link {
+		color: var(--accent-default);
+		text-decoration: underline;
+		font-weight: 600;
+	}
+
+	.email-link:hover {
+		color: var(--content-primary);
+	}
+</style>
+
+<script is:inline define:vars={{ t }}>
+	(function () {
+		var form = document.getElementById('contact-form');
+		if (!form) return;
+
+		var nameInput = document.getElementById('contact-name');
+		var emailInput = document.getElementById('contact-email');
+		var messageInput = document.getElementById('contact-message');
+		var consentInput = document.getElementById('contact-consent');
+		var honeypotInput = document.getElementById('website');
+		var submitBtn = document.getElementById('contact-submit-btn');
+		var statusBanner = document.getElementById('form-status-banner');
+
+		var ENDPOINT = 'https://contact.yinside.de/phpmailer.php';
+
+		function showBanner(type, message) {
+			if (!statusBanner) return;
+			statusBanner.className = 'form-banner ' + (type === 'success' ? 'banner-success' : 'banner-error');
+			statusBanner.setAttribute('role', type === 'success' ? 'status' : 'alert');
+			statusBanner.textContent = message;
+			statusBanner.removeAttribute('hidden');
+		}
+
+		function hideBanner() {
+			if (!statusBanner) return;
+			statusBanner.setAttribute('hidden', '');
+			statusBanner.textContent = '';
+		}
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+			hideBanner();
+
+			// Honeypot check: If filled, fake success and return immediately
+			if (honeypotInput && honeypotInput.value.trim() !== '') {
+				showBanner('success', t.successMessage);
+				form.reset();
+				return;
+			}
+
+			// Validate inputs
+			var name = nameInput ? nameInput.value.trim() : '';
+			var email = emailInput ? emailInput.value.trim() : '';
+			var message = messageInput ? messageInput.value.trim() : '';
+			var consent = consentInput ? consentInput.checked : false;
+
+			if (!name || !email || !message) {
+				showBanner('error', t.isEnglish ? 'Please fill out all required fields.' : 'Bitte füllen Sie alle Pflichtfelder aus.');
+				return;
+			}
+
+			if (!consent) {
+				showBanner('error', t.isEnglish ? 'Please agree to the privacy policy to submit.' : 'Bitte stimmen Sie der Datenschutzerklärung zu.');
+				if (consentInput) consentInput.focus();
+				return;
+			}
+
+			// Simple email regex check
+			var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(email)) {
+				showBanner('error', t.isEnglish ? 'Please enter a valid email address.' : 'Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+				if (emailInput) emailInput.focus();
+				return;
+			}
+
+			// Set sending state
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.querySelector('.btn-text').textContent = t.sendingText;
+			}
+
+			var payload = {
+				name: name,
+				email: email,
+				message: message
+			};
+
+			fetch(ENDPOINT, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(payload)
+			})
+				.then(function (res) {
+					return res.json().then(function (data) {
+						if (!res.ok || !data.success) {
+							throw new Error(data && data.error ? data.error : 'Server error');
+						}
+						return data;
+					});
+				})
+				.then(function () {
+					showBanner('success', t.successMessage);
+					form.reset();
+				})
+				.catch(function (err) {
+					console.error('Contact form submission failed:', err);
+					showBanner('error', t.errorMessage);
+				})
+				.finally(function () {
+					if (submitBtn) {
+						submitBtn.disabled = false;
+						submitBtn.querySelector('.btn-text').textContent = t.submitText;
+					}
+				});
+		});
+	})();
+</script>

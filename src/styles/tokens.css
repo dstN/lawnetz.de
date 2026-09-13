@@ -31,8 +31,8 @@
 
   /* Content — text and icons on surface */
   --c-content:          #1a1d23;  /* on #fff → 16.1:1 ✓ AAA */
-  --c-content-secondary:#525866;  /* on #fff →  7.1:1 ✓ AAA */
-  --c-content-tertiary: #525866;  /* on #fff →  7.1:1 ✓ AAA */
+  --c-content-secondary:#4a505e;  /* on #fff → 8.1:1, on #f7f8fa → 7.6:1, on #f0f1f4 → 7.2:1 ✓ AAA */
+  --c-content-tertiary: #4a505e;  /* on #fff → 8.1:1, on #f7f8fa → 7.6:1, on #f0f1f4 → 7.2:1 ✓ AAA */
 
   /* Primary — the "Gesetzesrand" accent, interactive elements, links */
   --c-primary:          #1a4a8a;  /* on #fff → 8.5:1 ✓ AAA */
@@ -179,13 +179,13 @@
     --c-surface-sunken:   #0d0f12;
 
     --c-content:          #e8eaed;  /* on #121418 → 14.2:1 ✓ AAA */
-    --c-content-secondary:#9da3ad;  /* on #121418 →  7.8:1 ✓ AAA */
-    --c-content-tertiary: #636975;  /* on #121418 →  4.1:1 — decorative */
+    --c-content-secondary:#a4abb8;  /* on #121418 →  8.0:1, on #1a1d23 → 7.3:1 ✓ AAA */
+    --c-content-tertiary: #a4abb8;  /* on #121418 →  8.0:1, on #1a1d23 → 7.3:1 ✓ AAA */
 
-    --c-primary:          #6ea8e6;  /* on #121418 →  8.2:1 ✓ AAA */
-    --c-primary-hover:    #8dbcf0;  /* on #121418 → 10.1:1 ✓ AAA */
-    --c-primary-subtle:   #1a2a3f;
-    --accent-focus:       rgba(110, 168, 230, 0.35);
+    --c-primary:          #7eb5ee;  /* on #121418 →  8.5:1, on #1a1d23 → 7.8:1, on #141f30 → 7.7:1 ✓ AAA */
+    --c-primary-hover:    #9ec8f6;  /* on #121418 → 11.2:1 ✓ AAA */
+    --c-primary-subtle:   #141f30;
+    --accent-focus:       rgba(126, 181, 238, 0.35);
 
     --c-signal-error:     #f28b82;
     --c-signal-success:   #81c995;
@@ -195,6 +195,7 @@
     --c-border-strong:    #444a55;
 
     --fg-link-visited:    #c0a0e0;  /* on #121418 → 7.6:1 ✓ AAA */
+    --fg-on-primary:      #121418;  /* on #7eb5ee → 8.6:1 ✓ AAA */
 
     --shadow-sm:  0 1px 2px rgb(0 0 0 / 0.3);
     --shadow-md:  0 2px 8px rgb(0 0 0 / 0.4);
@@ -207,14 +208,14 @@
   --c-surface-raised:   #1a1d23;
   --c-surface-sunken:   #0d0f12;
 
-  --c-content:          #e8eaed;
-  --c-content-secondary:#9da3ad;
-  --c-content-tertiary: #9da3ad;
+  --c-content:          #e8eaed;  /* on #121418 → 14.2:1 ✓ AAA */
+  --c-content-secondary:#a4abb8;  /* on #121418 →  8.0:1, on #1a1d23 → 7.3:1 ✓ AAA */
+  --c-content-tertiary: #a4abb8;  /* on #121418 →  8.0:1, on #1a1d23 → 7.3:1 ✓ AAA */
 
-  --c-primary:          #6ea8e6;
-  --c-primary-hover:    #8dbcf0;
-  --c-primary-subtle:   #1a2a3f;
-  --accent-focus:       rgba(110, 168, 230, 0.35);
+  --c-primary:          #7eb5ee;  /* on #121418 →  8.5:1, on #1a1d23 → 7.8:1, on #141f30 → 7.7:1 ✓ AAA */
+  --c-primary-hover:    #9ec8f6;  /* on #121418 → 11.2:1 ✓ AAA */
+  --c-primary-subtle:   #141f30;
+  --accent-focus:       rgba(126, 181, 238, 0.35);
 
   --c-signal-error:     #f28b82;
   --c-signal-success:   #81c995;
@@ -223,7 +224,8 @@
   --c-border:           #2a2e35;
   --c-border-strong:    #444a55;
 
-  --fg-link-visited:    #c0a0e0;
+  --fg-link-visited:    #c0a0e0;  /* on #121418 → 7.6:1 ✓ AAA */
+  --fg-on-primary:      #121418;  /* on #7eb5ee → 8.6:1 ✓ AAA */
 
   --shadow-sm:  0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-md:  0 2px 8px rgb(0 0 0 / 0.4);

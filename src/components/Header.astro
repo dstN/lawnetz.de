@@ -39,6 +39,7 @@ const deToEnMap: Record<string, string> = {
 	'/barrierefreiheit': '/en/accessibility',
 	'/datenschutz': '/en/privacy',
 	'/impressum': '/en/legal-notice',
+	'/kontakt': '/en/contact',
 	'/tastenkombinationen': '/en/keyboard-shortcuts',
 };
 
@@ -51,6 +52,7 @@ const enToDeMap: Record<string, string> = {
 	'/en/accessibility': '/barrierefreiheit',
 	'/en/privacy': '/datenschutz',
 	'/en/legal-notice': '/impressum',
+	'/en/contact': '/kontakt',
 	'/en/keyboard-shortcuts': '/tastenkombinationen',
 };
 
@@ -76,7 +78,7 @@ if (isEnglish) {
 	} else {
 		// e.g. /arbst_ttv_2004 or /bgb or /stvo
 		const match = currentPath.match(/^\/([^\/]+)(?:\/([^\/]+))?/);
-		if (match && !['gesetze', 'suche', 'hinweise', 'impressum', 'datenschutz', 'barrierefreiheit', 'tastenkombinationen', 'aktualitaeten'].includes(match[1])) {
+		if (match && !['gesetze', 'suche', 'hinweise', 'impressum', 'kontakt', 'datenschutz', 'barrierefreiheit', 'tastenkombinationen', 'aktualitaeten'].includes(match[1])) {
 			const deSlug = match[1];
 			const baseSlug = deSlug.replace(/_\d{4}$/, '');
 			const entry = (translationsData as any[]).find((t) => t.germanSlug === deSlug || t.germanSlug === baseSlug);
@@ -229,6 +231,7 @@ function isCurrent(href: string): boolean {
 		<div class="drawer-footer-links">
 			<a href={isEnglish ? '/en/search' : '/suche'} class="drawer-sublink">{isEnglish ? 'Search' : 'Suche'}</a>
 			<a href={isEnglish ? '/en/about' : '/hinweise'} class="drawer-sublink">{isEnglish ? 'About' : 'Hinweise'}</a>
+			<a href={isEnglish ? '/en/contact' : '/kontakt'} class="drawer-sublink">{isEnglish ? 'Contact' : 'Kontakt'}</a>
 			<a href={isEnglish ? '/en/accessibility' : '/barrierefreiheit'} class="drawer-sublink">{isEnglish ? 'Accessibility' : 'Barrierefreiheit'}</a>
 			<a href={isEnglish ? '/en/legal-notice' : '/impressum'} class="drawer-sublink">{isEnglish ? 'Legal Notice' : 'Impressum'}</a>
 		</div>

@@ -43,14 +43,14 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		</header>
 
 		<!-- Search Results Container -->
-		<main id="search-results-area" class="search-results-area" aria-label="Suchergebnisse">
-			<div id="results-list" class="results-list" role="feed" aria-busy="false">
+		<section id="search-results-area" class="search-results-area" aria-label="Suchergebnisse">
+			<div id="results-list" class="results-list" aria-live="polite" aria-busy="false">
 				<!-- Injected via JavaScript -->
 			</div>
-		</main>
+		</section>
 
 		<!-- Search Helper Guidance -->
-		<footer class="search-guidance" aria-label="Suchhinweise">
+		<section class="search-guidance" aria-label="Suchhinweise">
 			<div class="guidance-content">
 				<span class="guidance-label">Suchtipps:</span>
 				<div class="guidance-items">
@@ -59,7 +59,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 					<span class="guidance-item"><strong>Datenschutz:</strong> Die Suche läuft lokal im Browser ohne Übermittlung von Suchanfragen</span>
 				</div>
 			</div>
-		</footer>
+		</section>
 	</div>
 </BaseLayout>
 
