@@ -50,17 +50,19 @@ Unter dem Menüpunkt **Node.js**:
 
 1. Unter **Datenbanken** → **Datenbank hinzufügen** eine neue MySQL-Datenbank erstellen (z. B. `k12345_lawnetz`).
 2. Einen Datenbankbenutzer mit Passwort anlegen.
-3. Im Projektverzeichnis die Datei `.env` mit den Zugangsdaten befüllen:
+3. Im Projektverzeichnis auf dem Server die Datei `.env` anlegen und mit der `DB_URL` befüllen:
    ```ini
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_USER=k12345_lawnetzuser
-   DB_PASSWORD=Passwort
-   DB_NAME=k12345_lawnetz
+   # Direkte MySQL-Verbindungs-URL (Benutzer, Passwort, Host, Port und Datenbank in einer einzigen Zeile)
+   DB_URL=mysql://k12345_lawnetzuser:DeinPasswort@localhost:3306/k12345_lawnetz
 
-   # Geheimer Schlüssel zur Absicherung des Cronjob-Endpunkts
+   # Geheimer Schlüssel zur Absicherung des Cronjob-Endpunkts (für Plesk URL-Aufruf)
    CRON_SECRET=a8f92b7c6d1e45903cde89712bf3456789abcdef
    ```
+   > [!TIP]
+   > Sie müssen **keine** Einzelfelder (`DB_HOST`, `DB_USER`, `DB_PASSWORD` etc.) anlegen – die Angabe der `DB_URL` reicht vollkommen für Drizzle ORM, Drizzle Kit und alle Sync-Skripte aus.
+   >
+   > Auch in den **GitHub Secrets** müssen **keine** Datenbank-Zugangsdaten hinterlegt werden: Die `.env`-Datei verbleibt sicher auf Ihrem Netcup-Server und wird beim automatischen Deployment über GitHub Actions bewusst ausgeschlossen (`--exclude='.env'`).
+
 4. Tabellenstruktur einrichten:
    ```bash
    npm run db:push
