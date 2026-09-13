@@ -182,7 +182,7 @@ function isCurrent(href: string): boolean {
 
 <!-- Mobile Off-Canvas Drawer (Slide-in) - Rendered as sibling to header to prevent backdrop-filter stacking constraint -->
 <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
-<aside id="mobile-nav-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-label={isEnglish ? 'Navigation Menu' : 'Hauptnavigation'} hidden>
+<div id="mobile-nav-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-label={isEnglish ? 'Navigation Menu' : 'Hauptnavigation'} hidden>
 	<div class="drawer-header">
 		<div class="drawer-brand">
 			<span class="brand-mark" aria-hidden="true">
@@ -233,7 +233,7 @@ function isCurrent(href: string): boolean {
 			<a href={isEnglish ? '/en/legal-notice' : '/impressum'} class="drawer-sublink">{isEnglish ? 'Legal Notice' : 'Impressum'}</a>
 		</div>
 	</div>
-</aside>
+</div>
 
 <style>
 	.site-header {
@@ -319,9 +319,10 @@ function isCurrent(href: string): boolean {
 		font-family: var(--font-mono);
 		font-size: var(--text-xs);
 		font-weight: 600;
-		color: var(--content-tertiary);
-		padding: 1px 5px;
+		color: var(--content-primary);
+		padding: 1px 6px;
 		background: var(--surface-sunken);
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-sm);
 	}
 

@@ -129,6 +129,23 @@ if (fs.existsSync(clientDist)) {
 		const hasUndefined = html.includes('undefined');
 		const hasObjObj = html.includes('[object Object]');
 		assert(!hasNaN && !hasUndefined && !hasObjObj, `No broken template variables in ${rel}`);
+
+		// Check W3C ARIA allowed roles (e.g. aside must not have role="dialog")
+		const hasIllegalAsideRole = /<aside[^>]+role=["']dialog["']/i.test(html);
+		assert(!hasIllegalAsideRole, `No illegal role="dialog" on <aside> in ${rel}`);
+
+		// Check all buttons have accessible names (aria-label or inner text)
+		const buttonMatches = html.match(/<button[\s\S]*?<\/button>/gi) || [];
+		let allButtonsAccessible = true;
+		for (const btn of buttonMatches) {
+			const hasAriaLabel = /aria-label=["'][^"']+["']/i.test(btn);
+			const hasText = />[\s]*[a-zA-Z0-9§]/.test(btn);
+			if (!hasAriaLabel && !hasText) {
+				allButtonsAccessible = false;
+				break;
+			}
+		}
+		assert(allButtonsAccessible, `All <button> elements have accessible names in ${rel}`);
 	}
 } else {
 	console.log('  [Notice] dist/client not found. Run `npm run build` before executing HTML checks.');

@@ -408,11 +408,11 @@
 
   .site-footer__source {
     font-size: var(--text-xs);
-    color: var(--fg-tertiary);
+    color: var(--fg-secondary);
   }
 
   .site-footer__source a {
-    color: var(--fg-secondary);
+    color: var(--fg);
     text-decoration: underline;
   }
 

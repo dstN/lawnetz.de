@@ -32,7 +32,7 @@
   /* Content — text and icons on surface */
   --c-content:          #1a1d23;  /* on #fff → 16.1:1 ✓ AAA */
   --c-content-secondary:#525866;  /* on #fff →  7.1:1 ✓ AAA */
-  --c-content-tertiary: #8b919e;  /* on #fff →  3.6:1 — decorative only, not for text */
+  --c-content-tertiary: #525866;  /* on #fff →  7.1:1 ✓ AAA */
 
   /* Primary — the "Gesetzesrand" accent, interactive elements, links */
   --c-primary:          #1a4a8a;  /* on #fff → 8.5:1 ✓ AAA */
@@ -209,7 +209,7 @@
 
   --c-content:          #e8eaed;
   --c-content-secondary:#9da3ad;
-  --c-content-tertiary: #636975;
+  --c-content-tertiary: #9da3ad;
 
   --c-primary:          #6ea8e6;
   --c-primary-hover:    #8dbcf0;
