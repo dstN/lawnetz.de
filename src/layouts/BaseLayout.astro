@@ -13,6 +13,13 @@
  * - Font loading via @dstn/fli (self-hosted, GDPR-safe)
  */
 
+import SkipLinks from '@components/SkipLinks.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import ShortcutManager from '@components/ShortcutManager.astro';
+
+import '@styles/global.css';
+
 interface Props {
 	title: string;
 	description?: string;
@@ -25,13 +32,6 @@ const currentPath = Astro.url.pathname || '';
 const isEnglish = currentPath.startsWith('/en');
 const fullTitle = title === 'Startseite' || title === 'Home' ? (isEnglish ? 'LawNetz | German Federal Law in English' : 'LawNetz | Bundesgesetze und Rechtsverordnungen') : `${title} | LawNetz`;
 const canonicalURL = canonical || new URL(currentPath, Astro.site).toString();
-
-import SkipLinks from '@components/SkipLinks.astro';
-import Header from '@components/Header.astro';
-import Footer from '@components/Footer.astro';
-import ShortcutManager from '@components/ShortcutManager.astro';
-
-import '@styles/global.css';
 ---
 
 <!doctype html>
