@@ -159,8 +159,8 @@ jobs:
           ok=0
           for i in $(seq 1 8); do
             sleep 10
-            BODY=$(curl -s -m 20 "https://${DEPLOY_DOMAIN}/" || true)
-            STATUS=$(curl -s -m 20 -o /dev/null -w "%{http_code}" "https://${DEPLOY_DOMAIN}/" || true)
+            BODY=$(curl -sL -m 20 "https://${DEPLOY_DOMAIN}/" || true)
+            STATUS=$(curl -sL -m 20 -o /dev/null -w "%{http_code}" "https://${DEPLOY_DOMAIN}/" || true)
             if [ "$STATUS" = "200" ] && printf '%s' "$BODY" | grep -qi 'lawnetz'; then
               echo "Startseite OK (HTTP $STATUS) nach $((i * 10))s"
               ok=1
@@ -173,14 +173,14 @@ jobs:
             exit 1
           fi
 
-          for path in /robots.txt /sitemap-index.xml; do
-            CODE=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "https://${DEPLOY_DOMAIN}$path" || true)
+          for path in /robots.txt /sitemap-index.xml /stgb/__185; do
+            CODE=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "https://${DEPLOY_DOMAIN}$path" || true)
             if [ "$CODE" != "200" ]; then
               echo "::error::$path lieferte HTTP $CODE, erwartet wurde 200."
               exit 1
             fi
           done
-          echo "Smoke Test erfolgreich: Web-App und statische Ressourcen sind online."
+          echo "Smoke Test erfolgreich: Web-App, dynamische Routen und statische Ressourcen sind online."
 
       - name: Verify Application Root is not web-readable
         if: steps.check_secrets.outputs.configured == 'true' && steps.smoke.outcome == 'success'
