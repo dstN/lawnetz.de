@@ -6,3 +6,15 @@ declare module '*.astro' {
 	const Component: AstroComponentFactory;
 	export default Component;
 }
+
+declare module '@layouts/*.astro' {
+	type AstroComponentFactory = any;
+	const Component: AstroComponentFactory;
+	export default Component;
+}
+
+declare module '@components/*.astro' {
+	type AstroComponentFactory = any;
+	const Component: AstroComponentFactory;
+	export default Component;
+}
