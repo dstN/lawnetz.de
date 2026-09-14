@@ -101,9 +101,10 @@ export async function getLaw(slug: string, language: 'de' | 'en' = 'de'): Promis
     } catch (err) {
       console.warn(`[DB] Error fetching law "${slug}":`, err);
     }
+    return null;
   }
 
-  // Fallback to local files
+  // Fallback to local files only if DB is not configured
   const local = loadLocalLaw(slug);
   if (local) {
     return {
@@ -157,9 +158,10 @@ export async function getNorm(lawSlug: string, normSlug: string): Promise<(schem
     } catch (err) {
       console.warn(`[DB] Error fetching norm "${normId}":`, err);
     }
+    return null;
   }
 
-  // Fallback to local files
+  // Fallback to local files only if DB is not configured
   const local = loadLocalLaw(lawSlug);
   if (local && local.norms) {
     const foundIndex = local.norms.findIndex((n: any) => n.slug === normSlug);
@@ -202,9 +204,10 @@ export async function getLawNorms(lawSlug: string): Promise<Array<{ normSlug: st
     } catch (err) {
       console.warn(`[DB] Error fetching norms for law "${lawSlug}":`, err);
     }
+    return [];
   }
 
-  // Fallback
+  // Fallback only if DB is not configured
   const local = loadLocalLaw(lawSlug);
   if (local && local.norms) {
     return local.norms.map((n: any, idx: number) => ({

@@ -213,9 +213,9 @@ async function main() {
             })
             .onDuplicateKeyUpdate({
               set: {
-                abbreviation: sql`VALUES(abbreviation)`,
-                title: sql`VALUES(title)`,
-                normCount: sql`VALUES(norm_count)`,
+                abbreviation: law.abbreviation,
+                title: law.title,
+                normCount: law.norms.length,
                 lastSyncedAt: new Date(),
               },
             });
@@ -253,11 +253,11 @@ async function main() {
               })
               .onDuplicateKeyUpdate({
                 set: {
-                  identifier: sql`VALUES(identifier)`,
-                  title: sql`VALUES(title)`,
-                  paragraphs: sql`VALUES(paragraphs)`,
-                  contentText: sql`VALUES(content_text)`,
-                  orderIndex: sql`VALUES(order_index)`,
+                  identifier: norm.identifier,
+                  title: norm.title,
+                  paragraphs: paragraphsJson,
+                  contentText,
+                  orderIndex: norm.orderIndex,
                 },
               });
           }

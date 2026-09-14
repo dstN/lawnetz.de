@@ -33,3 +33,7 @@ playwright-report/
 # Temporary / scratch
 scratch/
 .tempmediaStorage/
+
+# Local Law JSONs (data comes from MySQL)
+src/data/laws/*.json
+!src/data/laws/.gitkeep

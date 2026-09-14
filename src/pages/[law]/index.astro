@@ -14,38 +14,28 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import FlagIcon from '@components/FlagIcon.astro';
 import { getLaw, getLawNorms, hasTranslation } from '../../db/index';
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
 
 const { law: lawParam } = Astro.params;
 
 let law = Astro.props.law;
 
 if (!law && lawParam) {
-	const localFile = resolve(process.cwd(), `src/data/laws/${lawParam}.json`);
-	if (existsSync(localFile)) {
-		try {
-			law = JSON.parse(readFileSync(localFile, 'utf-8'));
-		} catch {}
-	}
-	if (!law) {
-		const dbLaw = await getLaw(lawParam);
-		if (dbLaw) {
-			if (dbLaw.slug !== lawParam) {
-				return Astro.redirect(`/${dbLaw.slug}/`);
-			}
-			const dbNorms = await getLawNorms(dbLaw.slug);
-			law = {
-				...dbLaw,
-				norms: dbNorms,
-				items: dbNorms.map((n) => ({
-					type: 'norm',
-					slug: n.normSlug,
-					identifier: n.identifier,
-					title: n.title,
-				})),
-			};
+	const dbLaw = await getLaw(lawParam);
+	if (dbLaw) {
+		if (dbLaw.slug !== lawParam) {
+			return Astro.redirect(`/${dbLaw.slug}/`);
 		}
+		const dbNorms = await getLawNorms(dbLaw.slug);
+		law = {
+			...dbLaw,
+			norms: dbNorms,
+			items: dbNorms.map((n) => ({
+				type: 'norm',
+				slug: n.normSlug,
+				identifier: n.identifier,
+				title: n.title,
+			})),
+		};
 	}
 }
 

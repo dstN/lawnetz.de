@@ -70,9 +70,9 @@ export const ALL: APIRoute = async ({ request, url }) => {
 					})
 					.onDuplicateKeyUpdate({
 						set: {
-							abbreviation: sql`VALUES(abbreviation)`,
-							title: sql`VALUES(title)`,
-							normCount: sql`VALUES(norm_count)`,
+							abbreviation: law.abbreviation,
+							title: law.title,
+							normCount: law.norms.length,
 							lastSyncedAt: new Date(),
 						},
 					});
@@ -80,6 +80,21 @@ export const ALL: APIRoute = async ({ request, url }) => {
 				// Upsert norms
 				for (const norm of law.norms) {
 					const normId = `${law.slug}:${norm.slug}`;
+					const paragraphsJson = norm.paragraphs.map((p: any) => {
+						if (typeof p === 'string') {
+							const m = p.match(/^\s*\((\d+[a-z]?)\)/);
+							return { number: m ? m[1] : null, text: p, html: p };
+						}
+						return {
+							number: p.number ?? null,
+							text: p.text || '',
+							html: p.html || p.text || '',
+						};
+					});
+					const contentText = norm.paragraphs
+						.map((p: any) => (typeof p === 'string' ? p : p.text || ''))
+						.join('\n');
+
 					await db
 						.insert(schema.norms)
 						.values({
@@ -87,31 +102,20 @@ export const ALL: APIRoute = async ({ request, url }) => {
 							lawSlug: law.slug,
 							normSlug: norm.slug,
 							identifier: norm.identifier,
-							paragraphs: norm.paragraphs.map((p: any) => {
-								if (typeof p === 'string') {
-									const m = p.match(/^\s*\((\d+[a-z]?)\)/);
-									return { number: m ? m[1] : null, text: p, html: p };
-								}
-								return {
-									number: p.number ?? null,
-									text: p.text || '',
-									html: p.html || p.text || '',
-								};
-							}),
-							contentText: norm.paragraphs
-								.map((p: any) => (typeof p === 'string' ? p : p.text || ''))
-								.join('\n'),
+							title: norm.title,
+							paragraphs: paragraphsJson,
+							contentText,
 							orderIndex: norm.orderIndex,
 							language: 'de',
 							createdAt: new Date(),
 						})
 						.onDuplicateKeyUpdate({
 							set: {
-								identifier: sql`VALUES(identifier)`,
-								title: sql`VALUES(title)`,
-								paragraphs: sql`VALUES(paragraphs)`,
-								contentText: sql`VALUES(content_text)`,
-								orderIndex: sql`VALUES(order_index)`,
+								identifier: norm.identifier,
+								title: norm.title,
+								paragraphs: paragraphsJson,
+								contentText,
+								orderIndex: norm.orderIndex,
 							},
 						});
 				}
