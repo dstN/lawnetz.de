@@ -23,7 +23,7 @@ Anleitung für das Deployment auf Netcup-Webhosting-Tarifen (Plesk/WCP) unter No
 - **Rechtliche Einordnung**: Da keine einwilligungspflichtigen Informationen auf Endgeräten gespeichert oder ausgelesen werden (§ 25 TDDDG) und keine Nutzerprofile gebildet werden, ist kein Cookie-Banner erforderlich.
 - **Content Security Policy (CSP)**: Sowohl über die Middleware (`src/middleware.ts`) als auch über `.htaccess` wird eine restriktive CSP ausgeliefert:
   ```http
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://contact.yinside.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
   ```
 
 ---

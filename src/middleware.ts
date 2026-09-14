@@ -38,9 +38,11 @@ export const onRequest = defineMiddleware(async ({ request, redirect }, next) =>
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=()');
+  // connect-src also lists the self-hosted mail relay the contact form posts to
+  // (ContactForm.astro); with 'self' alone the browser blocks that fetch.
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://contact.yinside.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
   );
 
   return response;
