@@ -31,6 +31,7 @@ const limit = Number(getArg('--limit', '0'));
 const concurrency = Number(getArg('--concurrency', '10'));
 const englishOnly = args.includes('--english-only');
 const germanOnly = args.includes('--german-only');
+const saveJson = args.includes('--save-json');
 
 async function main() {
   console.log('='.repeat(60));
@@ -75,10 +76,12 @@ async function main() {
           totalLawsProcessed++;
           totalNormsProcessed += law.norms.length;
 
-          // Save local JSON cache for offline/local development
-          const lawsDir = path.resolve('src/data/laws');
-          if (!fs.existsSync(lawsDir)) fs.mkdirSync(lawsDir, { recursive: true });
-          fs.writeFileSync(path.join(lawsDir, `${law.slug}.json`), JSON.stringify(law, null, 2), 'utf-8');
+          // Save local JSON cache only if requested or if no database configured
+          if (saveJson || !db) {
+            const lawsDir = path.resolve('src/data/laws');
+            if (!fs.existsSync(lawsDir)) fs.mkdirSync(lawsDir, { recursive: true });
+            fs.writeFileSync(path.join(lawsDir, `${law.slug}.json`), JSON.stringify(law, null, 2), 'utf-8');
+          }
 
           // Save to MySQL if active
           if (db) {

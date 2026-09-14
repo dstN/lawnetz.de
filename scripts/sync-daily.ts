@@ -68,6 +68,7 @@ async function main() {
   const limitArg = args.find((_, i) => args[i - 1] === '--limit');
   const maxLimit = limitArg ? parseInt(limitArg, 10) : Infinity;
   const force = args.includes('--force');
+  const saveJson = args.includes('--save-json');
   const specificSlug = args.find((_, i) => args[i - 1] === '--slug');
 
   console.log(`[${new Date().toISOString()}] 🔄 Starting LawNetz Daily Delta Sync (ALL laws)...`);
@@ -190,9 +191,11 @@ async function main() {
         const law = await fetchAndParseLaw(slug);
         if (!law) return;
 
-        // Save local JSON cache
-        const outFile = path.join(lawsDir, `${law.slug}.json`);
-        fs.writeFileSync(outFile, JSON.stringify(law, null, 2), 'utf-8');
+        // Save local JSON cache only if requested or if no database connected
+        if (saveJson || !db) {
+          const outFile = path.join(lawsDir, `${law.slug}.json`);
+          fs.writeFileSync(outFile, JSON.stringify(law, null, 2), 'utf-8');
+        }
 
         // Upsert to MySQL if database is connected
         if (db) {
