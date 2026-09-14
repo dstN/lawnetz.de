@@ -2,7 +2,6 @@ import type { APIRoute } from 'astro';
 import { db } from '../../../db/index';
 import * as schema from '../../../db/schema';
 import { fetchAndParseLaw } from '../../../../scripts/fetch-law';
-import { sql } from 'drizzle-orm';
 
 export const prerender = false;
 

@@ -19,7 +19,6 @@ import path from 'node:path';
 import { fetchAndParseLaw } from './fetch-law';
 import { db, isDatabaseConfigured } from '../src/db/index';
 import * as schema from '../src/db/schema';
-import { sql } from 'drizzle-orm';
 
 const args = process.argv.slice(2);
 function getArg(flag: string, fallback: string = ''): string {
@@ -76,8 +75,8 @@ async function main() {
           totalLawsProcessed++;
           totalNormsProcessed += law.norms.length;
 
-          // Save local JSON cache only if requested or if no database configured
-          if (saveJson || !db) {
+          // Save local JSON cache only if explicitly requested
+          if (saveJson) {
             const lawsDir = path.resolve('src/data/laws');
             if (!fs.existsSync(lawsDir)) fs.mkdirSync(lawsDir, { recursive: true });
             fs.writeFileSync(path.join(lawsDir, `${law.slug}.json`), JSON.stringify(law, null, 2), 'utf-8');
@@ -191,7 +190,7 @@ async function main() {
               })
               .onDuplicateKeyUpdate({
                 set: {
-                  title: sql`VALUES(title)`,
+                  title: t.title,
                   lastSyncedAt: new Date(),
                 },
               });

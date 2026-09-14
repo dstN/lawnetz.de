@@ -2,8 +2,6 @@ import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 import { eq, and, asc, sql } from 'drizzle-orm';
 import * as schema from './schema';
-import fs from 'node:fs';
-import path from 'node:path';
 import translationsData from '../data/translations.json';
 
 // Environment variable retrieval helper
@@ -56,25 +54,6 @@ if (isDatabaseConfigured()) {
 
 export const db = dbInstance;
 
-// ==========================================================================
-// Local Storage Fallback Cache
-// ==========================================================================
-const localCache = new Map<string, any>();
-
-function loadLocalLaw(slug: string): any | null {
-  if (localCache.has(slug)) return localCache.get(slug);
-  const filePath = path.join(process.cwd(), 'src', 'data', 'laws', `${slug}.json`);
-  if (fs.existsSync(filePath)) {
-    try {
-      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      localCache.set(slug, data);
-      return data;
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
 
 // ==========================================================================
 // Repository API — High Performance Data Access
@@ -102,21 +81,6 @@ export async function getLaw(slug: string, language: 'de' | 'en' = 'de'): Promis
       console.warn(`[DB] Error fetching law "${slug}":`, err);
     }
     return null;
-  }
-
-  // Fallback to local files only if DB is not configured
-  const local = loadLocalLaw(slug);
-  if (local) {
-    return {
-      slug: local.slug,
-      abbreviation: local.abbreviation || slug.toUpperCase(),
-      title: local.title,
-      language: 'de',
-      normCount: local.norms ? local.norms.length : 0,
-      sourceUrl: `https://www.gesetze-im-internet.de/${slug}/index.html`,
-      lastSyncedAt: new Date(local.lastUpdated || Date.now()),
-      createdAt: new Date(),
-    };
   }
 
   return null;
@@ -161,29 +125,6 @@ export async function getNorm(lawSlug: string, normSlug: string): Promise<(schem
     return null;
   }
 
-  // Fallback to local files only if DB is not configured
-  const local = loadLocalLaw(lawSlug);
-  if (local && local.norms) {
-    const foundIndex = local.norms.findIndex((n: any) => n.slug === normSlug);
-    if (foundIndex !== -1) {
-      const found = local.norms[foundIndex];
-      return {
-        id: normId,
-        lawSlug,
-        normSlug: found.slug,
-        slug: found.slug,
-        identifier: found.identifier,
-        title: found.title,
-        paragraphs: found.paragraphs,
-        contentHtml: null,
-        contentText: found.paragraphs ? found.paragraphs.map((p: any) => (typeof p === 'string' ? p : p.text || '')).join('\n') : '',
-        orderIndex: found.orderIndex ?? foundIndex,
-        language: 'de',
-        createdAt: new Date(),
-      };
-    }
-  }
-
   return null;
 }
 
@@ -205,17 +146,6 @@ export async function getLawNorms(lawSlug: string): Promise<Array<{ normSlug: st
       console.warn(`[DB] Error fetching norms for law "${lawSlug}":`, err);
     }
     return [];
-  }
-
-  // Fallback only if DB is not configured
-  const local = loadLocalLaw(lawSlug);
-  if (local && local.norms) {
-    return local.norms.map((n: any, idx: number) => ({
-      normSlug: n.slug,
-      identifier: n.identifier,
-      title: n.title,
-      orderIndex: n.orderIndex ?? idx,
-    }));
   }
 
   return [];

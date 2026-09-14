@@ -6,7 +6,7 @@
     "src/**/*",
     "scripts/**/*",
     "tests/**/*",
-    "astro.config.mjs",
+    "astro.config.ts",
     "playwright.config.ts"
   ],
   "exclude": [
@@ -23,8 +23,7 @@
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"],
-      "@data/*": ["src/data/*"],
-      "@lib/*": ["src/lib/*"]
+      "@data/*": ["src/data/*"]
     }
   }
 }

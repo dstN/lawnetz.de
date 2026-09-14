@@ -127,11 +127,10 @@ npm install --omit=dev
 ```
 
 ### 4. Datenbestand initialisieren
-Für den ersten Datenabruf aller Gesetze per SSH ausführen:
+Für den ersten Datenabruf aller Gesetze in die MySQL-Datenbank per SSH ausführen:
 ```bash
 npm run scrape:all
 ```
-Ohne vorherigen Datenbankabgleich werden die lokalen Fallback-Dateien aus `src/data/laws/` verwendet.
 
 ### 5. Anwendung neu starten
 In Plesk unter **Node.js** auf **App neu starten** klicken (bzw. `touch tmp/restart.txt`).

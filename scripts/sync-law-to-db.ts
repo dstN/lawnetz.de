@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { db, isDatabaseConfigured } from '../src/db/index';
+import { db } from '../src/db/index';
 import * as schema from '../src/db/schema';
 import { fetchAndParseLaw } from './fetch-law';
 

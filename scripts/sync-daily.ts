@@ -20,7 +20,6 @@ import { fileURLToPath } from 'node:url';
 import { fetchAndParseLaw } from './fetch-law';
 import { db } from '../src/db/index';
 import * as schema from '../src/db/schema';
-import { sql } from 'drizzle-orm';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -191,8 +190,8 @@ async function main() {
         const law = await fetchAndParseLaw(slug);
         if (!law) return;
 
-        // Save local JSON cache only if requested or if no database connected
-        if (saveJson || !db) {
+        // Save local JSON cache only if explicitly requested
+        if (saveJson) {
           const outFile = path.join(lawsDir, `${law.slug}.json`);
           fs.writeFileSync(outFile, JSON.stringify(law, null, 2), 'utf-8');
         }
