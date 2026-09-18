@@ -573,6 +573,17 @@
     background-color: var(--c-primary);
   }
 
+  .law-index__alpha-divider {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-border);
+    font-weight: 300;
+    margin: 0 var(--space-1);
+    user-select: none;
+    font-size: var(--text-base);
+  }
+
   /* ── Law List Items ──────────────────────────────────────────────── */
   .law-index__section { margin-block-end: var(--space-10); }
 
@@ -683,11 +694,10 @@
     color: var(--c-content-secondary);
     background: var(--c-surface-sunken);
     border: 1px solid var(--c-border);
-    padding: 3px 8px;
+    padding: 3px 10px;
     border-radius: var(--radius-sm);
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: max-content;
+    width: max-content;
     white-space: nowrap;
     flex-shrink: 0;
     margin-left: auto;

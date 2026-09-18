@@ -140,7 +140,7 @@ async function scrapeTeillisten(): Promise<Map<string, TeillisteEntry>> {
               title,
               abbr,
               pdf,
-              letter: letters.includes(key) ? key : '#',
+              letter: key,
             });
           }
           break; // success
@@ -195,17 +195,39 @@ async function fetchToc(): Promise<void> {
       if (!slug) return null;
 
       const teilliste = teillisteMap.get(slug);
-      const title = teilliste?.title || item.title;
-      const abbreviation = teilliste?.abbr || slug.toUpperCase();
-
-      // Letter from Teilliste or derived from first character of abbreviation
+      let title = teilliste?.title || item.title;
+      let abbreviation = teilliste?.abbr || '';
       let firstLetter = teilliste?.letter;
-      if (!firstLetter) {
-        const char = abbreviation.trim()[0]?.toUpperCase() || '#';
-        firstLetter = /[A-Z]/.test(char) ? char : '#';
+      let pdf = teilliste?.pdf || null;
+
+      // Handle the 3 special laws in XML feed that are not indexed in any GII Teilliste
+      if (slug === '_77abs3__145abs1__54abs3sgb9bek') {
+        abbreviation = '§ 77 Abs. 3 SGB IX Bek';
+        firstLetter = 'B'; // "Bekanntmachung über die Anpassung der Ausgleichsabgabe..."
+        pdf = '§77Abs3_§145Abs1_§54Abs3SGB9Bek.pdf';
+      } else if (slug === '_77abs3__54abs3sgb9bek') {
+        abbreviation = '§ 77 Abs. 3 SGB IX Bek';
+        firstLetter = 'B'; // "Bekanntmachung über die Erhöhung der Ausgleichsabgabe..."
+        pdf = '§77Abs3_§54Abs3SGB9Bek.pdf';
+      } else if (slug === 'enwg_118asubv') {
+        abbreviation = '§ 118a EnWG-SubVO';
+        firstLetter = 'E'; // EnWG-Subdelegationsverordnung
+        pdf = '§_118a_EnWG-SubVO.pdf';
       }
 
-      const pdf = teilliste?.pdf || `${(abbreviation || slug).trim().replace(/\s+/g, '_')}.pdf`;
+      if (!abbreviation) {
+        abbreviation = slug.toUpperCase();
+      }
+
+      if (!firstLetter) {
+        const cleanAbbr = abbreviation.replace(/^[§_\s\d.]+/g, '').trim();
+        const char = cleanAbbr[0]?.toUpperCase() || title.trim()[0]?.toUpperCase() || 'A';
+        firstLetter = /[A-Z]/.test(char) ? char : 'A';
+      }
+
+      if (!pdf) {
+        pdf = `${abbreviation.trim().replace(/\s+/g, '_')}.pdf`;
+      }
 
       return {
         title,
@@ -218,11 +240,13 @@ async function fetchToc(): Promise<void> {
     })
     .filter((entry): entry is LawEntry => entry !== null);
 
-  // Sort laws: primary by firstLetter (# comes first or last? Alphabetical: # then A-Z), then by abbreviation
+  // Sort laws: A-Z then 1-9, then by abbreviation within each group
+  const letterOrder = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
   const sortedLaws = rawLaws.sort((a, b) => {
     if (a.firstLetter !== b.firstLetter) {
-      if (a.firstLetter === '#') return -1;
-      if (b.firstLetter === '#') return 1;
+      const idxA = letterOrder.indexOf(a.firstLetter);
+      const idxB = letterOrder.indexOf(b.firstLetter);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
       return a.firstLetter.localeCompare(b.firstLetter);
     }
     return a.abbreviation.localeCompare(b.abbreviation, 'de-DE', { sensitivity: 'base' });
@@ -237,6 +261,11 @@ async function fetchToc(): Promise<void> {
     }
     index[letter].push(law.slug);
   }
+
+  // Also include combined digit aliases (# and 1-9) containing all 158 digit laws for backwards compatibility
+  const digitSlugs = sortedLaws.filter((l) => /^[1-9]$/.test(l.firstLetter)).map((l) => l.slug);
+  index['#'] = digitSlugs;
+  index['1-9'] = digitSlugs;
 
   // Assemble output
   const tocData: TocData = {

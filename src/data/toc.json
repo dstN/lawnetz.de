@@ -1,1290 +1,10 @@
 {
   "meta": {
-    "fetchedAt": "2026-09-18T01:44:53.857Z",
+    "fetchedAt": "2026-09-18T02:04:21.679Z",
     "source": "https://www.gesetze-im-internet.de/gii-toc.xml",
     "count": 6132
   },
   "laws": [
-    {
-      "title": "Bekanntmachung über die Anpassung der Ausgleichsabgabe (§ 77 Absatz 3 des Neunten Buches Sozialgesetzbuch [SGB IX]), der Eigenbeteiligung für die unentgeltliche Beförderung (§ 145 Absatz 1 Satz 4 SGB IX) und der übernahmefähigen Kinderbetreuungskosten (§ 54 Absatz 3 SGB IX)",
-      "slug": "_77abs3__145abs1__54abs3sgb9bek",
-      "abbreviation": "_77ABS3__145ABS1__54ABS3SGB9BEK",
-      "firstLetter": "#",
-      "pdf": "_77ABS3__145ABS1__54ABS3SGB9BEK.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/_77abs3__145abs1__54abs3sgb9bek/xml.zip"
-    },
-    {
-      "title": "Bekanntmachung über die Erhöhung der Ausgleichsabgabe (§ 77 Absatz 3 SGB IX) und der übernahmefähigen Kinderbetreuungskosten (§ 54 Absatz 3 SGB IX)",
-      "slug": "_77abs3__54abs3sgb9bek",
-      "abbreviation": "_77ABS3__54ABS3SGB9BEK",
-      "firstLetter": "#",
-      "pdf": "_77ABS3__54ABS3SGB9BEK.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/_77abs3__54abs3sgb9bek/xml.zip"
-    },
-    {
-      "title": "Gesetz über die Ausprägung einer 1-DM-Goldmünze und die Errichtung der Stiftung &quot;Geld und Währung&quot;",
-      "slug": "1-dm-goldm_nzg",
-      "abbreviation": "1-DM-GoldmünzG",
-      "firstLetter": "#",
-      "pdf": "1-DM-GoldmünzG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/1-dm-goldm_nzg/xml.zip"
-    },
-    {
-      "title": "Erstes Gesetz zur Vereinheitlichung und Neuregelung des Besoldungsrechts in Bund und Ländern",
-      "slug": "besvng_1",
-      "abbreviation": "1. BesVNG",
-      "firstLetter": "#",
-      "pdf": "1._BesVNG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/besvng_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes *)",
-      "slug": "bimschv_1_2010",
-      "abbreviation": "1. BImSchV",
-      "firstLetter": "#",
-      "pdf": "1._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_1_2010/xml.zip"
-    },
-    {
-      "title": "Verordnung zur Durchführung von regelmäßigen Datenübermittlungen zwischen Meldebehörden",
-      "slug": "bmeldd_v_1_2015",
-      "abbreviation": "1. BMeldDÜV",
-      "firstLetter": "#",
-      "pdf": "1._BMeldDÜV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bmeldd_v_1_2015/xml.zip"
-    },
-    {
-      "title": "Erste Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Anwendungsbestimmungen zu Anhang III - EU-OPS - der VO (EWG) Nr. 3922/91",
-      "slug": "luftbodv_1_2008",
-      "abbreviation": "1. DV LuftBO",
-      "firstLetter": "#",
-      "pdf": "1._DV_LuftBO.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_1_2008/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_1",
-      "abbreviation": "1. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "1._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Bundesrückerstattungsgesetzes",
-      "slug": "br_gdv_1",
-      "abbreviation": "1. DV-BRüG",
-      "firstLetter": "#",
-      "pdf": "1._DV-BRüG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/br_gdv_1/xml.zip"
-    },
-    {
-      "title": "Erstes Gesetz zur Reform des Ehe- und Familienrechts",
-      "slug": "eherg_1",
-      "abbreviation": "1. EheRG",
-      "firstLetter": "#",
-      "pdf": "1._EheRG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/eherg_1/xml.zip"
-    },
-    {
-      "title": "Verordnung über die Kosten von Maßnahmen nach dem Eisenbahnkreuzungsgesetz",
-      "slug": "ekrv_1",
-      "abbreviation": "1. EKrV",
-      "firstLetter": "#",
-      "pdf": "1._EKrV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/ekrv_1/xml.zip"
-    },
-    {
-      "title": "Verordnung über die Preismeldung bei Schlachtkörpern und deren Kennzeichnung",
-      "slug": "flgdv_1",
-      "abbreviation": "1. FlGDV",
-      "firstLetter": "#",
-      "pdf": "1._FlGDV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/flgdv_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
-      "slug": "fluglsv_1",
-      "abbreviation": "1. FlugLSV",
-      "firstLetter": "#",
-      "pdf": "1._FlugLSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Gesetzes zur Einführung von Vorschriften des Lastenausgleichsrechts im Saarland",
-      "slug": "lasaardv_1",
-      "abbreviation": "1. LADV-Saar",
-      "firstLetter": "#",
-      "pdf": "1._LADV-Saar.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lasaardv_1/xml.zip"
-    },
-    {
-      "title": "Erstes Gesetz zur Neuordnung von Selbstverwaltung und Eigenverantwortung in der gesetzlichen Krankenversicherung",
-      "slug": "gkvnog_1",
-      "abbreviation": "1. NOG",
-      "firstLetter": "#",
-      "pdf": "1._NOG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gkvnog_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zum Produktsicherheitsgesetz 1",
-      "slug": "prodsg2011v_1",
-      "abbreviation": "1. ProdSV",
-      "firstLetter": "#",
-      "pdf": "1._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_1/xml.zip"
-    },
-    {
-      "title": "Erstes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1958",
-      "slug": "rag_1",
-      "abbreviation": "1. RAG",
-      "firstLetter": "#",
-      "pdf": "1._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "rav_1",
-      "abbreviation": "1. RAV",
-      "firstLetter": "#",
-      "pdf": "1._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_1/xml.zip"
-    },
-    {
-      "title": "Erstes Gesetz zur Änderung des Elften Buches Sozialgesetzbuch und anderer Gesetze",
-      "slug": "sgb11_ndg_1",
-      "abbreviation": "1. SGB XI-ÄndG",
-      "firstLetter": "#",
-      "pdf": "1._SGB_XI-ÄndG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sgb11_ndg_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zum Sprengstoffgesetz",
-      "slug": "sprengv_1",
-      "abbreviation": "1. SprengV",
-      "firstLetter": "#",
-      "pdf": "1._SprengV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_1/xml.zip"
-    },
-    {
-      "title": "Erste Wassersicherstellungsverordnung",
-      "slug": "wassv_1",
-      "abbreviation": "1. WasSV",
-      "firstLetter": "#",
-      "pdf": "1._WasSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/wassv_1/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
-      "slug": "windseev_1",
-      "abbreviation": "1. WindSeeV",
-      "firstLetter": "#",
-      "pdf": "1._WindSeeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_1/xml.zip"
-    },
-    {
-      "title": "Erste Wahlordnung zum Mitbestimmungsgesetz",
-      "slug": "mitbestgwo_1_2002",
-      "abbreviation": "1. WOMitbestG",
-      "firstLetter": "#",
-      "pdf": "1._WOMitbestG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_1_2002/xml.zip"
-    },
-    {
-      "title": "Erste Verordnung über die Erhöhung der Zinsen für Darlehen aus Wohnungsfürsorgemitteln des Bundes",
-      "slug": "wozerhv_1",
-      "abbreviation": "1. WoZErhV",
-      "firstLetter": "#",
-      "pdf": "1._WoZErhV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/wozerhv_1/xml.zip"
-    },
-    {
-      "title": "Zehnte Verordnung zur Änderung von Rechtsvorschriften zum Güterkraftverkehrsgesetz",
-      "slug": "g_kg_ndv_10",
-      "abbreviation": "10. ÄndVGüKG",
-      "firstLetter": "#",
-      "pdf": "10._ÄndVGüKG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/g_kg_ndv_10/xml.zip"
-    },
-    {
-      "title": "Zehntes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
-      "slug": "kovanpg_10",
-      "abbreviation": "10. AnpG-KOV",
-      "firstLetter": "#",
-      "pdf": "10._AnpG-KOV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_10/xml.zip"
-    },
-    {
-      "title": "Zehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*)**)",
-      "slug": "bimschv_10_2010",
-      "abbreviation": "10. BImSchV",
-      "firstLetter": "#",
-      "pdf": "10._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_10_2010/xml.zip"
-    },
-    {
-      "title": "Zehnte Verordnung über zwingende Arbeitsbedingungen in der Gebäudereinigung",
-      "slug": "geb_udearbbv_10",
-      "abbreviation": "10. GebäudeArbbV",
-      "firstLetter": "#",
-      "pdf": "10._GebäudeArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/geb_udearbbv_10/xml.zip"
-    },
-    {
-      "title": "Zehnte Verordnung zum Produktsicherheitsgesetz",
-      "slug": "prodsg2011v_10",
-      "abbreviation": "10. ProdSV",
-      "firstLetter": "#",
-      "pdf": "10._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_10/xml.zip"
-    },
-    {
-      "title": "Zehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_10",
-      "abbreviation": "10. RAG",
-      "firstLetter": "#",
-      "pdf": "10._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_10/xml.zip"
-    },
-    {
-      "title": "Elftes Gesetz zur Änderung des Lastenausgleichsgesetzes",
-      "slug": "lag_ndg_11",
-      "abbreviation": "11. ÄndG LAG",
-      "firstLetter": "#",
-      "pdf": "11._ÄndG_LAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_11/xml.zip"
-    },
-    {
-      "title": "Elfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung über Emissionserklärungen)",
-      "slug": "bimschv_11_2004",
-      "abbreviation": "11. BImSchV",
-      "firstLetter": "#",
-      "pdf": "11._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_11_2004/xml.zip"
-    },
-    {
-      "title": "Elfte Verordnung zum Produktsicherheitsgesetz 1",
-      "slug": "gsgv_11_2016",
-      "abbreviation": "11. ProdSV",
-      "firstLetter": "#",
-      "pdf": "11._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_11_2016/xml.zip"
-    },
-    {
-      "title": "Elftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_11",
-      "abbreviation": "11. RAG",
-      "firstLetter": "#",
-      "pdf": "11._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_11/xml.zip"
-    },
-    {
-      "title": "Verordnung zur elften Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet und zur Bestimmung weiterer Rechengrößen der Sozialversicherung für 1996",
-      "slug": "rav_11",
-      "abbreviation": "11. RAV",
-      "firstLetter": "#",
-      "pdf": "11._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_11/xml.zip"
-    },
-    {
-      "title": "Zwölfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_12_2000",
-      "abbreviation": "12. BImSchV",
-      "firstLetter": "#",
-      "pdf": "12._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_12_2000/xml.zip"
-    },
-    {
-      "title": "Zwölfte Verordnung über zwingende Arbeitsbedingungen für das Maler- und Lackiererhandwerk",
-      "slug": "malerarbbv_12",
-      "abbreviation": "12. MalerArbbV",
-      "firstLetter": "#",
-      "pdf": "12._MalerArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/malerarbbv_12/xml.zip"
-    },
-    {
-      "title": "Zwölfte Verordnung zum Produktsicherheitsgesetz 1",
-      "slug": "prodsg2011v_12",
-      "abbreviation": "12. ProdSV",
-      "firstLetter": "#",
-      "pdf": "12._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_12/xml.zip"
-    },
-    {
-      "title": "Zwölftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung (Art. 4 d. Dritten Rentenversicherungs- Änderungsgesetzes - 3. RVÄndG)",
-      "slug": "rag_12",
-      "abbreviation": "12. RAG",
-      "firstLetter": "#",
-      "pdf": "12._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_12/xml.zip"
-    },
-    {
-      "title": "Dreizehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_13_2021",
-      "abbreviation": "13. BImSchV",
-      "firstLetter": "#",
-      "pdf": "13._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_13_2021/xml.zip"
-    },
-    {
-      "title": "Dreizehnte Verordnung über zwingende Arbeitsbedingungen im Dachdeckerhandwerk",
-      "slug": "dachdarbbv_13",
-      "abbreviation": "13. DachdArbbV",
-      "firstLetter": "#",
-      "pdf": "13._DachdArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/dachdarbbv_13/xml.zip"
-    },
-    {
-      "title": "Dreizehnte Verordnung zum Produktsicherheitsgesetz (Aerosolpackungsverordnung)",
-      "slug": "gsgv_13",
-      "abbreviation": "13. ProdSV",
-      "firstLetter": "#",
-      "pdf": "13._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_13/xml.zip"
-    },
-    {
-      "title": "Dreizehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_13",
-      "abbreviation": "13. RAG",
-      "firstLetter": "#",
-      "pdf": "13._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_13/xml.zip"
-    },
-    {
-      "title": "Vierzehntes Gesetz zur Änderung des Lastenausgleichsgesetzes",
-      "slug": "lag_ndg_14",
-      "abbreviation": "14. ÄndG LAG",
-      "firstLetter": "#",
-      "pdf": "14._ÄndG_LAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_14/xml.zip"
-    },
-    {
-      "title": "Vierzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_14",
-      "abbreviation": "14. BImSchV",
-      "firstLetter": "#",
-      "pdf": "14._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_14/xml.zip"
-    },
-    {
-      "title": "Vierzehnte Verordnung zum Produktsicherheitsgesetz 1",
-      "slug": "gsgv_14_2016",
-      "abbreviation": "14. ProdSV",
-      "firstLetter": "#",
-      "pdf": "14._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_14_2016/xml.zip"
-    },
-    {
-      "title": "Vierzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_14",
-      "abbreviation": "14. RAG",
-      "firstLetter": "#",
-      "pdf": "14._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_14/xml.zip"
-    },
-    {
-      "title": "Fünfzehnte Verordnung zum Produktsicherheitsgesetz",
-      "slug": "gsgv_15",
-      "abbreviation": "15. ProdSV",
-      "firstLetter": "#",
-      "pdf": "15._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_15/xml.zip"
-    },
-    {
-      "title": "Fünfzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_15",
-      "abbreviation": "15. RAG",
-      "firstLetter": "#",
-      "pdf": "15._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_15/xml.zip"
-    },
-    {
-      "title": "Sechzehntes Gesetz zur Änderung des Lastenausgleichsgesetzes",
-      "slug": "lag_ndg_16",
-      "abbreviation": "16. ÄndG LAG",
-      "firstLetter": "#",
-      "pdf": "16._ÄndG_LAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_16/xml.zip"
-    },
-    {
-      "title": "Sechzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_16",
-      "abbreviation": "16. BImSchV",
-      "firstLetter": "#",
-      "pdf": "16._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_16/xml.zip"
-    },
-    {
-      "title": "Sechzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_16",
-      "abbreviation": "16. RAG",
-      "firstLetter": "#",
-      "pdf": "16._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_16/xml.zip"
-    },
-    {
-      "title": "Siebzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_17_2013",
-      "abbreviation": "17. BImSchV",
-      "firstLetter": "#",
-      "pdf": "17._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_17_2013/xml.zip"
-    },
-    {
-      "title": "Siebzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
-      "slug": "rag_17",
-      "abbreviation": "17. RAG",
-      "firstLetter": "#",
-      "pdf": "17._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_17/xml.zip"
-    },
-    {
-      "title": "Achtzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_18",
-      "abbreviation": "18. BImSchV",
-      "firstLetter": "#",
-      "pdf": "18._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_18/xml.zip"
-    },
-    {
-      "title": "Achtzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
-      "slug": "rag_18",
-      "abbreviation": "18. RAG",
-      "firstLetter": "#",
-      "pdf": "18._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_18/xml.zip"
-    },
-    {
-      "title": "Neunzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
-      "slug": "rag_19",
-      "abbreviation": "19. RAG",
-      "firstLetter": "#",
-      "pdf": "19._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_19/xml.zip"
-    },
-    {
-      "title": "Zweites Gesetz zur Änderung und Ergänzung des Anspruchs- und Anwartschaftsüberführungsgesetzes",
-      "slug": "aa_g_ndg_2",
-      "abbreviation": "2. AAÜG-ÄndG",
-      "firstLetter": "#",
-      "pdf": "2._AAÜG-ÄndG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/aa_g_ndg_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Änderung der Sechsten Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv6_ndv_2",
-      "abbreviation": "2. ÄndV - 6. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "2._ÄndV_-_6._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv6_ndv_2/xml.zip"
-    },
-    {
-      "title": "Zweites Gesetz zur Vereinheitlichung und Neuregelung des Besoldungsrechts in Bund und Ländern",
-      "slug": "besvng_2",
-      "abbreviation": "2. BesVNG",
-      "firstLetter": "#",
-      "pdf": "2._BesVNG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/besvng_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_2_1990",
-      "abbreviation": "2. BImSchV",
-      "firstLetter": "#",
-      "pdf": "2._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_2_1990/xml.zip"
-    },
-    {
-      "title": "Verordnung zur Durchführung von regelmäßigen Datenübermittlungen der Meldebehörden an Behörden oder sonstige öffentliche Stellen des Bundes",
-      "slug": "bmeldd_v_2_2015",
-      "abbreviation": "2. BMeldDÜV",
-      "firstLetter": "#",
-      "pdf": "2._BMeldDÜV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bmeldd_v_2_2015/xml.zip"
-    },
-    {
-      "title": "Zweite Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Dienst-, Flugdienst-, Block- und Ruhezeiten von Besatzungsmitgliedern in Luftfahrtunternehmen und außerhalb von Luftfahrtunternehmen bei berufsmäßiger Betätigung)",
-      "slug": "luftbodv_2_2009",
-      "abbreviation": "2. DV LuftBO",
-      "firstLetter": "#",
-      "pdf": "2._DV_LuftBO.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_2_2009/xml.zip"
-    },
-    {
-      "title": "Zweite Durchführungsverordnung zur Verordnung zur Prüfung von Luftfahrtgerät (Lufttüchtigkeitsforderungen für Luftfahrtgerät)",
-      "slug": "luftgerpv1998dv_2_2018",
-      "abbreviation": "2. DV LuftGerPV",
-      "firstLetter": "#",
-      "pdf": "2._DV_LuftGerPV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftgerpv1998dv_2_2018/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_2",
-      "abbreviation": "2. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "2._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Durchführungsverordnung zur Verordnung über Luftfahrtpersonal (Anwendungsbestimmungen für die Ausbildung und Prüfung für den Erwerb von Lizenzen und Berechtigungen für Luftfahrer gemäß der Verordnung über Luftfahrtpersonal)",
-      "slug": "luftpersvdv_2",
-      "abbreviation": "2. DVLuftPersV",
-      "firstLetter": "#",
-      "pdf": "2._DVLuftPersV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftpersvdv_2/xml.zip"
-    },
-    {
-      "title": "Gesetz zur Ergänzung des Dritten Gesetzes über die Übernahme von Sicherheitsleistungen und Gewährleistungen zur Förderung der deutschen Wirtschaft",
-      "slug": "erpb_rgschg_2",
-      "abbreviation": "2. ERP-BürgschG",
-      "firstLetter": "#",
-      "pdf": "2._ERP-BürgschG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/erpb_rgschg_2/xml.zip"
-    },
-    {
-      "title": "Verordnung über die Anforderungen an die Zulassung von Klassifizierungsunternehmen und Klassifizierern für Schlachtkörper von Rindern, Schweinen und Schafen",
-      "slug": "flgdv_2",
-      "abbreviation": "2. FlGDV",
-      "firstLetter": "#",
-      "pdf": "2._FlGDV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/flgdv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
-      "slug": "fluglsv_2",
-      "abbreviation": "2. FlugLSV",
-      "firstLetter": "#",
-      "pdf": "2._FlugLSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung über Ausnahmen von den Vorschriften der Fahrzeug-Zulassungsverordnung",
-      "slug": "fzausnv_2",
-      "abbreviation": "2. FZVAusnV",
-      "firstLetter": "#",
-      "pdf": "2._FZVAusnV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/fzausnv_2/xml.zip"
-    },
-    {
-      "title": "Verordnung zur Durchführung der im Rahmen der Gemeinsamen Agrarpolitik geltenden Ausnahmeregelung hinsichtlich der Anwendung des Standards Nummer 8 für den guten landwirtschaftlichen und ökologischen Zustand für das Antragsjahr 2024",
-      "slug": "gapausnv_2",
-      "abbreviation": "2. GAPAusnV",
-      "firstLetter": "#",
-      "pdf": "2._GAPAusnV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gapausnv_2/xml.zip"
-    },
-    {
-      "title": "Gesetz zur Durchsetzung der Gleichberechtigung von Frauen und Männern",
-      "slug": "gleichberg_2",
-      "abbreviation": "2. GleiBG",
-      "firstLetter": "#",
-      "pdf": "2._GleiBG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gleichberg_2/xml.zip"
-    },
-    {
-      "title": "Zweites Gesetz zur Verbesserung der Haushaltsstruktur",
-      "slug": "hstruktg_2",
-      "abbreviation": "2. HStruktG",
-      "firstLetter": "#",
-      "pdf": "2._HStruktG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/hstruktg_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Durchführung des Gesetzes zur Einführung von Vorschriften des Lastenausgleichsrechts im Saarland",
-      "slug": "lasaardv_2",
-      "abbreviation": "2. LADV-Saar",
-      "firstLetter": "#",
-      "pdf": "2._LADV-Saar.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lasaardv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Bekanntmachung zu § 115 der Zivilprozessordnung",
-      "slug": "pkhb_2012_2",
-      "abbreviation": "2. PKHB 2012",
-      "firstLetter": "#",
-      "pdf": "2._PKHB_2012.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/pkhb_2012_2/xml.zip"
-    },
-    {
-      "title": "Zweite Bekanntmachung zu § 115 der Zivilprozessordnung",
-      "slug": "pkhb_2019_2",
-      "abbreviation": "2. PKHB 2019",
-      "firstLetter": "#",
-      "pdf": "2._PKHB_2019.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/pkhb_2019_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zum Produktsicherheitsgesetz (Verordnung über die Sicherheit von Spielzeug)*)",
-      "slug": "gpsgv_2",
-      "abbreviation": "2. ProdSV",
-      "firstLetter": "#",
-      "pdf": "2._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gpsgv_2/xml.zip"
-    },
-    {
-      "title": "Zweites Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1959",
-      "slug": "rag_2",
-      "abbreviation": "2. RAG",
-      "firstLetter": "#",
-      "pdf": "2._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Anpassung der Renten und zu den maßgeblichen Rechengrößen in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "rav_2",
-      "abbreviation": "2. RAV",
-      "firstLetter": "#",
-      "pdf": "2._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zum Sprengstoffgesetz",
-      "slug": "sprengv_2",
-      "abbreviation": "2. SprengV",
-      "firstLetter": "#",
-      "pdf": "2._SprengV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Übertragung von unternehmensbezogenen Aufgaben nach dem Treuhandgesetz und von Unternehmensbeteiligungen der Bundesanstalt für vereinigungsbedingte Sonderaufgaben",
-      "slug": "treuhunt_v_2",
-      "abbreviation": "2. TreuhUntÜV",
-      "firstLetter": "#",
-      "pdf": "2._TreuhUntÜV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/treuhunt_v_2/xml.zip"
-    },
-    {
-      "title": "Zweite Wassersicherstellungsverordnung",
-      "slug": "wassv_2",
-      "abbreviation": "2. WasSV",
-      "firstLetter": "#",
-      "pdf": "2._WasSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/wassv_2/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
-      "slug": "windseev_2",
-      "abbreviation": "2. WindSeeV",
-      "firstLetter": "#",
-      "pdf": "2._WindSeeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_2/xml.zip"
-    },
-    {
-      "title": "Zweite Wahlordnung zum Mitbestimmungsgesetz",
-      "slug": "mitbestgwo_2_2002",
-      "abbreviation": "2. WOMitbestG",
-      "firstLetter": "#",
-      "pdf": "2._WOMitbestG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_2_2002/xml.zip"
-    },
-    {
-      "title": "Zweite Verordnung über die Erhöhung der Zinsen für Darlehen aus Wohnungsfürsorgemitteln des Bundes",
-      "slug": "wozerhv_2",
-      "abbreviation": "2. WoZErhV",
-      "firstLetter": "#",
-      "pdf": "2._WoZErhV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/wozerhv_2/xml.zip"
-    },
-    {
-      "title": "Zwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung zur Begrenzung der Emissionen flüchtiger organischer Verbindungen beim Umfüllen oder Lagern von Ottokraftstoffen, Kraftstoffgemischen oder Rohbenzin)",
-      "slug": "bimschv_20_1998",
-      "abbreviation": "20. BImSchV",
-      "firstLetter": "#",
-      "pdf": "20._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_20_1998/xml.zip"
-    },
-    {
-      "title": "Gesetz zur Zwanzigsten Rentenanpassung und zur Verbesserung der Finanzgrundlagen der gesetzlichen Rentenversicherung",
-      "slug": "rag_20",
-      "abbreviation": "20. RAG",
-      "firstLetter": "#",
-      "pdf": "20._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_20/xml.zip"
-    },
-    {
-      "title": "Einundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_21",
-      "abbreviation": "21. BImSchV",
-      "firstLetter": "#",
-      "pdf": "21._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_21/xml.zip"
-    },
-    {
-      "title": "Einundzwanzigste Verordnung zur Änderung betäubungsmittelrechtlicher Vorschriften",
-      "slug": "btm_ndv_21",
-      "abbreviation": "21. BtMÄndV",
-      "firstLetter": "#",
-      "pdf": "21._BtMÄndV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/btm_ndv_21/xml.zip"
-    },
-    {
-      "title": "Einundzwanzigstes Gesetz über die Anpassung der Renten aus der gesetzlichen Rentenversicherung sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
-      "slug": "rag_21",
-      "abbreviation": "21. RAG",
-      "firstLetter": "#",
-      "pdf": "21._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_21/xml.zip"
-    },
-    {
-      "title": "Vierundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_24",
-      "abbreviation": "24. BImSchV",
-      "firstLetter": "#",
-      "pdf": "24._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_24/xml.zip"
-    },
-    {
-      "title": "Vierundzwanzigste Verordnung zur Anpassung der Unterhaltshilfe nach dem Lastenausgleichsgesetz",
-      "slug": "uhanpv_24",
-      "abbreviation": "24. UhAnpV",
-      "firstLetter": "#",
-      "pdf": "24._UhAnpV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/uhanpv_24/xml.zip"
-    },
-    {
-      "title": "Fünfundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_25",
-      "abbreviation": "25. BImSchV",
-      "firstLetter": "#",
-      "pdf": "25._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_25/xml.zip"
-    },
-    {
-      "title": "Sechsundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_26",
-      "abbreviation": "26. BImSchV",
-      "firstLetter": "#",
-      "pdf": "26._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_26/xml.zip"
-    },
-    {
-      "title": "Siebenundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_27",
-      "abbreviation": "27. BImSchV",
-      "firstLetter": "#",
-      "pdf": "27._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_27/xml.zip"
-    },
-    {
-      "title": "Achtundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1",
-      "slug": "bimschv_28_2021",
-      "abbreviation": "28. BImSchV",
-      "firstLetter": "#",
-      "pdf": "28._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_28_2021/xml.zip"
-    },
-    {
-      "title": "Neunundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_29",
-      "abbreviation": "29. BImSchV",
-      "firstLetter": "#",
-      "pdf": "29._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_29/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Änderung der Sechsten Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv6_ndv_3",
-      "abbreviation": "3. ÄndV - 6. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "3._ÄndV_-_6._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv6_ndv_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Durchführung einer Bundesstatistik über Art und Umfang der betrieblichen Altersversorgung",
-      "slug": "betravstatv_3",
-      "abbreviation": "3. BetrAVStatVO",
-      "firstLetter": "#",
-      "pdf": "3._BetrAVStatVO.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/betravstatv_3/xml.zip"
-    },
-    {
-      "title": "Dritte Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Ausrüstung und Betrieb des Luftfahrtgerätes außerhalb von Luftfahrtunternehmen)",
-      "slug": "luftbodv_3_2009",
-      "abbreviation": "3. DV LuftBO",
-      "firstLetter": "#",
-      "pdf": "3._DV_LuftBO.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_3_2009/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_3",
-      "abbreviation": "3. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "3._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
-      "slug": "fluglsv_3",
-      "abbreviation": "3. FlugLSV",
-      "firstLetter": "#",
-      "pdf": "3._FlugLSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Anpassung der Höhe der Vergütungen nach der Gebührenordnung für Ärzte, der Gebührenordnung für Zahnärzte sowie nach der Hebammenhilfe-Gebührenverordnung in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "gebav_3",
-      "abbreviation": "3. GebAV",
-      "firstLetter": "#",
-      "pdf": "3._GebAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gebav_3/xml.zip"
-    },
-    {
-      "title": "Drittes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1960",
-      "slug": "rag_3",
-      "abbreviation": "3. RAG",
-      "firstLetter": "#",
-      "pdf": "3._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Anpassung der Renten und zu den maßgeblichen Rechengrößen in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "rav_3",
-      "abbreviation": "3. RAV",
-      "firstLetter": "#",
-      "pdf": "3._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zum Sprengstoffgesetz",
-      "slug": "sprengv_3",
-      "abbreviation": "3. SprengV",
-      "firstLetter": "#",
-      "pdf": "3._SprengV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_3/xml.zip"
-    },
-    {
-      "title": "Dritte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
-      "slug": "windseev_3",
-      "abbreviation": "3. WindSeeV",
-      "firstLetter": "#",
-      "pdf": "3._WindSeeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_3/xml.zip"
-    },
-    {
-      "title": "Dritte Wahlordnung zum Mitbestimmungsgesetz",
-      "slug": "mitbestgwo_3_2002",
-      "abbreviation": "3. WOMitbestG",
-      "firstLetter": "#",
-      "pdf": "3._WOMitbestG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_3_2002/xml.zip"
-    },
-    {
-      "title": "Dreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_30",
-      "abbreviation": "30. BImSchV",
-      "firstLetter": "#",
-      "pdf": "30._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_30/xml.zip"
-    },
-    {
-      "title": "31. Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_31_2024",
-      "abbreviation": "31. BImSchV",
-      "firstLetter": "#",
-      "pdf": "31._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_31_2024/xml.zip"
-    },
-    {
-      "title": "32. Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_32",
-      "abbreviation": "32. BImSchV",
-      "firstLetter": "#",
-      "pdf": "32._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_32/xml.zip"
-    },
-    {
-      "title": "Vierunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung über die Lärmkartierung)",
-      "slug": "bimschv_34",
-      "abbreviation": "34. BImSchV",
-      "firstLetter": "#",
-      "pdf": "34._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_34/xml.zip"
-    },
-    {
-      "title": "Fünfunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_35",
-      "abbreviation": "35. BImSchV",
-      "firstLetter": "#",
-      "pdf": "35._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_35/xml.zip"
-    },
-    {
-      "title": "Sechsunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung zur Durchführung der Regelungen der Biokraftstoffquote)",
-      "slug": "bimschv_36",
-      "abbreviation": "36. BImSchV",
-      "firstLetter": "#",
-      "pdf": "36._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_36/xml.zip"
-    },
-    {
-      "title": "Siebenunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1, 2 (Verordnung zur Anrechnung von strombasierten Kraftstoffen und mitverarbeiteten biogenen Rohstoffen auf die Treibhausgasquote und zur Anrechnung auf die Verpflichtung nach Artikel 4 in Verbindung mit Anhang I der Verordnung (EU) 2023/2405)",
-      "slug": "bimschv_37_2024",
-      "abbreviation": "37. BImSchV",
-      "firstLetter": "#",
-      "pdf": "37._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_37_2024/xml.zip"
-    },
-    {
-      "title": "Achtunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1, 2",
-      "slug": "bimschv_38_2017",
-      "abbreviation": "38. BImSchV",
-      "firstLetter": "#",
-      "pdf": "38._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_38_2017/xml.zip"
-    },
-    {
-      "title": "Neununddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*)",
-      "slug": "bimschv_39",
-      "abbreviation": "39. BImSchV",
-      "firstLetter": "#",
-      "pdf": "39._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_39/xml.zip"
-    },
-    {
-      "title": "Viertes Gesetz zur Änderung des Lastenausgleichsgesetzes",
-      "slug": "lag_ndg_4",
-      "abbreviation": "4. ÄndG LAG",
-      "firstLetter": "#",
-      "pdf": "4._ÄndG_LAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_4/xml.zip"
-    },
-    {
-      "title": "Vierte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_4_2013",
-      "abbreviation": "4. BImSchV",
-      "firstLetter": "#",
-      "pdf": "4._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_4_2013/xml.zip"
-    },
-    {
-      "title": "Vierte Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Ausrüstung und Betrieb von Heißluftballonen und Heißluft-Luftschiffen)",
-      "slug": "luftbodv_4",
-      "abbreviation": "4. DV LuftBO",
-      "firstLetter": "#",
-      "pdf": "4._DV_LuftBO.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_4/xml.zip"
-    },
-    {
-      "title": "Vierte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_4",
-      "abbreviation": "4. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "4._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_4/xml.zip"
-    },
-    {
-      "title": "Vierte Verordnung über die Bezugsdauer für das Kurzarbeitergeld",
-      "slug": "kugbev_4",
-      "abbreviation": "4. KugBeV",
-      "firstLetter": "#",
-      "pdf": "4._KugBeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/kugbev_4/xml.zip"
-    },
-    {
-      "title": "Viertes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1961",
-      "slug": "rag_4",
-      "abbreviation": "4. RAG",
-      "firstLetter": "#",
-      "pdf": "4._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_4/xml.zip"
-    },
-    {
-      "title": "Vierte Verordnung über zwingende Arbeitsbedingungen für Sicherheitskräfte an Verkehrsflughäfen",
-      "slug": "vflughsikarbbv_4",
-      "abbreviation": "4. VFlughSiKArbbV",
-      "firstLetter": "#",
-      "pdf": "4._VFlughSiKArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/vflughsikarbbv_4/xml.zip"
-    },
-    {
-      "title": "Vierte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
-      "slug": "windseev_4",
-      "abbreviation": "4. WindSeeV",
-      "firstLetter": "#",
-      "pdf": "4._WindSeeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_4/xml.zip"
-    },
-    {
-      "title": "Einundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_41",
-      "abbreviation": "41. BImSchV",
-      "firstLetter": "#",
-      "pdf": "41._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_41/xml.zip"
-    },
-    {
-      "title": "Zweiundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_42",
-      "abbreviation": "42. BImSchV",
-      "firstLetter": "#",
-      "pdf": "42._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_42/xml.zip"
-    },
-    {
-      "title": "Dreiundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_43",
-      "abbreviation": "43. BImSchV",
-      "firstLetter": "#",
-      "pdf": "43._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_43/xml.zip"
-    },
-    {
-      "title": "Vierundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*",
-      "slug": "bimschv_44",
-      "abbreviation": "44. BImSchV",
-      "firstLetter": "#",
-      "pdf": "44._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_44/xml.zip"
-    },
-    {
-      "title": "Fünfundvierzigste Verordnung zur vorübergehenden Abweichung von der Rheinschifffahrtspolizeiverordnung",
-      "slug": "rheinschpvabwv_45",
-      "abbreviation": "45. RheinSchPVAbweichV",
-      "firstLetter": "#",
-      "pdf": "45._RheinSchPVAbweichV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rheinschpvabwv_45/xml.zip"
-    },
-    {
-      "title": "Fünftes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
-      "slug": "kovanpg_5",
-      "abbreviation": "5. AnpG-KOV",
-      "firstLetter": "#",
-      "pdf": "5._AnpG-KOV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_5/xml.zip"
-    },
-    {
-      "title": "Fünfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_5_1993",
-      "abbreviation": "5. BImSchV",
-      "firstLetter": "#",
-      "pdf": "5._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_5_1993/xml.zip"
-    },
-    {
-      "title": "Fünfte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
-      "slug": "binschstro2012abwv_5",
-      "abbreviation": "5. BinSchStrOAbweichV",
-      "firstLetter": "#",
-      "pdf": "5._BinSchStrOAbweichV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_5/xml.zip"
-    },
-    {
-      "title": "Fünfte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_5",
-      "abbreviation": "5. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "5._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_5/xml.zip"
-    },
-    {
-      "title": "Fünftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1962",
-      "slug": "rag_5",
-      "abbreviation": "5. RAG",
-      "firstLetter": "#",
-      "pdf": "5._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_5/xml.zip"
-    },
-    {
-      "title": "Fünfte Verordnung zur Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "rav_5",
-      "abbreviation": "5. RAV",
-      "firstLetter": "#",
-      "pdf": "5._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_5/xml.zip"
-    },
-    {
-      "title": "Fünftes Gesetz zur Änderung des Sozialgerichtsgesetzes",
-      "slug": "sgg_ndg_5",
-      "abbreviation": "5. SGG-ÄndG",
-      "firstLetter": "#",
-      "pdf": "5._SGG-ÄndG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sgg_ndg_5/xml.zip"
-    },
-    {
-      "title": "Fünftes Gesetz zur Förderung der Vermögensbildung der Arbeitnehmer",
-      "slug": "vermbg_2",
-      "abbreviation": "5. VermBG",
-      "firstLetter": "#",
-      "pdf": "5._VermBG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/vermbg_2/xml.zip"
-    },
-    {
-      "title": "Fünfte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
-      "slug": "windseev_5",
-      "abbreviation": "5. WindSeeV",
-      "firstLetter": "#",
-      "pdf": "5._WindSeeV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_5/xml.zip"
-    },
-    {
-      "title": "Vierundfünfzigste Verordnung über das anzurechnende Einkommen nach dem Bundesversorgungsgesetz",
-      "slug": "anrv_2023",
-      "abbreviation": "54. AnrV",
-      "firstLetter": "#",
-      "pdf": "54._AnrV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/anrv_2023/xml.zip"
-    },
-    {
-      "title": "Sechste Verordnung über zwingende Arbeitsbedingungen für Aus- und Weiterbildungsdienstleistungen nach dem Zweiten oder Dritten Buch Sozialgesetzbuch",
-      "slug": "ausbdienstlarbbv_6",
-      "abbreviation": "6. AusbDienstLArbbV",
-      "firstLetter": "#",
-      "pdf": "6._AusbDienstLArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/ausbdienstlarbbv_6/xml.zip"
-    },
-    {
-      "title": "Sechste Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
-      "slug": "binschstro2012abwv_6",
-      "abbreviation": "6. BinSchStrOAbweichV",
-      "firstLetter": "#",
-      "pdf": "6._BinSchStrOAbweichV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_6/xml.zip"
-    },
-    {
-      "title": "Sechste Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
-      "slug": "begdv_6",
-      "abbreviation": "6. DV-BEG",
-      "firstLetter": "#",
-      "pdf": "6._DV-BEG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_6/xml.zip"
-    },
-    {
-      "title": "Sechste Verordnung zum Produktsicherheitsgesetz 1",
-      "slug": "prodsg2011v_6",
-      "abbreviation": "6. ProdSV",
-      "firstLetter": "#",
-      "pdf": "6._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_6/xml.zip"
-    },
-    {
-      "title": "Sechstes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_6",
-      "abbreviation": "6. RAG",
-      "firstLetter": "#",
-      "pdf": "6._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_6/xml.zip"
-    },
-    {
-      "title": "Sechstes Gesetz zur Änderung des Sozialgerichtsgesetzes",
-      "slug": "sgg_ndg_6",
-      "abbreviation": "6. SGGÄndG",
-      "firstLetter": "#",
-      "pdf": "6._SGGÄndG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/sgg_ndg_6/xml.zip"
-    },
-    {
-      "title": "Siebente Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_7",
-      "abbreviation": "7. BImSchV",
-      "firstLetter": "#",
-      "pdf": "7._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_7/xml.zip"
-    },
-    {
-      "title": "Siebte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
-      "slug": "binschstro2012abwv_7",
-      "abbreviation": "7. BinSchStrOAbweichV",
-      "firstLetter": "#",
-      "pdf": "7._BinSchStrOAbweichV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_7/xml.zip"
-    },
-    {
-      "title": "Siebte Verordnung über zwingende Arbeitsbedingungen für die Pflegebranche",
-      "slug": "pflegearbbv_7",
-      "abbreviation": "7. PflegeArbbV",
-      "firstLetter": "#",
-      "pdf": "7._PflegeArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/pflegearbbv_7/xml.zip"
-    },
-    {
-      "title": "Siebentes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_7",
-      "abbreviation": "7. RAG",
-      "firstLetter": "#",
-      "pdf": "7._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_7/xml.zip"
-    },
-    {
-      "title": "Achtes Gesetz zur Änderung des Lastenausgleichsgesetzes (Gesetz nach § 246 LAG - 8. ÄndG LAG)",
-      "slug": "lag_ndg_8",
-      "abbreviation": "8. ÄndGLAG",
-      "firstLetter": "#",
-      "pdf": "8._ÄndGLAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_8/xml.zip"
-    },
-    {
-      "title": "Achte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
-      "slug": "binschstro2012abwv_8",
-      "abbreviation": "8. BinSchStrOAbweichV",
-      "firstLetter": "#",
-      "pdf": "8._BinSchStrOAbweichV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_8/xml.zip"
-    },
-    {
-      "title": "Achte Verordnung über Änderungen des Internationalen Übereinkommens von 1973 zur Verhütung der Meeresverschmutzung durch Schiffe und des Protokolls von 1978 zu diesem Übereinkommen",
-      "slug": "marpol_ndv_8",
-      "abbreviation": "8. MARPOL-ÄndV",
-      "firstLetter": "#",
-      "pdf": "8._MARPOL-ÄndV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/marpol_ndv_8/xml.zip"
-    },
-    {
-      "title": "Achtes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_8",
-      "abbreviation": "8. RAG",
-      "firstLetter": "#",
-      "pdf": "8._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_8/xml.zip"
-    },
-    {
-      "title": "Neuntes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
-      "slug": "kovanpg_9",
-      "abbreviation": "9. AnpG-KOV",
-      "firstLetter": "#",
-      "pdf": "9._AnpG-KOV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_9/xml.zip"
-    },
-    {
-      "title": "Neunte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
-      "slug": "bimschv_9",
-      "abbreviation": "9. BImSchV",
-      "firstLetter": "#",
-      "pdf": "9._BImSchV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_9/xml.zip"
-    },
-    {
-      "title": "Neunte Verordnung über zwingende Arbeitsbedingungen im Gerüstbauerhandwerk",
-      "slug": "ger_stbarbbv_9",
-      "abbreviation": "9. GerüstbauerArbbV",
-      "firstLetter": "#",
-      "pdf": "9._GerüstbauerArbbV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/ger_stbarbbv_9/xml.zip"
-    },
-    {
-      "title": "Neunte Verordnung zum Produktsicherheitsgesetz *)",
-      "slug": "gsgv_9",
-      "abbreviation": "9. ProdSV",
-      "firstLetter": "#",
-      "pdf": "9._ProdSV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_9/xml.zip"
-    },
-    {
-      "title": "Neuntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
-      "slug": "rag_9",
-      "abbreviation": "9. RAG",
-      "firstLetter": "#",
-      "pdf": "9._RAG.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rag_9/xml.zip"
-    },
-    {
-      "title": "Verordnung zur neunten Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
-      "slug": "rav_9",
-      "abbreviation": "9. RAV",
-      "firstLetter": "#",
-      "pdf": "9._RAV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/rav_9/xml.zip"
-    },
     {
       "title": "Ausführungsanordnung zur Konzessionsabgabenanordnung",
       "slug": "kaeaano",
@@ -4460,6 +3180,22 @@
       "firstLetter": "A",
       "pdf": "AZV.pdf",
       "xmlUrl": "http://www.gesetze-im-internet.de/azv/xml.zip"
+    },
+    {
+      "title": "Bekanntmachung über die Anpassung der Ausgleichsabgabe (§ 77 Absatz 3 des Neunten Buches Sozialgesetzbuch [SGB IX]), der Eigenbeteiligung für die unentgeltliche Beförderung (§ 145 Absatz 1 Satz 4 SGB IX) und der übernahmefähigen Kinderbetreuungskosten (§ 54 Absatz 3 SGB IX)",
+      "slug": "_77abs3__145abs1__54abs3sgb9bek",
+      "abbreviation": "§ 77 Abs. 3 SGB IX Bek",
+      "firstLetter": "B",
+      "pdf": "§77Abs3_§145Abs1_§54Abs3SGB9Bek.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/_77abs3__145abs1__54abs3sgb9bek/xml.zip"
+    },
+    {
+      "title": "Bekanntmachung über die Erhöhung der Ausgleichsabgabe (§ 77 Absatz 3 SGB IX) und der übernahmefähigen Kinderbetreuungskosten (§ 54 Absatz 3 SGB IX)",
+      "slug": "_77abs3__54abs3sgb9bek",
+      "abbreviation": "§ 77 Abs. 3 SGB IX Bek",
+      "firstLetter": "B",
+      "pdf": "§77Abs3_§54Abs3SGB9Bek.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/_77abs3__54abs3sgb9bek/xml.zip"
     },
     {
       "title": "Rechtsverordnung des Präsidenten des Bundesausgleichsamtes zur Einführung von Rechtsverordnungen im Saarland",
@@ -13446,6 +12182,14 @@
       "xmlUrl": "http://www.gesetze-im-internet.de/dwg_ndg/xml.zip"
     },
     {
+      "title": "Verordnung zur Subdelegation der Verordnungsermächtigung über regulatorische Rahmenbedingungen für LNG-Anlagen nach § 118a des Energiewirtschaftsgesetzes",
+      "slug": "enwg_118asubv",
+      "abbreviation": "§ 118a EnWG-SubVO",
+      "firstLetter": "E",
+      "pdf": "§_118a_EnWG-SubVO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/enwg_118asubv/xml.zip"
+    },
+    {
       "title": "Verordnung über technische Anforderungen an Energieanlagen 1",
       "slug": "eaav",
       "abbreviation": "EAAV",
@@ -14732,14 +13476,6 @@
       "firstLetter": "E",
       "pdf": "EnWG.pdf",
       "xmlUrl": "http://www.gesetze-im-internet.de/enwg_2005/xml.zip"
-    },
-    {
-      "title": "Verordnung zur Subdelegation der Verordnungsermächtigung über regulatorische Rahmenbedingungen für LNG-Anlagen nach § 118a des Energiewirtschaftsgesetzes",
-      "slug": "enwg_118asubv",
-      "abbreviation": "ENWG_118ASUBV",
-      "firstLetter": "E",
-      "pdf": "ENWG_118ASUBV.pdf",
-      "xmlUrl": "http://www.gesetze-im-internet.de/enwg_118asubv/xml.zip"
     },
     {
       "title": "Bekanntmachung über die Erteilung einer beihilferechtlichen Genehmigung der Europäischen Kommission zur Anwendung von § 28r Absatz 1 bis 9 und § 28s Absatz 1 bis 5 des Energiewirtschaftsgesetzes",
@@ -49060,12 +47796,1274 @@
       "firstLetter": "Z",
       "pdf": "ZwVwV.pdf",
       "xmlUrl": "http://www.gesetze-im-internet.de/zwvwv/xml.zip"
+    },
+    {
+      "title": "Gesetz über die Ausprägung einer 1-DM-Goldmünze und die Errichtung der Stiftung &quot;Geld und Währung&quot;",
+      "slug": "1-dm-goldm_nzg",
+      "abbreviation": "1-DM-GoldmünzG",
+      "firstLetter": "1",
+      "pdf": "1-DM-GoldmünzG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/1-dm-goldm_nzg/xml.zip"
+    },
+    {
+      "title": "Erstes Gesetz zur Vereinheitlichung und Neuregelung des Besoldungsrechts in Bund und Ländern",
+      "slug": "besvng_1",
+      "abbreviation": "1. BesVNG",
+      "firstLetter": "1",
+      "pdf": "1._BesVNG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/besvng_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes *)",
+      "slug": "bimschv_1_2010",
+      "abbreviation": "1. BImSchV",
+      "firstLetter": "1",
+      "pdf": "1._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_1_2010/xml.zip"
+    },
+    {
+      "title": "Verordnung zur Durchführung von regelmäßigen Datenübermittlungen zwischen Meldebehörden",
+      "slug": "bmeldd_v_1_2015",
+      "abbreviation": "1. BMeldDÜV",
+      "firstLetter": "1",
+      "pdf": "1._BMeldDÜV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bmeldd_v_1_2015/xml.zip"
+    },
+    {
+      "title": "Erste Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Anwendungsbestimmungen zu Anhang III - EU-OPS - der VO (EWG) Nr. 3922/91",
+      "slug": "luftbodv_1_2008",
+      "abbreviation": "1. DV LuftBO",
+      "firstLetter": "1",
+      "pdf": "1._DV_LuftBO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_1_2008/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_1",
+      "abbreviation": "1. DV-BEG",
+      "firstLetter": "1",
+      "pdf": "1._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Bundesrückerstattungsgesetzes",
+      "slug": "br_gdv_1",
+      "abbreviation": "1. DV-BRüG",
+      "firstLetter": "1",
+      "pdf": "1._DV-BRüG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/br_gdv_1/xml.zip"
+    },
+    {
+      "title": "Erstes Gesetz zur Reform des Ehe- und Familienrechts",
+      "slug": "eherg_1",
+      "abbreviation": "1. EheRG",
+      "firstLetter": "1",
+      "pdf": "1._EheRG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/eherg_1/xml.zip"
+    },
+    {
+      "title": "Verordnung über die Kosten von Maßnahmen nach dem Eisenbahnkreuzungsgesetz",
+      "slug": "ekrv_1",
+      "abbreviation": "1. EKrV",
+      "firstLetter": "1",
+      "pdf": "1._EKrV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/ekrv_1/xml.zip"
+    },
+    {
+      "title": "Verordnung über die Preismeldung bei Schlachtkörpern und deren Kennzeichnung",
+      "slug": "flgdv_1",
+      "abbreviation": "1. FlGDV",
+      "firstLetter": "1",
+      "pdf": "1._FlGDV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/flgdv_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
+      "slug": "fluglsv_1",
+      "abbreviation": "1. FlugLSV",
+      "firstLetter": "1",
+      "pdf": "1._FlugLSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Gesetzes zur Einführung von Vorschriften des Lastenausgleichsrechts im Saarland",
+      "slug": "lasaardv_1",
+      "abbreviation": "1. LADV-Saar",
+      "firstLetter": "1",
+      "pdf": "1._LADV-Saar.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lasaardv_1/xml.zip"
+    },
+    {
+      "title": "Erstes Gesetz zur Neuordnung von Selbstverwaltung und Eigenverantwortung in der gesetzlichen Krankenversicherung",
+      "slug": "gkvnog_1",
+      "abbreviation": "1. NOG",
+      "firstLetter": "1",
+      "pdf": "1._NOG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gkvnog_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zum Produktsicherheitsgesetz 1",
+      "slug": "prodsg2011v_1",
+      "abbreviation": "1. ProdSV",
+      "firstLetter": "1",
+      "pdf": "1._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_1/xml.zip"
+    },
+    {
+      "title": "Erstes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1958",
+      "slug": "rag_1",
+      "abbreviation": "1. RAG",
+      "firstLetter": "1",
+      "pdf": "1._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "rav_1",
+      "abbreviation": "1. RAV",
+      "firstLetter": "1",
+      "pdf": "1._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_1/xml.zip"
+    },
+    {
+      "title": "Erstes Gesetz zur Änderung des Elften Buches Sozialgesetzbuch und anderer Gesetze",
+      "slug": "sgb11_ndg_1",
+      "abbreviation": "1. SGB XI-ÄndG",
+      "firstLetter": "1",
+      "pdf": "1._SGB_XI-ÄndG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sgb11_ndg_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zum Sprengstoffgesetz",
+      "slug": "sprengv_1",
+      "abbreviation": "1. SprengV",
+      "firstLetter": "1",
+      "pdf": "1._SprengV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_1/xml.zip"
+    },
+    {
+      "title": "Erste Wassersicherstellungsverordnung",
+      "slug": "wassv_1",
+      "abbreviation": "1. WasSV",
+      "firstLetter": "1",
+      "pdf": "1._WasSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/wassv_1/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
+      "slug": "windseev_1",
+      "abbreviation": "1. WindSeeV",
+      "firstLetter": "1",
+      "pdf": "1._WindSeeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_1/xml.zip"
+    },
+    {
+      "title": "Erste Wahlordnung zum Mitbestimmungsgesetz",
+      "slug": "mitbestgwo_1_2002",
+      "abbreviation": "1. WOMitbestG",
+      "firstLetter": "1",
+      "pdf": "1._WOMitbestG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_1_2002/xml.zip"
+    },
+    {
+      "title": "Erste Verordnung über die Erhöhung der Zinsen für Darlehen aus Wohnungsfürsorgemitteln des Bundes",
+      "slug": "wozerhv_1",
+      "abbreviation": "1. WoZErhV",
+      "firstLetter": "1",
+      "pdf": "1._WoZErhV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/wozerhv_1/xml.zip"
+    },
+    {
+      "title": "Zehnte Verordnung zur Änderung von Rechtsvorschriften zum Güterkraftverkehrsgesetz",
+      "slug": "g_kg_ndv_10",
+      "abbreviation": "10. ÄndVGüKG",
+      "firstLetter": "1",
+      "pdf": "10._ÄndVGüKG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/g_kg_ndv_10/xml.zip"
+    },
+    {
+      "title": "Zehntes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
+      "slug": "kovanpg_10",
+      "abbreviation": "10. AnpG-KOV",
+      "firstLetter": "1",
+      "pdf": "10._AnpG-KOV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_10/xml.zip"
+    },
+    {
+      "title": "Zehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*)**)",
+      "slug": "bimschv_10_2010",
+      "abbreviation": "10. BImSchV",
+      "firstLetter": "1",
+      "pdf": "10._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_10_2010/xml.zip"
+    },
+    {
+      "title": "Zehnte Verordnung über zwingende Arbeitsbedingungen in der Gebäudereinigung",
+      "slug": "geb_udearbbv_10",
+      "abbreviation": "10. GebäudeArbbV",
+      "firstLetter": "1",
+      "pdf": "10._GebäudeArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/geb_udearbbv_10/xml.zip"
+    },
+    {
+      "title": "Zehnte Verordnung zum Produktsicherheitsgesetz",
+      "slug": "prodsg2011v_10",
+      "abbreviation": "10. ProdSV",
+      "firstLetter": "1",
+      "pdf": "10._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_10/xml.zip"
+    },
+    {
+      "title": "Zehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_10",
+      "abbreviation": "10. RAG",
+      "firstLetter": "1",
+      "pdf": "10._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_10/xml.zip"
+    },
+    {
+      "title": "Elftes Gesetz zur Änderung des Lastenausgleichsgesetzes",
+      "slug": "lag_ndg_11",
+      "abbreviation": "11. ÄndG LAG",
+      "firstLetter": "1",
+      "pdf": "11._ÄndG_LAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_11/xml.zip"
+    },
+    {
+      "title": "Elfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung über Emissionserklärungen)",
+      "slug": "bimschv_11_2004",
+      "abbreviation": "11. BImSchV",
+      "firstLetter": "1",
+      "pdf": "11._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_11_2004/xml.zip"
+    },
+    {
+      "title": "Elfte Verordnung zum Produktsicherheitsgesetz 1",
+      "slug": "gsgv_11_2016",
+      "abbreviation": "11. ProdSV",
+      "firstLetter": "1",
+      "pdf": "11._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_11_2016/xml.zip"
+    },
+    {
+      "title": "Elftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_11",
+      "abbreviation": "11. RAG",
+      "firstLetter": "1",
+      "pdf": "11._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_11/xml.zip"
+    },
+    {
+      "title": "Verordnung zur elften Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet und zur Bestimmung weiterer Rechengrößen der Sozialversicherung für 1996",
+      "slug": "rav_11",
+      "abbreviation": "11. RAV",
+      "firstLetter": "1",
+      "pdf": "11._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_11/xml.zip"
+    },
+    {
+      "title": "Zwölfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_12_2000",
+      "abbreviation": "12. BImSchV",
+      "firstLetter": "1",
+      "pdf": "12._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_12_2000/xml.zip"
+    },
+    {
+      "title": "Zwölfte Verordnung über zwingende Arbeitsbedingungen für das Maler- und Lackiererhandwerk",
+      "slug": "malerarbbv_12",
+      "abbreviation": "12. MalerArbbV",
+      "firstLetter": "1",
+      "pdf": "12._MalerArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/malerarbbv_12/xml.zip"
+    },
+    {
+      "title": "Zwölfte Verordnung zum Produktsicherheitsgesetz 1",
+      "slug": "prodsg2011v_12",
+      "abbreviation": "12. ProdSV",
+      "firstLetter": "1",
+      "pdf": "12._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_12/xml.zip"
+    },
+    {
+      "title": "Zwölftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung (Art. 4 d. Dritten Rentenversicherungs- Änderungsgesetzes - 3. RVÄndG)",
+      "slug": "rag_12",
+      "abbreviation": "12. RAG",
+      "firstLetter": "1",
+      "pdf": "12._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_12/xml.zip"
+    },
+    {
+      "title": "Dreizehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_13_2021",
+      "abbreviation": "13. BImSchV",
+      "firstLetter": "1",
+      "pdf": "13._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_13_2021/xml.zip"
+    },
+    {
+      "title": "Dreizehnte Verordnung über zwingende Arbeitsbedingungen im Dachdeckerhandwerk",
+      "slug": "dachdarbbv_13",
+      "abbreviation": "13. DachdArbbV",
+      "firstLetter": "1",
+      "pdf": "13._DachdArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/dachdarbbv_13/xml.zip"
+    },
+    {
+      "title": "Dreizehnte Verordnung zum Produktsicherheitsgesetz (Aerosolpackungsverordnung)",
+      "slug": "gsgv_13",
+      "abbreviation": "13. ProdSV",
+      "firstLetter": "1",
+      "pdf": "13._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_13/xml.zip"
+    },
+    {
+      "title": "Dreizehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_13",
+      "abbreviation": "13. RAG",
+      "firstLetter": "1",
+      "pdf": "13._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_13/xml.zip"
+    },
+    {
+      "title": "Vierzehntes Gesetz zur Änderung des Lastenausgleichsgesetzes",
+      "slug": "lag_ndg_14",
+      "abbreviation": "14. ÄndG LAG",
+      "firstLetter": "1",
+      "pdf": "14._ÄndG_LAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_14/xml.zip"
+    },
+    {
+      "title": "Vierzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_14",
+      "abbreviation": "14. BImSchV",
+      "firstLetter": "1",
+      "pdf": "14._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_14/xml.zip"
+    },
+    {
+      "title": "Vierzehnte Verordnung zum Produktsicherheitsgesetz 1",
+      "slug": "gsgv_14_2016",
+      "abbreviation": "14. ProdSV",
+      "firstLetter": "1",
+      "pdf": "14._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_14_2016/xml.zip"
+    },
+    {
+      "title": "Vierzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_14",
+      "abbreviation": "14. RAG",
+      "firstLetter": "1",
+      "pdf": "14._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_14/xml.zip"
+    },
+    {
+      "title": "Fünfzehnte Verordnung zum Produktsicherheitsgesetz",
+      "slug": "gsgv_15",
+      "abbreviation": "15. ProdSV",
+      "firstLetter": "1",
+      "pdf": "15._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_15/xml.zip"
+    },
+    {
+      "title": "Fünfzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_15",
+      "abbreviation": "15. RAG",
+      "firstLetter": "1",
+      "pdf": "15._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_15/xml.zip"
+    },
+    {
+      "title": "Sechzehntes Gesetz zur Änderung des Lastenausgleichsgesetzes",
+      "slug": "lag_ndg_16",
+      "abbreviation": "16. ÄndG LAG",
+      "firstLetter": "1",
+      "pdf": "16._ÄndG_LAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_16/xml.zip"
+    },
+    {
+      "title": "Sechzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_16",
+      "abbreviation": "16. BImSchV",
+      "firstLetter": "1",
+      "pdf": "16._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_16/xml.zip"
+    },
+    {
+      "title": "Sechzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_16",
+      "abbreviation": "16. RAG",
+      "firstLetter": "1",
+      "pdf": "16._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_16/xml.zip"
+    },
+    {
+      "title": "Siebzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_17_2013",
+      "abbreviation": "17. BImSchV",
+      "firstLetter": "1",
+      "pdf": "17._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_17_2013/xml.zip"
+    },
+    {
+      "title": "Siebzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
+      "slug": "rag_17",
+      "abbreviation": "17. RAG",
+      "firstLetter": "1",
+      "pdf": "17._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_17/xml.zip"
+    },
+    {
+      "title": "Achtzehnte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_18",
+      "abbreviation": "18. BImSchV",
+      "firstLetter": "1",
+      "pdf": "18._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_18/xml.zip"
+    },
+    {
+      "title": "Achtzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
+      "slug": "rag_18",
+      "abbreviation": "18. RAG",
+      "firstLetter": "1",
+      "pdf": "18._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_18/xml.zip"
+    },
+    {
+      "title": "Neunzehntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
+      "slug": "rag_19",
+      "abbreviation": "19. RAG",
+      "firstLetter": "1",
+      "pdf": "19._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_19/xml.zip"
+    },
+    {
+      "title": "Zweites Gesetz zur Änderung und Ergänzung des Anspruchs- und Anwartschaftsüberführungsgesetzes",
+      "slug": "aa_g_ndg_2",
+      "abbreviation": "2. AAÜG-ÄndG",
+      "firstLetter": "2",
+      "pdf": "2._AAÜG-ÄndG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/aa_g_ndg_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Änderung der Sechsten Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv6_ndv_2",
+      "abbreviation": "2. ÄndV - 6. DV-BEG",
+      "firstLetter": "2",
+      "pdf": "2._ÄndV_-_6._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv6_ndv_2/xml.zip"
+    },
+    {
+      "title": "Zweites Gesetz zur Vereinheitlichung und Neuregelung des Besoldungsrechts in Bund und Ländern",
+      "slug": "besvng_2",
+      "abbreviation": "2. BesVNG",
+      "firstLetter": "2",
+      "pdf": "2._BesVNG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/besvng_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_2_1990",
+      "abbreviation": "2. BImSchV",
+      "firstLetter": "2",
+      "pdf": "2._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_2_1990/xml.zip"
+    },
+    {
+      "title": "Verordnung zur Durchführung von regelmäßigen Datenübermittlungen der Meldebehörden an Behörden oder sonstige öffentliche Stellen des Bundes",
+      "slug": "bmeldd_v_2_2015",
+      "abbreviation": "2. BMeldDÜV",
+      "firstLetter": "2",
+      "pdf": "2._BMeldDÜV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bmeldd_v_2_2015/xml.zip"
+    },
+    {
+      "title": "Zweite Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Dienst-, Flugdienst-, Block- und Ruhezeiten von Besatzungsmitgliedern in Luftfahrtunternehmen und außerhalb von Luftfahrtunternehmen bei berufsmäßiger Betätigung)",
+      "slug": "luftbodv_2_2009",
+      "abbreviation": "2. DV LuftBO",
+      "firstLetter": "2",
+      "pdf": "2._DV_LuftBO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_2_2009/xml.zip"
+    },
+    {
+      "title": "Zweite Durchführungsverordnung zur Verordnung zur Prüfung von Luftfahrtgerät (Lufttüchtigkeitsforderungen für Luftfahrtgerät)",
+      "slug": "luftgerpv1998dv_2_2018",
+      "abbreviation": "2. DV LuftGerPV",
+      "firstLetter": "2",
+      "pdf": "2._DV_LuftGerPV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftgerpv1998dv_2_2018/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_2",
+      "abbreviation": "2. DV-BEG",
+      "firstLetter": "2",
+      "pdf": "2._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Durchführungsverordnung zur Verordnung über Luftfahrtpersonal (Anwendungsbestimmungen für die Ausbildung und Prüfung für den Erwerb von Lizenzen und Berechtigungen für Luftfahrer gemäß der Verordnung über Luftfahrtpersonal)",
+      "slug": "luftpersvdv_2",
+      "abbreviation": "2. DVLuftPersV",
+      "firstLetter": "2",
+      "pdf": "2._DVLuftPersV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftpersvdv_2/xml.zip"
+    },
+    {
+      "title": "Gesetz zur Ergänzung des Dritten Gesetzes über die Übernahme von Sicherheitsleistungen und Gewährleistungen zur Förderung der deutschen Wirtschaft",
+      "slug": "erpb_rgschg_2",
+      "abbreviation": "2. ERP-BürgschG",
+      "firstLetter": "2",
+      "pdf": "2._ERP-BürgschG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/erpb_rgschg_2/xml.zip"
+    },
+    {
+      "title": "Verordnung über die Anforderungen an die Zulassung von Klassifizierungsunternehmen und Klassifizierern für Schlachtkörper von Rindern, Schweinen und Schafen",
+      "slug": "flgdv_2",
+      "abbreviation": "2. FlGDV",
+      "firstLetter": "2",
+      "pdf": "2._FlGDV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/flgdv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
+      "slug": "fluglsv_2",
+      "abbreviation": "2. FlugLSV",
+      "firstLetter": "2",
+      "pdf": "2._FlugLSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung über Ausnahmen von den Vorschriften der Fahrzeug-Zulassungsverordnung",
+      "slug": "fzausnv_2",
+      "abbreviation": "2. FZVAusnV",
+      "firstLetter": "2",
+      "pdf": "2._FZVAusnV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/fzausnv_2/xml.zip"
+    },
+    {
+      "title": "Verordnung zur Durchführung der im Rahmen der Gemeinsamen Agrarpolitik geltenden Ausnahmeregelung hinsichtlich der Anwendung des Standards Nummer 8 für den guten landwirtschaftlichen und ökologischen Zustand für das Antragsjahr 2024",
+      "slug": "gapausnv_2",
+      "abbreviation": "2. GAPAusnV",
+      "firstLetter": "2",
+      "pdf": "2._GAPAusnV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gapausnv_2/xml.zip"
+    },
+    {
+      "title": "Gesetz zur Durchsetzung der Gleichberechtigung von Frauen und Männern",
+      "slug": "gleichberg_2",
+      "abbreviation": "2. GleiBG",
+      "firstLetter": "2",
+      "pdf": "2._GleiBG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gleichberg_2/xml.zip"
+    },
+    {
+      "title": "Zweites Gesetz zur Verbesserung der Haushaltsstruktur",
+      "slug": "hstruktg_2",
+      "abbreviation": "2. HStruktG",
+      "firstLetter": "2",
+      "pdf": "2._HStruktG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/hstruktg_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Durchführung des Gesetzes zur Einführung von Vorschriften des Lastenausgleichsrechts im Saarland",
+      "slug": "lasaardv_2",
+      "abbreviation": "2. LADV-Saar",
+      "firstLetter": "2",
+      "pdf": "2._LADV-Saar.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lasaardv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Bekanntmachung zu § 115 der Zivilprozessordnung",
+      "slug": "pkhb_2012_2",
+      "abbreviation": "2. PKHB 2012",
+      "firstLetter": "2",
+      "pdf": "2._PKHB_2012.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/pkhb_2012_2/xml.zip"
+    },
+    {
+      "title": "Zweite Bekanntmachung zu § 115 der Zivilprozessordnung",
+      "slug": "pkhb_2019_2",
+      "abbreviation": "2. PKHB 2019",
+      "firstLetter": "2",
+      "pdf": "2._PKHB_2019.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/pkhb_2019_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zum Produktsicherheitsgesetz (Verordnung über die Sicherheit von Spielzeug)*)",
+      "slug": "gpsgv_2",
+      "abbreviation": "2. ProdSV",
+      "firstLetter": "2",
+      "pdf": "2._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gpsgv_2/xml.zip"
+    },
+    {
+      "title": "Zweites Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1959",
+      "slug": "rag_2",
+      "abbreviation": "2. RAG",
+      "firstLetter": "2",
+      "pdf": "2._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Anpassung der Renten und zu den maßgeblichen Rechengrößen in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "rav_2",
+      "abbreviation": "2. RAV",
+      "firstLetter": "2",
+      "pdf": "2._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zum Sprengstoffgesetz",
+      "slug": "sprengv_2",
+      "abbreviation": "2. SprengV",
+      "firstLetter": "2",
+      "pdf": "2._SprengV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Übertragung von unternehmensbezogenen Aufgaben nach dem Treuhandgesetz und von Unternehmensbeteiligungen der Bundesanstalt für vereinigungsbedingte Sonderaufgaben",
+      "slug": "treuhunt_v_2",
+      "abbreviation": "2. TreuhUntÜV",
+      "firstLetter": "2",
+      "pdf": "2._TreuhUntÜV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/treuhunt_v_2/xml.zip"
+    },
+    {
+      "title": "Zweite Wassersicherstellungsverordnung",
+      "slug": "wassv_2",
+      "abbreviation": "2. WasSV",
+      "firstLetter": "2",
+      "pdf": "2._WasSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/wassv_2/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
+      "slug": "windseev_2",
+      "abbreviation": "2. WindSeeV",
+      "firstLetter": "2",
+      "pdf": "2._WindSeeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_2/xml.zip"
+    },
+    {
+      "title": "Zweite Wahlordnung zum Mitbestimmungsgesetz",
+      "slug": "mitbestgwo_2_2002",
+      "abbreviation": "2. WOMitbestG",
+      "firstLetter": "2",
+      "pdf": "2._WOMitbestG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_2_2002/xml.zip"
+    },
+    {
+      "title": "Zweite Verordnung über die Erhöhung der Zinsen für Darlehen aus Wohnungsfürsorgemitteln des Bundes",
+      "slug": "wozerhv_2",
+      "abbreviation": "2. WoZErhV",
+      "firstLetter": "2",
+      "pdf": "2._WoZErhV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/wozerhv_2/xml.zip"
+    },
+    {
+      "title": "Zwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung zur Begrenzung der Emissionen flüchtiger organischer Verbindungen beim Umfüllen oder Lagern von Ottokraftstoffen, Kraftstoffgemischen oder Rohbenzin)",
+      "slug": "bimschv_20_1998",
+      "abbreviation": "20. BImSchV",
+      "firstLetter": "2",
+      "pdf": "20._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_20_1998/xml.zip"
+    },
+    {
+      "title": "Gesetz zur Zwanzigsten Rentenanpassung und zur Verbesserung der Finanzgrundlagen der gesetzlichen Rentenversicherung",
+      "slug": "rag_20",
+      "abbreviation": "20. RAG",
+      "firstLetter": "2",
+      "pdf": "20._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_20/xml.zip"
+    },
+    {
+      "title": "Einundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_21",
+      "abbreviation": "21. BImSchV",
+      "firstLetter": "2",
+      "pdf": "21._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_21/xml.zip"
+    },
+    {
+      "title": "Einundzwanzigste Verordnung zur Änderung betäubungsmittelrechtlicher Vorschriften",
+      "slug": "btm_ndv_21",
+      "abbreviation": "21. BtMÄndV",
+      "firstLetter": "2",
+      "pdf": "21._BtMÄndV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/btm_ndv_21/xml.zip"
+    },
+    {
+      "title": "Einundzwanzigstes Gesetz über die Anpassung der Renten aus der gesetzlichen Rentenversicherung sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung und der Altersgelder in der Altershilfe für Landwirte",
+      "slug": "rag_21",
+      "abbreviation": "21. RAG",
+      "firstLetter": "2",
+      "pdf": "21._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_21/xml.zip"
+    },
+    {
+      "title": "Vierundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_24",
+      "abbreviation": "24. BImSchV",
+      "firstLetter": "2",
+      "pdf": "24._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_24/xml.zip"
+    },
+    {
+      "title": "Vierundzwanzigste Verordnung zur Anpassung der Unterhaltshilfe nach dem Lastenausgleichsgesetz",
+      "slug": "uhanpv_24",
+      "abbreviation": "24. UhAnpV",
+      "firstLetter": "2",
+      "pdf": "24._UhAnpV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/uhanpv_24/xml.zip"
+    },
+    {
+      "title": "Fünfundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_25",
+      "abbreviation": "25. BImSchV",
+      "firstLetter": "2",
+      "pdf": "25._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_25/xml.zip"
+    },
+    {
+      "title": "Sechsundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_26",
+      "abbreviation": "26. BImSchV",
+      "firstLetter": "2",
+      "pdf": "26._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_26/xml.zip"
+    },
+    {
+      "title": "Siebenundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_27",
+      "abbreviation": "27. BImSchV",
+      "firstLetter": "2",
+      "pdf": "27._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_27/xml.zip"
+    },
+    {
+      "title": "Achtundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1",
+      "slug": "bimschv_28_2021",
+      "abbreviation": "28. BImSchV",
+      "firstLetter": "2",
+      "pdf": "28._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_28_2021/xml.zip"
+    },
+    {
+      "title": "Neunundzwanzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_29",
+      "abbreviation": "29. BImSchV",
+      "firstLetter": "2",
+      "pdf": "29._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_29/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Änderung der Sechsten Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv6_ndv_3",
+      "abbreviation": "3. ÄndV - 6. DV-BEG",
+      "firstLetter": "3",
+      "pdf": "3._ÄndV_-_6._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv6_ndv_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Durchführung einer Bundesstatistik über Art und Umfang der betrieblichen Altersversorgung",
+      "slug": "betravstatv_3",
+      "abbreviation": "3. BetrAVStatVO",
+      "firstLetter": "3",
+      "pdf": "3._BetrAVStatVO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/betravstatv_3/xml.zip"
+    },
+    {
+      "title": "Dritte Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Ausrüstung und Betrieb des Luftfahrtgerätes außerhalb von Luftfahrtunternehmen)",
+      "slug": "luftbodv_3_2009",
+      "abbreviation": "3. DV LuftBO",
+      "firstLetter": "3",
+      "pdf": "3._DV_LuftBO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_3_2009/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_3",
+      "abbreviation": "3. DV-BEG",
+      "firstLetter": "3",
+      "pdf": "3._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Durchführung des Gesetzes zum Schutz gegen Fluglärm",
+      "slug": "fluglsv_3",
+      "abbreviation": "3. FlugLSV",
+      "firstLetter": "3",
+      "pdf": "3._FlugLSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/fluglsv_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Anpassung der Höhe der Vergütungen nach der Gebührenordnung für Ärzte, der Gebührenordnung für Zahnärzte sowie nach der Hebammenhilfe-Gebührenverordnung in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "gebav_3",
+      "abbreviation": "3. GebAV",
+      "firstLetter": "3",
+      "pdf": "3._GebAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gebav_3/xml.zip"
+    },
+    {
+      "title": "Drittes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1960",
+      "slug": "rag_3",
+      "abbreviation": "3. RAG",
+      "firstLetter": "3",
+      "pdf": "3._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Anpassung der Renten und zu den maßgeblichen Rechengrößen in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "rav_3",
+      "abbreviation": "3. RAV",
+      "firstLetter": "3",
+      "pdf": "3._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zum Sprengstoffgesetz",
+      "slug": "sprengv_3",
+      "abbreviation": "3. SprengV",
+      "firstLetter": "3",
+      "pdf": "3._SprengV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sprengv_3/xml.zip"
+    },
+    {
+      "title": "Dritte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
+      "slug": "windseev_3",
+      "abbreviation": "3. WindSeeV",
+      "firstLetter": "3",
+      "pdf": "3._WindSeeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_3/xml.zip"
+    },
+    {
+      "title": "Dritte Wahlordnung zum Mitbestimmungsgesetz",
+      "slug": "mitbestgwo_3_2002",
+      "abbreviation": "3. WOMitbestG",
+      "firstLetter": "3",
+      "pdf": "3._WOMitbestG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/mitbestgwo_3_2002/xml.zip"
+    },
+    {
+      "title": "Dreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_30",
+      "abbreviation": "30. BImSchV",
+      "firstLetter": "3",
+      "pdf": "30._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_30/xml.zip"
+    },
+    {
+      "title": "31. Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_31_2024",
+      "abbreviation": "31. BImSchV",
+      "firstLetter": "3",
+      "pdf": "31._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_31_2024/xml.zip"
+    },
+    {
+      "title": "32. Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_32",
+      "abbreviation": "32. BImSchV",
+      "firstLetter": "3",
+      "pdf": "32._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_32/xml.zip"
+    },
+    {
+      "title": "Vierunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung über die Lärmkartierung)",
+      "slug": "bimschv_34",
+      "abbreviation": "34. BImSchV",
+      "firstLetter": "3",
+      "pdf": "34._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_34/xml.zip"
+    },
+    {
+      "title": "Fünfunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_35",
+      "abbreviation": "35. BImSchV",
+      "firstLetter": "3",
+      "pdf": "35._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_35/xml.zip"
+    },
+    {
+      "title": "Sechsunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes (Verordnung zur Durchführung der Regelungen der Biokraftstoffquote)",
+      "slug": "bimschv_36",
+      "abbreviation": "36. BImSchV",
+      "firstLetter": "3",
+      "pdf": "36._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_36/xml.zip"
+    },
+    {
+      "title": "Siebenunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1, 2 (Verordnung zur Anrechnung von strombasierten Kraftstoffen und mitverarbeiteten biogenen Rohstoffen auf die Treibhausgasquote und zur Anrechnung auf die Verpflichtung nach Artikel 4 in Verbindung mit Anhang I der Verordnung (EU) 2023/2405)",
+      "slug": "bimschv_37_2024",
+      "abbreviation": "37. BImSchV",
+      "firstLetter": "3",
+      "pdf": "37._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_37_2024/xml.zip"
+    },
+    {
+      "title": "Achtunddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes 1, 2",
+      "slug": "bimschv_38_2017",
+      "abbreviation": "38. BImSchV",
+      "firstLetter": "3",
+      "pdf": "38._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_38_2017/xml.zip"
+    },
+    {
+      "title": "Neununddreißigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*)",
+      "slug": "bimschv_39",
+      "abbreviation": "39. BImSchV",
+      "firstLetter": "3",
+      "pdf": "39._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_39/xml.zip"
+    },
+    {
+      "title": "Viertes Gesetz zur Änderung des Lastenausgleichsgesetzes",
+      "slug": "lag_ndg_4",
+      "abbreviation": "4. ÄndG LAG",
+      "firstLetter": "4",
+      "pdf": "4._ÄndG_LAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_4/xml.zip"
+    },
+    {
+      "title": "Vierte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_4_2013",
+      "abbreviation": "4. BImSchV",
+      "firstLetter": "4",
+      "pdf": "4._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_4_2013/xml.zip"
+    },
+    {
+      "title": "Vierte Durchführungsverordnung zur Betriebsordnung für Luftfahrtgerät (Ausrüstung und Betrieb von Heißluftballonen und Heißluft-Luftschiffen)",
+      "slug": "luftbodv_4",
+      "abbreviation": "4. DV LuftBO",
+      "firstLetter": "4",
+      "pdf": "4._DV_LuftBO.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/luftbodv_4/xml.zip"
+    },
+    {
+      "title": "Vierte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_4",
+      "abbreviation": "4. DV-BEG",
+      "firstLetter": "4",
+      "pdf": "4._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_4/xml.zip"
+    },
+    {
+      "title": "Vierte Verordnung über die Bezugsdauer für das Kurzarbeitergeld",
+      "slug": "kugbev_4",
+      "abbreviation": "4. KugBeV",
+      "firstLetter": "4",
+      "pdf": "4._KugBeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/kugbev_4/xml.zip"
+    },
+    {
+      "title": "Viertes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1961",
+      "slug": "rag_4",
+      "abbreviation": "4. RAG",
+      "firstLetter": "4",
+      "pdf": "4._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_4/xml.zip"
+    },
+    {
+      "title": "Vierte Verordnung über zwingende Arbeitsbedingungen für Sicherheitskräfte an Verkehrsflughäfen",
+      "slug": "vflughsikarbbv_4",
+      "abbreviation": "4. VFlughSiKArbbV",
+      "firstLetter": "4",
+      "pdf": "4._VFlughSiKArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/vflughsikarbbv_4/xml.zip"
+    },
+    {
+      "title": "Vierte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
+      "slug": "windseev_4",
+      "abbreviation": "4. WindSeeV",
+      "firstLetter": "4",
+      "pdf": "4._WindSeeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_4/xml.zip"
+    },
+    {
+      "title": "Einundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_41",
+      "abbreviation": "41. BImSchV",
+      "firstLetter": "4",
+      "pdf": "41._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_41/xml.zip"
+    },
+    {
+      "title": "Zweiundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_42",
+      "abbreviation": "42. BImSchV",
+      "firstLetter": "4",
+      "pdf": "42._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_42/xml.zip"
+    },
+    {
+      "title": "Dreiundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_43",
+      "abbreviation": "43. BImSchV",
+      "firstLetter": "4",
+      "pdf": "43._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_43/xml.zip"
+    },
+    {
+      "title": "Vierundvierzigste Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes*",
+      "slug": "bimschv_44",
+      "abbreviation": "44. BImSchV",
+      "firstLetter": "4",
+      "pdf": "44._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_44/xml.zip"
+    },
+    {
+      "title": "Fünfundvierzigste Verordnung zur vorübergehenden Abweichung von der Rheinschifffahrtspolizeiverordnung",
+      "slug": "rheinschpvabwv_45",
+      "abbreviation": "45. RheinSchPVAbweichV",
+      "firstLetter": "4",
+      "pdf": "45._RheinSchPVAbweichV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rheinschpvabwv_45/xml.zip"
+    },
+    {
+      "title": "Fünftes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
+      "slug": "kovanpg_5",
+      "abbreviation": "5. AnpG-KOV",
+      "firstLetter": "5",
+      "pdf": "5._AnpG-KOV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_5/xml.zip"
+    },
+    {
+      "title": "Fünfte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_5_1993",
+      "abbreviation": "5. BImSchV",
+      "firstLetter": "5",
+      "pdf": "5._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_5_1993/xml.zip"
+    },
+    {
+      "title": "Fünfte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
+      "slug": "binschstro2012abwv_5",
+      "abbreviation": "5. BinSchStrOAbweichV",
+      "firstLetter": "5",
+      "pdf": "5._BinSchStrOAbweichV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_5/xml.zip"
+    },
+    {
+      "title": "Fünfte Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_5",
+      "abbreviation": "5. DV-BEG",
+      "firstLetter": "5",
+      "pdf": "5._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_5/xml.zip"
+    },
+    {
+      "title": "Fünftes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen aus Anlaß der Veränderung der allgemeinen Bemessungsgrundlage für das Jahr 1962",
+      "slug": "rag_5",
+      "abbreviation": "5. RAG",
+      "firstLetter": "5",
+      "pdf": "5._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_5/xml.zip"
+    },
+    {
+      "title": "Fünfte Verordnung zur Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "rav_5",
+      "abbreviation": "5. RAV",
+      "firstLetter": "5",
+      "pdf": "5._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_5/xml.zip"
+    },
+    {
+      "title": "Fünftes Gesetz zur Änderung des Sozialgerichtsgesetzes",
+      "slug": "sgg_ndg_5",
+      "abbreviation": "5. SGG-ÄndG",
+      "firstLetter": "5",
+      "pdf": "5._SGG-ÄndG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sgg_ndg_5/xml.zip"
+    },
+    {
+      "title": "Fünftes Gesetz zur Förderung der Vermögensbildung der Arbeitnehmer",
+      "slug": "vermbg_2",
+      "abbreviation": "5. VermBG",
+      "firstLetter": "5",
+      "pdf": "5._VermBG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/vermbg_2/xml.zip"
+    },
+    {
+      "title": "Fünfte Verordnung zur Durchführung des Windenergie-auf-See-Gesetzes",
+      "slug": "windseev_5",
+      "abbreviation": "5. WindSeeV",
+      "firstLetter": "5",
+      "pdf": "5._WindSeeV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/windseev_5/xml.zip"
+    },
+    {
+      "title": "Vierundfünfzigste Verordnung über das anzurechnende Einkommen nach dem Bundesversorgungsgesetz",
+      "slug": "anrv_2023",
+      "abbreviation": "54. AnrV",
+      "firstLetter": "5",
+      "pdf": "54._AnrV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/anrv_2023/xml.zip"
+    },
+    {
+      "title": "Sechste Verordnung über zwingende Arbeitsbedingungen für Aus- und Weiterbildungsdienstleistungen nach dem Zweiten oder Dritten Buch Sozialgesetzbuch",
+      "slug": "ausbdienstlarbbv_6",
+      "abbreviation": "6. AusbDienstLArbbV",
+      "firstLetter": "6",
+      "pdf": "6._AusbDienstLArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/ausbdienstlarbbv_6/xml.zip"
+    },
+    {
+      "title": "Sechste Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
+      "slug": "binschstro2012abwv_6",
+      "abbreviation": "6. BinSchStrOAbweichV",
+      "firstLetter": "6",
+      "pdf": "6._BinSchStrOAbweichV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_6/xml.zip"
+    },
+    {
+      "title": "Sechste Verordnung zur Durchführung des Bundesentschädigungsgesetzes",
+      "slug": "begdv_6",
+      "abbreviation": "6. DV-BEG",
+      "firstLetter": "6",
+      "pdf": "6._DV-BEG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/begdv_6/xml.zip"
+    },
+    {
+      "title": "Sechste Verordnung zum Produktsicherheitsgesetz 1",
+      "slug": "prodsg2011v_6",
+      "abbreviation": "6. ProdSV",
+      "firstLetter": "6",
+      "pdf": "6._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/prodsg2011v_6/xml.zip"
+    },
+    {
+      "title": "Sechstes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_6",
+      "abbreviation": "6. RAG",
+      "firstLetter": "6",
+      "pdf": "6._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_6/xml.zip"
+    },
+    {
+      "title": "Sechstes Gesetz zur Änderung des Sozialgerichtsgesetzes",
+      "slug": "sgg_ndg_6",
+      "abbreviation": "6. SGGÄndG",
+      "firstLetter": "6",
+      "pdf": "6._SGGÄndG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/sgg_ndg_6/xml.zip"
+    },
+    {
+      "title": "Siebente Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_7",
+      "abbreviation": "7. BImSchV",
+      "firstLetter": "7",
+      "pdf": "7._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_7/xml.zip"
+    },
+    {
+      "title": "Siebte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
+      "slug": "binschstro2012abwv_7",
+      "abbreviation": "7. BinSchStrOAbweichV",
+      "firstLetter": "7",
+      "pdf": "7._BinSchStrOAbweichV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_7/xml.zip"
+    },
+    {
+      "title": "Siebte Verordnung über zwingende Arbeitsbedingungen für die Pflegebranche",
+      "slug": "pflegearbbv_7",
+      "abbreviation": "7. PflegeArbbV",
+      "firstLetter": "7",
+      "pdf": "7._PflegeArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/pflegearbbv_7/xml.zip"
+    },
+    {
+      "title": "Siebentes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_7",
+      "abbreviation": "7. RAG",
+      "firstLetter": "7",
+      "pdf": "7._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_7/xml.zip"
+    },
+    {
+      "title": "Achtes Gesetz zur Änderung des Lastenausgleichsgesetzes (Gesetz nach § 246 LAG - 8. ÄndG LAG)",
+      "slug": "lag_ndg_8",
+      "abbreviation": "8. ÄndGLAG",
+      "firstLetter": "8",
+      "pdf": "8._ÄndGLAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/lag_ndg_8/xml.zip"
+    },
+    {
+      "title": "Achte Verordnung zur vorübergehenden Abweichung von der Binnenschifffahrtsstraßen-Ordnung",
+      "slug": "binschstro2012abwv_8",
+      "abbreviation": "8. BinSchStrOAbweichV",
+      "firstLetter": "8",
+      "pdf": "8._BinSchStrOAbweichV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/binschstro2012abwv_8/xml.zip"
+    },
+    {
+      "title": "Achte Verordnung über Änderungen des Internationalen Übereinkommens von 1973 zur Verhütung der Meeresverschmutzung durch Schiffe und des Protokolls von 1978 zu diesem Übereinkommen",
+      "slug": "marpol_ndv_8",
+      "abbreviation": "8. MARPOL-ÄndV",
+      "firstLetter": "8",
+      "pdf": "8._MARPOL-ÄndV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/marpol_ndv_8/xml.zip"
+    },
+    {
+      "title": "Achtes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_8",
+      "abbreviation": "8. RAG",
+      "firstLetter": "8",
+      "pdf": "8._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_8/xml.zip"
+    },
+    {
+      "title": "Neuntes Gesetz über die Anpassung der Leistungen des Bundesversorgungsgesetzes",
+      "slug": "kovanpg_9",
+      "abbreviation": "9. AnpG-KOV",
+      "firstLetter": "9",
+      "pdf": "9._AnpG-KOV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/kovanpg_9/xml.zip"
+    },
+    {
+      "title": "Neunte Verordnung zur Durchführung des Bundes-Immissionsschutzgesetzes",
+      "slug": "bimschv_9",
+      "abbreviation": "9. BImSchV",
+      "firstLetter": "9",
+      "pdf": "9._BImSchV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/bimschv_9/xml.zip"
+    },
+    {
+      "title": "Neunte Verordnung über zwingende Arbeitsbedingungen im Gerüstbauerhandwerk",
+      "slug": "ger_stbarbbv_9",
+      "abbreviation": "9. GerüstbauerArbbV",
+      "firstLetter": "9",
+      "pdf": "9._GerüstbauerArbbV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/ger_stbarbbv_9/xml.zip"
+    },
+    {
+      "title": "Neunte Verordnung zum Produktsicherheitsgesetz *)",
+      "slug": "gsgv_9",
+      "abbreviation": "9. ProdSV",
+      "firstLetter": "9",
+      "pdf": "9._ProdSV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/gsgv_9/xml.zip"
+    },
+    {
+      "title": "Neuntes Gesetz über die Anpassung der Renten aus den gesetzlichen Rentenversicherungen sowie über die Anpassung der Geldleistungen aus der gesetzlichen Unfallversicherung",
+      "slug": "rag_9",
+      "abbreviation": "9. RAG",
+      "firstLetter": "9",
+      "pdf": "9._RAG.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rag_9/xml.zip"
+    },
+    {
+      "title": "Verordnung zur neunten Anpassung der Renten in dem in Artikel 3 des Einigungsvertrages genannten Gebiet",
+      "slug": "rav_9",
+      "abbreviation": "9. RAV",
+      "firstLetter": "9",
+      "pdf": "9._RAV.pdf",
+      "xmlUrl": "http://www.gesetze-im-internet.de/rav_9/xml.zip"
     }
   ],
   "index": {
-    "#": [
-      "_77abs3__145abs1__54abs3sgb9bek",
-      "_77abs3__54abs3sgb9bek",
+    "1": [
       "1-dm-goldm_nzg",
       "besvng_1",
       "bimschv_1_2010",
@@ -49120,7 +49118,9 @@
       "rag_17",
       "bimschv_18",
       "rag_18",
-      "rag_19",
+      "rag_19"
+    ],
+    "2": [
       "aa_g_ndg_2",
       "begdv6_ndv_2",
       "besvng_2",
@@ -49160,7 +49160,9 @@
       "bimschv_26",
       "bimschv_27",
       "bimschv_28_2021",
-      "bimschv_29",
+      "bimschv_29"
+    ],
+    "3": [
       "begdv6_ndv_3",
       "betravstatv_3",
       "luftbodv_3_2009",
@@ -49180,7 +49182,9 @@
       "bimschv_36",
       "bimschv_37_2024",
       "bimschv_38_2017",
-      "bimschv_39",
+      "bimschv_39"
+    ],
+    "4": [
       "lag_ndg_4",
       "bimschv_4_2013",
       "luftbodv_4",
@@ -49193,7 +49197,9 @@
       "bimschv_42",
       "bimschv_43",
       "bimschv_44",
-      "rheinschpvabwv_45",
+      "rheinschpvabwv_45"
+    ],
+    "5": [
       "kovanpg_5",
       "bimschv_5_1993",
       "binschstro2012abwv_5",
@@ -49203,21 +49209,29 @@
       "sgg_ndg_5",
       "vermbg_2",
       "windseev_5",
-      "anrv_2023",
+      "anrv_2023"
+    ],
+    "6": [
       "ausbdienstlarbbv_6",
       "binschstro2012abwv_6",
       "begdv_6",
       "prodsg2011v_6",
       "rag_6",
-      "sgg_ndg_6",
+      "sgg_ndg_6"
+    ],
+    "7": [
       "bimschv_7",
       "binschstro2012abwv_7",
       "pflegearbbv_7",
-      "rag_7",
+      "rag_7"
+    ],
+    "8": [
       "lag_ndg_8",
       "binschstro2012abwv_8",
       "marpol_ndv_8",
-      "rag_8",
+      "rag_8"
+    ],
+    "9": [
       "kovanpg_9",
       "bimschv_9",
       "ger_stbarbbv_9",
@@ -49625,6 +49639,8 @@
       "azv"
     ],
     "B": [
+      "_77abs3__145abs1__54abs3sgb9bek",
+      "_77abs3__54abs3sgb9bek",
       "baasaareinfdv",
       "b_ausbv_2004",
       "baazustv",
@@ -50754,6 +50770,7 @@
       "dwg_ndg"
     ],
     "E": [
+      "enwg_118asubv",
       "eaav",
       "eag-behandv",
       "eakav",
@@ -50915,7 +50932,6 @@
       "envkv",
       "enwfachwbaprofv",
       "enwg_2005",
-      "enwg_118asubv",
       "enwg2005_28r_28sanwbek",
       "enwgkostv",
       "epiaappoabwv",
@@ -55248,6 +55264,326 @@
       "zweiradfortbv",
       "zwrmechmstrv_2022",
       "zwvwv"
+    ],
+    "#": [
+      "1-dm-goldm_nzg",
+      "besvng_1",
+      "bimschv_1_2010",
+      "bmeldd_v_1_2015",
+      "luftbodv_1_2008",
+      "begdv_1",
+      "br_gdv_1",
+      "eherg_1",
+      "ekrv_1",
+      "flgdv_1",
+      "fluglsv_1",
+      "lasaardv_1",
+      "gkvnog_1",
+      "prodsg2011v_1",
+      "rag_1",
+      "rav_1",
+      "sgb11_ndg_1",
+      "sprengv_1",
+      "wassv_1",
+      "windseev_1",
+      "mitbestgwo_1_2002",
+      "wozerhv_1",
+      "g_kg_ndv_10",
+      "kovanpg_10",
+      "bimschv_10_2010",
+      "geb_udearbbv_10",
+      "prodsg2011v_10",
+      "rag_10",
+      "lag_ndg_11",
+      "bimschv_11_2004",
+      "gsgv_11_2016",
+      "rag_11",
+      "rav_11",
+      "bimschv_12_2000",
+      "malerarbbv_12",
+      "prodsg2011v_12",
+      "rag_12",
+      "bimschv_13_2021",
+      "dachdarbbv_13",
+      "gsgv_13",
+      "rag_13",
+      "lag_ndg_14",
+      "bimschv_14",
+      "gsgv_14_2016",
+      "rag_14",
+      "gsgv_15",
+      "rag_15",
+      "lag_ndg_16",
+      "bimschv_16",
+      "rag_16",
+      "bimschv_17_2013",
+      "rag_17",
+      "bimschv_18",
+      "rag_18",
+      "rag_19",
+      "aa_g_ndg_2",
+      "begdv6_ndv_2",
+      "besvng_2",
+      "bimschv_2_1990",
+      "bmeldd_v_2_2015",
+      "luftbodv_2_2009",
+      "luftgerpv1998dv_2_2018",
+      "begdv_2",
+      "luftpersvdv_2",
+      "erpb_rgschg_2",
+      "flgdv_2",
+      "fluglsv_2",
+      "fzausnv_2",
+      "gapausnv_2",
+      "gleichberg_2",
+      "hstruktg_2",
+      "lasaardv_2",
+      "pkhb_2012_2",
+      "pkhb_2019_2",
+      "gpsgv_2",
+      "rag_2",
+      "rav_2",
+      "sprengv_2",
+      "treuhunt_v_2",
+      "wassv_2",
+      "windseev_2",
+      "mitbestgwo_2_2002",
+      "wozerhv_2",
+      "bimschv_20_1998",
+      "rag_20",
+      "bimschv_21",
+      "btm_ndv_21",
+      "rag_21",
+      "bimschv_24",
+      "uhanpv_24",
+      "bimschv_25",
+      "bimschv_26",
+      "bimschv_27",
+      "bimschv_28_2021",
+      "bimschv_29",
+      "begdv6_ndv_3",
+      "betravstatv_3",
+      "luftbodv_3_2009",
+      "begdv_3",
+      "fluglsv_3",
+      "gebav_3",
+      "rag_3",
+      "rav_3",
+      "sprengv_3",
+      "windseev_3",
+      "mitbestgwo_3_2002",
+      "bimschv_30",
+      "bimschv_31_2024",
+      "bimschv_32",
+      "bimschv_34",
+      "bimschv_35",
+      "bimschv_36",
+      "bimschv_37_2024",
+      "bimschv_38_2017",
+      "bimschv_39",
+      "lag_ndg_4",
+      "bimschv_4_2013",
+      "luftbodv_4",
+      "begdv_4",
+      "kugbev_4",
+      "rag_4",
+      "vflughsikarbbv_4",
+      "windseev_4",
+      "bimschv_41",
+      "bimschv_42",
+      "bimschv_43",
+      "bimschv_44",
+      "rheinschpvabwv_45",
+      "kovanpg_5",
+      "bimschv_5_1993",
+      "binschstro2012abwv_5",
+      "begdv_5",
+      "rag_5",
+      "rav_5",
+      "sgg_ndg_5",
+      "vermbg_2",
+      "windseev_5",
+      "anrv_2023",
+      "ausbdienstlarbbv_6",
+      "binschstro2012abwv_6",
+      "begdv_6",
+      "prodsg2011v_6",
+      "rag_6",
+      "sgg_ndg_6",
+      "bimschv_7",
+      "binschstro2012abwv_7",
+      "pflegearbbv_7",
+      "rag_7",
+      "lag_ndg_8",
+      "binschstro2012abwv_8",
+      "marpol_ndv_8",
+      "rag_8",
+      "kovanpg_9",
+      "bimschv_9",
+      "ger_stbarbbv_9",
+      "gsgv_9",
+      "rag_9",
+      "rav_9"
+    ],
+    "1-9": [
+      "1-dm-goldm_nzg",
+      "besvng_1",
+      "bimschv_1_2010",
+      "bmeldd_v_1_2015",
+      "luftbodv_1_2008",
+      "begdv_1",
+      "br_gdv_1",
+      "eherg_1",
+      "ekrv_1",
+      "flgdv_1",
+      "fluglsv_1",
+      "lasaardv_1",
+      "gkvnog_1",
+      "prodsg2011v_1",
+      "rag_1",
+      "rav_1",
+      "sgb11_ndg_1",
+      "sprengv_1",
+      "wassv_1",
+      "windseev_1",
+      "mitbestgwo_1_2002",
+      "wozerhv_1",
+      "g_kg_ndv_10",
+      "kovanpg_10",
+      "bimschv_10_2010",
+      "geb_udearbbv_10",
+      "prodsg2011v_10",
+      "rag_10",
+      "lag_ndg_11",
+      "bimschv_11_2004",
+      "gsgv_11_2016",
+      "rag_11",
+      "rav_11",
+      "bimschv_12_2000",
+      "malerarbbv_12",
+      "prodsg2011v_12",
+      "rag_12",
+      "bimschv_13_2021",
+      "dachdarbbv_13",
+      "gsgv_13",
+      "rag_13",
+      "lag_ndg_14",
+      "bimschv_14",
+      "gsgv_14_2016",
+      "rag_14",
+      "gsgv_15",
+      "rag_15",
+      "lag_ndg_16",
+      "bimschv_16",
+      "rag_16",
+      "bimschv_17_2013",
+      "rag_17",
+      "bimschv_18",
+      "rag_18",
+      "rag_19",
+      "aa_g_ndg_2",
+      "begdv6_ndv_2",
+      "besvng_2",
+      "bimschv_2_1990",
+      "bmeldd_v_2_2015",
+      "luftbodv_2_2009",
+      "luftgerpv1998dv_2_2018",
+      "begdv_2",
+      "luftpersvdv_2",
+      "erpb_rgschg_2",
+      "flgdv_2",
+      "fluglsv_2",
+      "fzausnv_2",
+      "gapausnv_2",
+      "gleichberg_2",
+      "hstruktg_2",
+      "lasaardv_2",
+      "pkhb_2012_2",
+      "pkhb_2019_2",
+      "gpsgv_2",
+      "rag_2",
+      "rav_2",
+      "sprengv_2",
+      "treuhunt_v_2",
+      "wassv_2",
+      "windseev_2",
+      "mitbestgwo_2_2002",
+      "wozerhv_2",
+      "bimschv_20_1998",
+      "rag_20",
+      "bimschv_21",
+      "btm_ndv_21",
+      "rag_21",
+      "bimschv_24",
+      "uhanpv_24",
+      "bimschv_25",
+      "bimschv_26",
+      "bimschv_27",
+      "bimschv_28_2021",
+      "bimschv_29",
+      "begdv6_ndv_3",
+      "betravstatv_3",
+      "luftbodv_3_2009",
+      "begdv_3",
+      "fluglsv_3",
+      "gebav_3",
+      "rag_3",
+      "rav_3",
+      "sprengv_3",
+      "windseev_3",
+      "mitbestgwo_3_2002",
+      "bimschv_30",
+      "bimschv_31_2024",
+      "bimschv_32",
+      "bimschv_34",
+      "bimschv_35",
+      "bimschv_36",
+      "bimschv_37_2024",
+      "bimschv_38_2017",
+      "bimschv_39",
+      "lag_ndg_4",
+      "bimschv_4_2013",
+      "luftbodv_4",
+      "begdv_4",
+      "kugbev_4",
+      "rag_4",
+      "vflughsikarbbv_4",
+      "windseev_4",
+      "bimschv_41",
+      "bimschv_42",
+      "bimschv_43",
+      "bimschv_44",
+      "rheinschpvabwv_45",
+      "kovanpg_5",
+      "bimschv_5_1993",
+      "binschstro2012abwv_5",
+      "begdv_5",
+      "rag_5",
+      "rav_5",
+      "sgg_ndg_5",
+      "vermbg_2",
+      "windseev_5",
+      "anrv_2023",
+      "ausbdienstlarbbv_6",
+      "binschstro2012abwv_6",
+      "begdv_6",
+      "prodsg2011v_6",
+      "rag_6",
+      "sgg_ndg_6",
+      "bimschv_7",
+      "binschstro2012abwv_7",
+      "pflegearbbv_7",
+      "rag_7",
+      "lag_ndg_8",
+      "binschstro2012abwv_8",
+      "marpol_ndv_8",
+      "rag_8",
+      "kovanpg_9",
+      "bimschv_9",
+      "ger_stbarbbv_9",
+      "gsgv_9",
+      "rag_9",
+      "rav_9"
     ]
   }
 }

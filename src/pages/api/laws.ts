@@ -12,16 +12,21 @@ interface LawEntry {
 
 const laws = tocData.laws as LawEntry[];
 
-// Pre-group laws by letter in memory for O(1) lookups
-const alphabet = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const alphabet = [...letters, ...digits];
 const lawsByLetter = new Map<string, LawEntry[]>();
 alphabet.forEach((l) => lawsByLetter.set(l, []));
 
 for (const law of laws) {
-	const char = law.firstLetter?.toUpperCase() || '#';
-	const key = lawsByLetter.has(char) ? char : '#';
-	lawsByLetter.get(key)!.push(law);
+	const char = law.firstLetter?.toUpperCase();
+	if (lawsByLetter.has(char)) {
+		lawsByLetter.get(char)!.push(law);
+	}
 }
+
+// Pre-group all digit laws for convenience
+const allDigitLaws = laws.filter((l) => digits.includes(l.firstLetter));
 
 export const GET: APIRoute = async ({ url }) => {
 	const letterParam = url.searchParams.get('letter') || url.searchParams.get('buchstabe');
@@ -88,11 +93,25 @@ export const GET: APIRoute = async ({ url }) => {
 	// 2. Letter Query
 	if (letterParam) {
 		let key = letterParam.trim().toUpperCase();
-		if (key === '0' || key === '0-9' || key === 'ZIFFERN' || key === '%23') {
-			key = '#';
+		if (key === '0' || key === '0-9' || key === '1-9' || key === 'ZIFFERN' || key === '%' || key === '%23' || key === '#') {
+			return new Response(
+				JSON.stringify({
+					letter: '1-9',
+					count: allDigitLaws.length,
+					laws: allDigitLaws,
+				}),
+				{
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+						'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+					},
+				}
+			);
 		}
+
 		if (!lawsByLetter.has(key)) {
-			key = '#';
+			key = 'A';
 		}
 
 		const results = lawsByLetter.get(key) || [];
@@ -118,6 +137,8 @@ export const GET: APIRoute = async ({ url }) => {
 	alphabet.forEach((l) => {
 		letterCounts[l] = lawsByLetter.get(l)?.length || 0;
 	});
+	letterCounts['1-9'] = allDigitLaws.length;
+	letterCounts['#'] = allDigitLaws.length;
 
 	return new Response(
 		JSON.stringify({

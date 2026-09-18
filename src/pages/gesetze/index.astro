@@ -28,30 +28,36 @@ interface LawEntry {
 const { laws, meta } = tocData as { meta: { count: number; fetchedAt: string; source: string }; laws: LawEntry[] };
 
 // Pre-calculate counts per letter
-const alphabet = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const alphabet = [...letters, ...digits];
 const letterCounts = new Map<string, number>();
 alphabet.forEach((l) => letterCounts.set(l, 0));
 
 for (const law of laws) {
-	const char = law.firstLetter?.toUpperCase() || '#';
-	const key = letterCounts.has(char) ? char : '#';
-	letterCounts.set(key, (letterCounts.get(key) || 0) + 1);
+	const char = law.firstLetter?.toUpperCase();
+	if (letterCounts.has(char)) {
+		letterCounts.set(char, (letterCounts.get(char) || 0) + 1);
+	}
 }
 
 // Check if a letter was requested via SSR searchParams
 const rawLetterParam = (Astro.url.searchParams.get('buchstabe') || Astro.url.searchParams.get('letter') || '').trim();
 let normalizedParam = rawLetterParam.toUpperCase();
-if (normalizedParam === '0' || normalizedParam === '0-9' || normalizedParam === 'ZIFFERN' || normalizedParam === '%23') {
-	normalizedParam = '#';
+let isCombinedDigits = false;
+if (normalizedParam === '0' || normalizedParam === '0-9' || normalizedParam === '1-9' || normalizedParam === 'ZIFFERN' || normalizedParam === '%23' || normalizedParam === '#') {
+	isCombinedDigits = true;
+	normalizedParam = '1-9';
 }
-const initialLetter = alphabet.includes(normalizedParam) ? normalizedParam : '';
+const initialLetter = isCombinedDigits ? '1-9' : alphabet.includes(normalizedParam) ? normalizedParam : '';
 
 let initialLaws: LawEntry[] = [];
 if (initialLetter) {
-	initialLaws = laws.filter((law) => {
-		const char = law.firstLetter?.toUpperCase() || '#';
-		return (alphabet.includes(char) ? char : '#') === initialLetter;
-	});
+	if (initialLetter === '1-9') {
+		initialLaws = laws.filter((law) => digits.includes(law.firstLetter));
+	} else {
+		initialLaws = laws.filter((law) => law.firstLetter === initialLetter);
+	}
 }
 
 const CHUNK_SIZE = 60;
@@ -115,20 +121,36 @@ const curatedLeitgesetze = [
 ---
 
 <BaseLayout
-	title={initialLetter ? `Bundesgesetze mit Anfangsbuchstabe ${initialLetter}` : 'Alle Bundesgesetze A–Z'}
+	title={
+		initialLetter
+			? digits.includes(initialLetter)
+				? `Bundesgesetze mit Anfangsziffer ${initialLetter}`
+				: initialLetter === '1-9'
+					? 'Bundesgesetze mit Ziffern (1–9)'
+					: `Bundesgesetze mit Anfangsbuchstabe ${initialLetter}`
+			: 'Alle Bundesgesetze A–Z'
+	}
 	description={`Verzeichnis aller ${meta.count.toLocaleString('de-DE')} deutschen Bundesgesetze und Verordnungen im Volltext.`}
 >
 	<div class="directory-container">
 		<header class="directory-header">
-			<nav aria-label="Brotkrumen" class="breadcrumbs">
+			<nav aria-label="Brotkrumen" class="breadcrumbs" id="directory-breadcrumbs">
 				<a href="/">Startseite</a>
 				<span aria-hidden="true">/</span>
-				<span aria-current="page">Gesetze A–Z</span>
-				{initialLetter && (
+				{initialLetter ? (
 					<>
+						<a href="/gesetze" id="breadcrumb-overview-link">Gesetze A–Z</a>
 						<span aria-hidden="true">/</span>
-						<span id="breadcrumb-letter" aria-current="page">Buchstabe {initialLetter}</span>
+						<span id="breadcrumb-letter" aria-current="page">
+							{digits.includes(initialLetter)
+								? `Ziffer ${initialLetter}`
+								: initialLetter === '1-9'
+									? 'Ziffern (1–9)'
+									: `Buchstabe ${initialLetter}`}
+						</span>
 					</>
+				) : (
+					<span id="breadcrumb-current" aria-current="page">Gesetze A–Z</span>
 				)}
 			</nav>
 
@@ -156,8 +178,12 @@ const curatedLeitgesetze = [
 				</div>
 				<p id="filter-status" class="filter-status" aria-live="polite">
 					{initialLetter
-						? `Buchstabe ${initialLetter}: ${initialLaws.length.toLocaleString('de-DE')} Gesetze geladen`
-						: `Wählen Sie einen Anfangsbuchstaben oder suchen Sie gezielt nach Gesetzen`}
+						? digits.includes(initialLetter)
+							? `Ziffer ${initialLetter}: ${initialLaws.length.toLocaleString('de-DE')} Gesetze geladen`
+							: initialLetter === '1-9'
+								? `Ziffern (1–9): ${initialLaws.length.toLocaleString('de-DE')} Gesetze geladen`
+								: `Buchstabe ${initialLetter}: ${initialLaws.length.toLocaleString('de-DE')} Gesetze geladen`
+						: `Wählen Sie einen Anfangsbuchstaben oder eine Ziffer, oder suchen Sie gezielt nach Gesetzen`}
 				</p>
 			</div>
 		</header>
@@ -200,24 +226,25 @@ const curatedLeitgesetze = [
 					</div>
 				</div>
 
-				<!-- Alphabet Tiles Grid -->
+				<!-- Alphabet & Digits Tiles Grid -->
 				<div class="tiles-section">
 					<div class="section-heading">
-						<h2 class="section-title">Gesetze nach Anfangsbuchstaben nachladen</h2>
-						<p class="section-subtitle">Wählen Sie einen Buchstaben, um die zugehörige Liste gezielt und ressourcenschonend anzuzeigen.</p>
+						<h2 class="section-title">Gesetze nach Anfangsbuchstaben oder Ziffern nachladen</h2>
+						<p class="section-subtitle">Wählen Sie einen Buchstaben oder eine Ziffer, um die zugehörige Liste gezielt und ressourcenschonend anzuzeigen.</p>
 					</div>
 
 					<div class="letter-tiles-grid">
-						{alphabet.map((letter) => {
-							const count = letterCounts.get(letter) || 0;
+						{alphabet.map((item) => {
+							const count = letterCounts.get(item) || 0;
+							const isDigit = digits.includes(item);
 							return (
 								<button
 									type="button"
 									class="letter-tile-btn"
-									data-letter={letter}
-									aria-label={`Buchstabe ${letter}: ${count.toLocaleString('de-DE')} Gesetze laden`}
+									data-letter={item}
+									aria-label={`${isDigit ? 'Ziffer' : 'Buchstabe'} ${item}: ${count.toLocaleString('de-DE')} Gesetze laden`}
 								>
-									<span class="tile-char">{letter}</span>
+									<span class="tile-char">{item}</span>
 									<span class="tile-count">{count.toLocaleString('de-DE')} Gesetze</span>
 								</button>
 							);
@@ -230,8 +257,8 @@ const curatedLeitgesetze = [
 			<section id="letter-view" class="letter-view" style={!initialLetter ? 'display: none;' : ''}>
 				<!-- Alphabet Quick Switch Bar for Letter View -->
 				<nav class="alpha-jump-nav" aria-label="Alphabetische Schnellnavigation">
-					<div class="alpha-jump-bar" role="toolbar" aria-label="Buchstabenleiste">
-						{alphabet.map((letter) => {
+					<div class="alpha-jump-bar" role="toolbar" aria-label="Buchstaben- und Ziffernleiste">
+						{letters.map((letter) => {
 							const count = letterCounts.get(letter) || 0;
 							const isActive = initialLetter === letter;
 							return (
@@ -239,10 +266,26 @@ const curatedLeitgesetze = [
 									type="button"
 									class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
 									data-alpha-letter={letter}
-									aria-label={`Buchstabe ${letter === '#' ? '0–9' : letter}: ${count.toLocaleString('de-DE')} Gesetze`}
+									aria-label={`Buchstabe ${letter}: ${count.toLocaleString('de-DE')} Gesetze`}
 									aria-pressed={isActive ? 'true' : 'false'}
 								>
-									{letter === '#' ? '0–9' : letter}
+									{letter}
+								</button>
+							);
+						})}
+						<span class="alpha-jump-divider" aria-hidden="true"></span>
+						{digits.map((digit) => {
+							const count = letterCounts.get(digit) || 0;
+							const isActive = initialLetter === digit;
+							return (
+								<button
+									type="button"
+									class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
+									data-alpha-letter={digit}
+									aria-label={`Ziffer ${digit}: ${count.toLocaleString('de-DE')} Gesetze`}
+									aria-pressed={isActive ? 'true' : 'false'}
+								>
+									{digit}
 								</button>
 							);
 						})}
@@ -261,7 +304,13 @@ const curatedLeitgesetze = [
 					</div>
 					<div class="letter-view-heading-row">
 						<h2 class="letter-view-title" id="letter-view-title">
-							{initialLetter ? (initialLetter === '#' ? 'Ziffern & Sonderzeichen (0–9)' : `Buchstabe ${initialLetter}`) : ''}
+							{initialLetter
+								? digits.includes(initialLetter)
+									? `Ziffer ${initialLetter}`
+									: initialLetter === '1-9'
+										? 'Ziffern (1–9)'
+										: `Buchstabe ${initialLetter}`
+								: ''}
 						</h2>
 						<span class="letter-view-badge" id="letter-view-badge">
 							{initialLetter ? `${initialLaws.length.toLocaleString('de-DE')} Gesetze` : ''}
@@ -821,11 +870,10 @@ const curatedLeitgesetze = [
 		color: var(--c-content-secondary);
 		background: var(--c-surface-sunken);
 		border: 1px solid var(--c-border);
-		padding: 3px 8px;
+		padding: 3px 10px;
 		border-radius: var(--radius-sm);
-		max-width: 160px;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		max-width: max-content;
+		width: max-content;
 		white-space: nowrap;
 		flex-shrink: 0;
 		margin-left: auto;
@@ -852,30 +900,41 @@ const curatedLeitgesetze = [
 
 	.alpha-jump-bar {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 3px;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2px;
 		background: var(--c-surface-sunken);
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius-md);
-		padding: 6px;
+		padding: 4px 6px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.alpha-jump-bar::-webkit-scrollbar {
+		display: none;
 	}
 
 	.alpha-jump-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 36px;
-		height: 36px;
-		padding: 0 var(--space-2);
+		flex: 1 1 0;
+		min-width: 20px;
+		height: 32px;
+		padding: 0 2px;
 		border: 1px solid transparent;
 		background: transparent;
 		border-radius: var(--radius-sm);
 		font-family: var(--font-utility);
 		font-weight: 600;
-		font-size: var(--text-sm);
+		font-size: var(--text-xs);
 		color: var(--c-content-secondary);
 		cursor: pointer;
 		transition: all var(--duration-fast);
+		white-space: nowrap;
 	}
 
 	.alpha-jump-btn:hover {
@@ -889,6 +948,15 @@ const curatedLeitgesetze = [
 		color: var(--fg-on-primary);
 		background: var(--c-primary);
 		border-color: var(--c-primary);
+	}
+
+	.alpha-jump-divider {
+		display: inline-block;
+		width: 1px;
+		height: 18px;
+		background: var(--c-border);
+		margin: 0 3px;
+		flex-shrink: 0;
 	}
 
 	.search-empty-state {
@@ -1116,7 +1184,16 @@ const curatedLeitgesetze = [
 	const searchLoadMoreCount = document.getElementById('load-more-search-count') as HTMLSpanElement | null;
 
 	// In-memory cache for letters: letter => LawEntry[]
-	const alphabet = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+	const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+	const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+	const alphabet = [...letters, ...digits];
+
+	function getLetterDisplayName(key: string): string {
+		if (digits.includes(key)) return `Ziffer ${key}`;
+		if (key === '1-9' || key === '#' || key === '0-9') return 'Ziffern (1–9)';
+		return `Buchstabe ${key}`;
+	}
+
 	const cache = new Map<string, LawEntry[]>();
 	let currentLetter: string | null = null;
 
@@ -1155,6 +1232,16 @@ const curatedLeitgesetze = [
 		container.appendChild(fragment);
 	}
 
+	function renderLetterLaws(laws: LawEntry[]) {
+		currentLetterLaws = laws;
+		currentLetterShown = Math.min(CHUNK_SIZE, laws.length);
+		if (letterLawList) {
+			letterLawList.innerHTML = '';
+			appendLaws(letterLawList, laws, 0, currentLetterShown);
+		}
+		updateLetterLoadMoreUI();
+	}
+
 	function updateLetterLoadMoreUI() {
 		if (!letterLoadMoreDiv) return;
 		const total = currentLetterLaws.length;
@@ -1170,14 +1257,38 @@ const curatedLeitgesetze = [
 		}
 	}
 
-	function renderLetterLaws(laws: LawEntry[]) {
-		currentLetterLaws = laws;
-		currentLetterShown = Math.min(CHUNK_SIZE, laws.length);
-		if (letterLawList) {
-			letterLawList.innerHTML = '';
-			appendLaws(letterLawList, laws, 0, currentLetterShown);
+	if (btnLoadMoreLetter) {
+		btnLoadMoreLetter.addEventListener('click', () => {
+			const start = currentLetterShown;
+			const end = Math.min(start + CHUNK_SIZE, currentLetterLaws.length);
+			if (letterLawList) {
+				appendLaws(letterLawList, currentLetterLaws, start, end);
+			}
+			currentLetterShown = end;
+			updateLetterLoadMoreUI();
+		});
+	}
+
+	if (btnLoadAllLetter) {
+		btnLoadAllLetter.addEventListener('click', () => {
+			const start = currentLetterShown;
+			const end = currentLetterLaws.length;
+			if (letterLawList) {
+				appendLaws(letterLawList, currentLetterLaws, start, end);
+			}
+			currentLetterShown = end;
+			updateLetterLoadMoreUI();
+		});
+	}
+
+	function renderSearchLaws(laws: LawEntry[]) {
+		currentSearchLaws = laws;
+		currentSearchShown = Math.min(CHUNK_SIZE, laws.length);
+		if (searchLawList) {
+			searchLawList.innerHTML = '';
+			appendLaws(searchLawList, laws, 0, currentSearchShown);
 		}
-		updateLetterLoadMoreUI();
+		updateSearchLoadMoreUI();
 	}
 
 	function updateSearchLoadMoreUI() {
@@ -1195,14 +1306,28 @@ const curatedLeitgesetze = [
 		}
 	}
 
-	function renderSearchLaws(laws: LawEntry[]) {
-		currentSearchLaws = laws;
-		currentSearchShown = Math.min(CHUNK_SIZE, laws.length);
-		if (searchLawList) {
-			searchLawList.innerHTML = '';
-			appendLaws(searchLawList, laws, 0, currentSearchShown);
-		}
-		updateSearchLoadMoreUI();
+	if (btnLoadMoreSearch) {
+		btnLoadMoreSearch.addEventListener('click', () => {
+			const start = currentSearchShown;
+			const end = Math.min(start + CHUNK_SIZE, currentSearchLaws.length);
+			if (searchLawList) {
+				appendLaws(searchLawList, currentSearchLaws, start, end);
+			}
+			currentSearchShown = end;
+			updateSearchLoadMoreUI();
+		});
+	}
+
+	if (btnLoadAllSearch) {
+		btnLoadAllSearch.addEventListener('click', () => {
+			const start = currentSearchShown;
+			const end = currentSearchLaws.length;
+			if (searchLawList) {
+				appendLaws(searchLawList, currentSearchLaws, start, end);
+			}
+			currentSearchShown = end;
+			updateSearchLoadMoreUI();
+		});
 	}
 
 	const alphaJumpBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.alpha-jump-btn'));
@@ -1237,18 +1362,18 @@ const curatedLeitgesetze = [
 	const urlParams = new URLSearchParams(window.location.search);
 	let rawParam = urlParams.get('buchstabe') || urlParams.get('letter') || '';
 	let letterFromUrl = rawParam.trim().toUpperCase();
-	if (letterFromUrl === '0' || letterFromUrl === '0-9' || letterFromUrl === 'ZIFFERN' || letterFromUrl === '%23') {
-		letterFromUrl = '#';
+	if (letterFromUrl === '0' || letterFromUrl === '0-9' || letterFromUrl === '1-9' || letterFromUrl === 'ZIFFERN' || letterFromUrl === '%23' || letterFromUrl === '#') {
+		letterFromUrl = '1-9';
 	}
-	if (!alphabet.includes(letterFromUrl)) {
+	if (!alphabet.includes(letterFromUrl) && letterFromUrl !== '1-9') {
 		letterFromUrl = '';
 	}
 
-	// Hash fallback (e.g. /gesetze#b, /gesetze#ziffern, /gesetze#0)
+	// Hash fallback (e.g. /gesetze#b, /gesetze#ziffern, /gesetze#7)
 	if (!letterFromUrl && window.location.hash) {
 		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
-		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
-			letterFromUrl = '#';
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '1-9' || hash === '%' || hash === '%23') {
+			letterFromUrl = '1-9';
 		} else if (alphabet.includes(hash)) {
 			letterFromUrl = hash;
 		}
@@ -1276,8 +1401,8 @@ const curatedLeitgesetze = [
 	window.addEventListener('hashchange', () => {
 		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
 		let targetLetter = '';
-		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
-			targetLetter = '#';
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '1-9' || hash === '%' || hash === '%23') {
+			targetLetter = '1-9';
 		} else if (alphabet.includes(hash)) {
 			targetLetter = hash;
 		}
@@ -1285,6 +1410,41 @@ const curatedLeitgesetze = [
 			loadLetter(targetLetter, false);
 		}
 	});
+
+	function updateBreadcrumbs(displayName: string | null) {
+		const nav = document.getElementById('directory-breadcrumbs');
+		if (!nav) return;
+		if (displayName) {
+			nav.innerHTML = `
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<a href="/gesetze" id="breadcrumb-overview-link">Gesetze A–Z</a>
+				<span aria-hidden="true">/</span>
+				<span id="breadcrumb-letter" aria-current="page">${displayName}</span>
+			`;
+			const link = document.getElementById('breadcrumb-overview-link');
+			if (link) {
+				link.addEventListener('click', (e) => {
+					e.preventDefault();
+					showOverview();
+				});
+			}
+		} else {
+			nav.innerHTML = `
+				<a href="/">Startseite</a>
+				<span aria-hidden="true">/</span>
+				<span id="breadcrumb-current" aria-current="page">Gesetze A–Z</span>
+			`;
+		}
+	}
+
+	const initialOverviewLink = document.getElementById('breadcrumb-overview-link');
+	if (initialOverviewLink) {
+		initialOverviewLink.addEventListener('click', (e) => {
+			e.preventDefault();
+			showOverview();
+		});
+	}
 
 	function showView(view: 'overview' | 'letter' | 'search') {
 		if (loadingView) loadingView.hidden = true;
@@ -1310,23 +1470,26 @@ const curatedLeitgesetze = [
 			window.history.pushState({ mode: 'letter', letter: key }, '', newUrl);
 		}
 
-		// Update page title
-		document.title = `Bundesgesetze mit Anfangsbuchstabe ${key} | LawNetz`;
+		const displayName = getLetterDisplayName(key);
+
+		// Update page title & breadcrumbs
+		document.title = `Bundesgesetze mit ${displayName} | LawNetz`;
+		updateBreadcrumbs(displayName);
 
 		// If cached, render immediately
 		if (cache.has(key)) {
 			const laws = cache.get(key)!;
-			if (letterViewTitle) letterViewTitle.textContent = key === '#' ? 'Ziffern & Sonderzeichen (0–9)' : `Buchstabe ${key}`;
+			if (letterViewTitle) letterViewTitle.textContent = displayName;
 			if (letterViewBadge) letterViewBadge.textContent = `${laws.length.toLocaleString('de-DE')} Gesetze`;
 			renderLetterLaws(laws);
-			if (filterStatus) filterStatus.textContent = `Buchstabe ${key}: ${laws.length.toLocaleString('de-DE')} Gesetze geladen`;
+			if (filterStatus) filterStatus.textContent = `${displayName}: ${laws.length.toLocaleString('de-DE')} Gesetze geladen`;
 			showView('letter');
 			return;
 		}
 
 		// Show loading indicator
 		if (loadingView) loadingView.hidden = false;
-		if (loadingText) loadingText.textContent = `Lade Gesetze für ${key === '#' ? 'Ziffern (0–9)' : 'Buchstabe ' + key}...`;
+		if (loadingText) loadingText.textContent = `Lade Gesetze für ${displayName}...`;
 		if (letterView) letterView.style.display = 'none';
 		if (overviewView) overviewView.style.display = 'none';
 		if (searchView) searchView.style.display = 'none';
@@ -1339,14 +1502,14 @@ const curatedLeitgesetze = [
 
 			cache.set(key, laws);
 
-			if (letterViewTitle) letterViewTitle.textContent = key === '#' ? 'Ziffern & Sonderzeichen (0–9)' : `Buchstabe ${key}`;
+			if (letterViewTitle) letterViewTitle.textContent = displayName;
 			if (letterViewBadge) letterViewBadge.textContent = `${laws.length.toLocaleString('de-DE')} Gesetze`;
 			renderLetterLaws(laws);
-			if (filterStatus) filterStatus.textContent = `Buchstabe ${key}: ${laws.length.toLocaleString('de-DE')} Gesetze geladen`;
+			if (filterStatus) filterStatus.textContent = `${displayName}: ${laws.length.toLocaleString('de-DE')} Gesetze geladen`;
 
 			showView('letter');
 		} catch (err) {
-			if (filterStatus) filterStatus.textContent = `Fehler beim Laden von Buchstabe ${key}. Bitte erneut versuchen.`;
+			if (filterStatus) filterStatus.textContent = `Fehler beim Laden von ${displayName}. Bitte erneut versuchen.`;
 			showView('overview');
 		}
 	}
@@ -1363,6 +1526,7 @@ const curatedLeitgesetze = [
 		}
 
 		document.title = 'Alle Bundesgesetze A–Z | LawNetz';
+		updateBreadcrumbs(null);
 		if (filterStatus) filterStatus.textContent = 'Wählen Sie einen Anfangsbuchstaben oder suchen Sie gezielt nach Gesetzen';
 
 		showView('overview');
@@ -1378,6 +1542,8 @@ const curatedLeitgesetze = [
 			}
 			return;
 		}
+
+		updateBreadcrumbs(`Suche: „${q}“`);
 
 		if (loadingView) loadingView.hidden = false;
 		if (loadingText) loadingText.textContent = `Suche nach „${q}“...`;

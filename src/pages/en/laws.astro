@@ -44,30 +44,36 @@ for (const t of translations) {
 }
 
 // Pre-calculate counts per letter
-const alphabet = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const alphabet = [...letters, ...digits];
 const letterCounts = new Map<string, number>();
 alphabet.forEach((l) => letterCounts.set(l, 0));
 
 for (const law of laws) {
-	const char = law.firstLetter?.toUpperCase() || '#';
-	const key = letterCounts.has(char) ? char : '#';
-	letterCounts.set(key, (letterCounts.get(key) || 0) + 1);
+	const char = law.firstLetter?.toUpperCase();
+	if (letterCounts.has(char)) {
+		letterCounts.set(char, (letterCounts.get(char) || 0) + 1);
+	}
 }
 
 // Check if a letter was requested via SSR searchParams
 const rawLetterParam = (Astro.url.searchParams.get('letter') || Astro.url.searchParams.get('buchstabe') || '').trim();
 let normalizedParam = rawLetterParam.toUpperCase();
-if (normalizedParam === '0' || normalizedParam === '0-9' || normalizedParam === 'ZIFFERN' || normalizedParam === '%23') {
-	normalizedParam = '#';
+let isCombinedDigits = false;
+if (normalizedParam === '0' || normalizedParam === '0-9' || normalizedParam === '1-9' || normalizedParam === 'ZIFFERN' || normalizedParam === '%23' || normalizedParam === '#') {
+	isCombinedDigits = true;
+	normalizedParam = '1-9';
 }
-const initialLetter = alphabet.includes(normalizedParam) ? normalizedParam : '';
+const initialLetter = isCombinedDigits ? '1-9' : alphabet.includes(normalizedParam) ? normalizedParam : '';
 
 let initialLaws: LawEntry[] = [];
 if (initialLetter) {
-	initialLaws = laws.filter((law) => {
-		const char = law.firstLetter?.toUpperCase() || '#';
-		return (alphabet.includes(char) ? char : '#') === initialLetter;
-	});
+	if (initialLetter === '1-9') {
+		initialLaws = laws.filter((law) => digits.includes(law.firstLetter));
+	} else {
+		initialLaws = laws.filter((law) => law.firstLetter === initialLetter);
+	}
 }
 
 const CHUNK_SIZE = 60;
@@ -152,20 +158,36 @@ const curatedStatutes = [
 ---
 
 <BaseLayout
-	title={initialLetter ? `German Federal Laws starting with ${initialLetter}` : 'All German Laws A–Z'}
+	title={
+		initialLetter
+			? digits.includes(initialLetter)
+				? `German Federal Laws starting with Digit ${initialLetter}`
+				: initialLetter === '1-9'
+					? 'German Federal Laws starting with Digits (1–9)'
+					: `German Federal Laws starting with Letter ${initialLetter}`
+			: 'All German Laws A–Z'
+	}
 	description={`Complete directory of all ${meta.count.toLocaleString('en-US')} German federal statutes, codes, and regulations in full text.`}
 >
 	<div class="directory-container">
 		<header class="directory-header">
-			<nav aria-label="Breadcrumb" class="breadcrumbs">
+			<nav aria-label="Breadcrumb" class="breadcrumbs" id="directory-breadcrumbs">
 				<a href="/en">Home</a>
 				<span aria-hidden="true">/</span>
-				<span aria-current="page">All German Laws A–Z</span>
-				{initialLetter && (
+				{initialLetter ? (
 					<>
+						<a href="/en/laws" id="breadcrumb-overview-link">All German Laws A–Z</a>
 						<span aria-hidden="true">/</span>
-						<span id="breadcrumb-letter" aria-current="page">Letter {initialLetter}</span>
+						<span id="breadcrumb-letter" aria-current="page">
+							{digits.includes(initialLetter)
+								? `Digit ${initialLetter}`
+								: initialLetter === '1-9'
+									? 'Digits (1–9)'
+									: `Letter ${initialLetter}`}
+						</span>
 					</>
+				) : (
+					<span id="breadcrumb-current" aria-current="page">All German Laws A–Z</span>
 				)}
 			</nav>
 
@@ -238,24 +260,25 @@ const curatedStatutes = [
 					</div>
 				</div>
 
-				<!-- Alphabet Tiles Grid -->
+				<!-- Alphabet & Digits Tiles Grid -->
 				<div class="tiles-section">
 					<div class="section-heading">
-						<h2 class="section-title">Browse German Laws by Letter</h2>
-						<p class="section-subtitle">Select a letter to load the corresponding statutory registry on demand.</p>
+						<h2 class="section-title">Browse German Laws by Letter or Digit</h2>
+						<p class="section-subtitle">Select a letter or digit to load the corresponding statutory registry on demand.</p>
 					</div>
 
 					<div class="letter-tiles-grid">
-						{alphabet.map((letter) => {
-							const count = letterCounts.get(letter) || 0;
+						{alphabet.map((item) => {
+							const count = letterCounts.get(item) || 0;
+							const isDigit = digits.includes(item);
 							return (
 								<button
 									type="button"
 									class="letter-tile-btn"
-									data-letter={letter}
-									aria-label={`Letter ${letter}: load ${count.toLocaleString('en-US')} laws`}
+									data-letter={item}
+									aria-label={`${isDigit ? 'Digit' : 'Letter'} ${item}: load ${count.toLocaleString('en-US')} laws`}
 								>
-									<span class="tile-char">{letter}</span>
+									<span class="tile-char">{item}</span>
 									<span class="tile-count">{count.toLocaleString('en-US')} laws</span>
 								</button>
 							);
@@ -269,7 +292,7 @@ const curatedStatutes = [
 				<!-- Alphabet Quick Switch Bar for Letter View -->
 				<nav class="alpha-jump-nav" aria-label="Alphabet quick navigation">
 					<div class="alpha-jump-bar" role="toolbar" aria-label="Alphabet toolbar">
-						{alphabet.map((letter) => {
+						{letters.map((letter) => {
 							const count = letterCounts.get(letter) || 0;
 							const isActive = initialLetter === letter;
 							return (
@@ -277,10 +300,26 @@ const curatedStatutes = [
 									type="button"
 									class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
 									data-alpha-letter={letter}
-									aria-label={`Letter ${letter === '#' ? '0–9' : letter}: ${count.toLocaleString('en-US')} statutes`}
+									aria-label={`Letter ${letter}: ${count.toLocaleString('en-US')} statutes`}
 									aria-pressed={isActive ? 'true' : 'false'}
 								>
-									{letter === '#' ? '0–9' : letter}
+									{letter}
+								</button>
+							);
+						})}
+						<span class="alpha-jump-divider" aria-hidden="true"></span>
+						{digits.map((digit) => {
+							const count = letterCounts.get(digit) || 0;
+							const isActive = initialLetter === digit;
+							return (
+								<button
+									type="button"
+									class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
+									data-alpha-letter={digit}
+									aria-label={`Digit ${digit}: ${count.toLocaleString('en-US')} statutes`}
+									aria-pressed={isActive ? 'true' : 'false'}
+								>
+									{digit}
 								</button>
 							);
 						})}
@@ -299,7 +338,13 @@ const curatedStatutes = [
 					</div>
 					<div class="letter-view-heading-row">
 						<h2 class="letter-view-title" id="letter-view-title">
-							{initialLetter ? (initialLetter === '#' ? 'Numbers & Symbols (0–9)' : `Letter ${initialLetter}`) : ''}
+							{initialLetter
+								? digits.includes(initialLetter)
+									? `Digit ${initialLetter}`
+									: initialLetter === '1-9'
+										? 'Digits (1–9)'
+										: `Letter ${initialLetter}`
+								: ''}
 						</h2>
 						<span class="letter-view-badge" id="letter-view-badge">
 							{initialLetter ? `${initialLaws.length.toLocaleString('en-US')} laws` : ''}
@@ -875,11 +920,10 @@ const curatedStatutes = [
 		color: var(--c-content-secondary);
 		background: var(--c-surface-sunken);
 		border: 1px solid var(--c-border);
-		padding: 3px 8px;
+		padding: 3px 10px;
 		border-radius: var(--radius-sm);
-		max-width: 160px;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		max-width: max-content;
+		width: max-content;
 		white-space: nowrap;
 		flex-shrink: 0;
 		margin-left: auto;
@@ -920,39 +964,43 @@ const curatedStatutes = [
 		background: rgba(6, 95, 70, 0.35);
 	}
 
-	/* Alphabet Jump Bar */
-	.alpha-jump-nav {
-		margin-top: var(--space-4);
-		margin-bottom: var(--space-6);
-		width: 100%;
-	}
-
 	.alpha-jump-bar {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 3px;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2px;
 		background: var(--c-surface-sunken);
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius-md);
-		padding: 6px;
+		padding: 4px 6px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.alpha-jump-bar::-webkit-scrollbar {
+		display: none;
 	}
 
 	.alpha-jump-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 36px;
-		height: 36px;
-		padding: 0 var(--space-2);
+		flex: 1 1 0;
+		min-width: 20px;
+		height: 32px;
+		padding: 0 2px;
 		border: 1px solid transparent;
 		background: transparent;
 		border-radius: var(--radius-sm);
 		font-family: var(--font-utility);
 		font-weight: 600;
-		font-size: var(--text-sm);
+		font-size: var(--text-xs);
 		color: var(--c-content-secondary);
 		cursor: pointer;
 		transition: all var(--duration-fast);
+		white-space: nowrap;
 	}
 
 	.alpha-jump-btn:hover {
@@ -966,6 +1014,15 @@ const curatedStatutes = [
 		color: var(--fg-on-primary);
 		background: var(--c-primary);
 		border-color: var(--c-primary);
+	}
+
+	.alpha-jump-divider {
+		display: inline-block;
+		width: 1px;
+		height: 18px;
+		background: var(--c-border);
+		margin: 0 3px;
+		flex-shrink: 0;
 	}
 
 	.search-empty-state {
@@ -1177,7 +1234,16 @@ const curatedStatutes = [
 	const searchLoadMoreCount = document.getElementById('load-more-search-count') as HTMLSpanElement | null;
 
 	// In-memory cache for letters
-	const alphabet = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+	const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+	const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+	const alphabet = [...letters, ...digits];
+
+	function getLetterDisplayName(key: string): string {
+		if (digits.includes(key)) return `Digit ${key}`;
+		if (key === '1-9' || key === '#' || key === '0-9') return 'Digits (1–9)';
+		return `Letter ${key}`;
+	}
+
 	const cache = new Map<string, LawEntry[]>();
 	let currentLetter: string | null = null;
 
@@ -1277,6 +1343,55 @@ const curatedStatutes = [
 		}
 	});
 
+	function updateBreadcrumbs(displayName: string | null) {
+		const nav = document.getElementById('directory-breadcrumbs');
+		if (!nav) return;
+		if (displayName) {
+			nav.innerHTML = `
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<a href="/en/laws" id="breadcrumb-overview-link">All German Laws A–Z</a>
+				<span aria-hidden="true">/</span>
+				<span id="breadcrumb-letter" aria-current="page">${displayName}</span>
+			`;
+			const link = document.getElementById('breadcrumb-overview-link');
+			if (link) {
+				link.addEventListener('click', (e) => {
+					e.preventDefault();
+					showOverview();
+				});
+			}
+		} else {
+			nav.innerHTML = `
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span id="breadcrumb-current" aria-current="page">All German Laws A–Z</span>
+			`;
+		}
+	}
+
+	const initialOverviewLink = document.getElementById('breadcrumb-overview-link');
+	if (initialOverviewLink) {
+		initialOverviewLink.addEventListener('click', (e) => {
+			e.preventDefault();
+			showOverview();
+		});
+	}
+
+	function showOverview(updateUrl = true) {
+		currentLetter = null;
+		showView('overview');
+		setActiveAlphaButton(null);
+		updateBreadcrumbs(null);
+		if (filterInput) filterInput.value = '';
+		if (clearBtn) clearBtn.hidden = true;
+		if (filterStatus) filterStatus.textContent = 'Select a letter or search directly for specific federal statutes';
+		document.title = 'All German Laws A–Z | LawNetz';
+		if (updateUrl) {
+			window.history.pushState({ mode: 'overview' }, '', '/en/laws');
+		}
+	}
+
 	function showView(mode: 'overview' | 'letter' | 'search') {
 		if (loadingView) loadingView.hidden = true;
 
@@ -1290,8 +1405,11 @@ const curatedStatutes = [
 		showView('letter');
 		setActiveAlphaButton(letter);
 
-		if (letterViewTitle) letterViewTitle.textContent = `Letter ${letter}`;
-		if (filterStatus) filterStatus.textContent = `Loading Letter ${letter}...`;
+		const displayName = getLetterDisplayName(letter);
+		if (letterViewTitle) letterViewTitle.textContent = displayName;
+		if (filterStatus) filterStatus.textContent = `Loading ${displayName}...`;
+		document.title = `${displayName} | German Federal Laws | LawNetz`;
+		updateBreadcrumbs(displayName);
 
 		let laws = cache.get(letter);
 		if (!laws) {
@@ -1320,7 +1438,7 @@ const curatedStatutes = [
 			letterViewBadge.textContent = `${currentLetterLaws.length.toLocaleString('en-US')} laws`;
 		}
 		if (filterStatus) {
-			filterStatus.textContent = `Letter ${letter}: ${currentLetterLaws.length.toLocaleString('en-US')} laws loaded`;
+			filterStatus.textContent = `${displayName}: ${currentLetterLaws.length.toLocaleString('en-US')} laws loaded`;
 		}
 
 		if (letterLawList) {
@@ -1341,18 +1459,18 @@ const curatedStatutes = [
 	// Read initial SSR laws or URL/Hash parameters
 	const urlParams = new URLSearchParams(window.location.search);
 	let rawInitChar = (urlParams.get('letter') || urlParams.get('buchstabe') || '').trim().toUpperCase();
-	if (rawInitChar === '0' || rawInitChar === '0-9' || rawInitChar === 'ZIFFERN' || rawInitChar === '%23') {
-		rawInitChar = '#';
+	if (rawInitChar === '0' || rawInitChar === '0-9' || rawInitChar === '1-9' || rawInitChar === 'ZIFFERN' || rawInitChar === '%23' || rawInitChar === '#') {
+		rawInitChar = '1-9';
 	}
-	if (!alphabet.includes(rawInitChar)) {
+	if (!alphabet.includes(rawInitChar) && rawInitChar !== '1-9') {
 		rawInitChar = '';
 	}
 
 	// Hash fallback
 	if (!rawInitChar && window.location.hash) {
 		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
-		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
-			rawInitChar = '#';
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '1-9' || hash === '%' || hash === '%23') {
+			rawInitChar = '1-9';
 		} else if (alphabet.includes(hash)) {
 			rawInitChar = hash;
 		}
@@ -1380,8 +1498,8 @@ const curatedStatutes = [
 	window.addEventListener('hashchange', () => {
 		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
 		let targetLetter = '';
-		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
-			targetLetter = '#';
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '1-9' || hash === '%' || hash === '%23') {
+			targetLetter = '1-9';
 		} else if (alphabet.includes(hash)) {
 			targetLetter = hash;
 		}
@@ -1417,10 +1535,7 @@ const curatedStatutes = [
 
 	if (btnBackOverview) {
 		btnBackOverview.addEventListener('click', () => {
-			showView('overview');
-			setActiveAlphaButton(null);
-			if (filterStatus) filterStatus.textContent = 'Select a letter or search directly for specific federal statutes';
-			window.history.pushState({ mode: 'overview' }, '', '/en/laws');
+			showOverview();
 		});
 	}
 
@@ -1435,14 +1550,15 @@ const curatedStatutes = [
 
 			if (!query) {
 				if (currentLetter) {
-					showView('letter');
+					loadLetter(currentLetter, false);
 				} else {
-					showView('overview');
+					showOverview(false);
 				}
 				return;
 			}
 
 			debounceTimer = setTimeout(async () => {
+				updateBreadcrumbs(`Search: "${query}"`);
 				showView('search');
 				if (loadingView) loadingView.hidden = false;
 				if (searchLawList) searchLawList.innerHTML = '';

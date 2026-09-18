@@ -52,11 +52,19 @@ try {
 	</section>
 
 	<nav class="law-index" aria-label="Alphabetischer Index">
-		<div class="law-index__alpha-nav" role="navigation" aria-label="Buchstaben-Navigation">
+		<div class="law-index__alpha-nav" role="navigation" aria-label="Buchstaben- und Ziffern-Navigation">
 			{
-				'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('').map((letter) => (
-					<a href={`/gesetze?buchstabe=${letter === '0' ? '%23' : letter}`} class="law-index__alpha-link" aria-label={letter === '0' ? 'Gesetze mit Ziffern' : `Buchstabe ${letter}`}>
-						{letter === '0' ? '0–9' : letter}
+				'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => (
+					<a href={`/gesetze?buchstabe=${letter}`} class="law-index__alpha-link" aria-label={`Buchstabe ${letter}`}>
+						{letter}
+					</a>
+				))
+			}
+			<span class="law-index__alpha-divider" aria-hidden="true">|</span>
+			{
+				['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
+					<a href={`/gesetze?buchstabe=${digit}`} class="law-index__alpha-link" aria-label={`Ziffer ${digit}`}>
+						{digit}
 					</a>
 				))
 			}
