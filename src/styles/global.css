@@ -990,3 +990,28 @@
     display: block !important;
   }
 }
+
+/* ==========================================================================
+   Unlayered Global Overrides
+   Guarantees native clear buttons are removed and selection is visible
+   across all layered components and browser engines.
+   ========================================================================== */
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: none !important;
+}
+
+::selection {
+  background-color: var(--c-primary) !important;
+  color: var(--fg-on-primary) !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: var(--c-primary) !important;
+  color: var(--fg-on-primary) !important;
+}

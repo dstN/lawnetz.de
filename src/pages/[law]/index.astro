@@ -13,6 +13,7 @@
 
 import BaseLayout from '@layouts/BaseLayout.astro';
 import FlagIcon from '@components/FlagIcon.astro';
+import tocData from '@data/toc.json';
 import { getLaw, getLawNorms, hasTranslation } from '../../db/index';
 
 const { law: lawParam } = Astro.params;
@@ -48,6 +49,9 @@ const pageTitle = `${law.abbreviation} | ${law.title} (Nichtamtliches Inhaltsver
 const normCount = law.norms ? law.norms.length : law.items ? law.items.filter((i: any) => i.type === 'norm').length : 0;
 const description = `${law.title} (${law.abbreviation}) im Volltext lesen. ${normCount} Paragrafen/Artikel, nichtamtliche Textfassung.`;
 const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
+
+const tocEntry = ((tocData as any).laws as any[])?.find((l: any) => l.slug === law.slug);
+const pdfFileName = tocEntry?.pdf || `${(law.abbreviation || law.slug).trim().replace(/\s+/g, '_')}.pdf`;
 ---
 
 <BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
@@ -105,7 +109,7 @@ const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
 				</span>
 				<span class="meta-item">
 					<span class="meta-sep" aria-hidden="true">·</span>
-					<a href={`https://www.gesetze-im-internet.de/${law.slug}/${encodeURIComponent((law.abbreviation || law.slug).trim().replace(/\s+/g, '_'))}.pdf`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche PDF-Fassung herunterladen">
+					<a href={`https://www.gesetze-im-internet.de/${law.slug}/${encodeURIComponent(pdfFileName)}`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche PDF-Fassung herunterladen">
 						PDF ↗
 					</a>
 				</span>

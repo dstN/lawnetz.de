@@ -59,6 +59,30 @@ export const db = dbInstance;
 // Repository API — High Performance Data Access
 // ==========================================================================
 
+/**
+ * Loads a slug → abbreviation map for all German laws.
+ * Used on the /gesetze listing to show the official abbreviation
+ * instead of the technical slug.
+ */
+export async function getAllLawAbbreviations(): Promise<Record<string, string>> {
+  if (db) {
+    try {
+      const rows = await db
+        .select({ slug: schema.laws.slug, abbreviation: schema.laws.abbreviation })
+        .from(schema.laws)
+        .where(eq(schema.laws.language, 'de'));
+      const map: Record<string, string> = {};
+      for (const row of rows) {
+        map[row.slug] = row.abbreviation;
+      }
+      return map;
+    } catch (err) {
+      console.warn('[DB] Error fetching abbreviations:', err);
+    }
+  }
+  return {};
+}
+
 export async function getLaw(slug: string, language: 'de' | 'en' = 'de'): Promise<schema.Law | null> {
   if (db) {
     try {

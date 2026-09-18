@@ -461,22 +461,29 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 				// 4. Separate numbering dots from following text: e.g. "291.§" -> "291. §", "1.für" -> "1. für"
 				s = s.replace(/(\d+\.)([§A-Za-zÄÖÜäöüß])/g, '$1 $2');
 
-				// 5. Handle missing spaces across or inside <mark> tags:
+				// 5. Separate parenthesized numbers (e.g. section marks "(1)Whoever" -> "(1) Whoever", "Section(1)" -> "Section (1)")
+				s = s.replace(/([A-Za-zÄÖÜäöüß0-9])(\([0-9a-z]+\))/g, '$1 $2');
+				s = s.replace(/(\([0-9a-z]+\))([A-Za-zÄÖÜäöüß])/g, '$1 $2');
+
+				// 6. Separate lowercase immediately followed by uppercase (tag boundaries without space):
+				s = s.replace(/([a-zäöüß])([A-ZÄÖÜ])/g, '$1 $2');
+
+				// 7. Separate punctuation glued to text/digits:
+				s = s.replace(/([,;:!?\)])([A-Za-zÄÖÜäöüß0-9])/g, '$1 $2');
+
+				// 8. Handle missing spaces across or inside <mark> tags:
 				s = s.replace(/(§+\s*\d+[a-z]?)(<mark[^>]*>)/gi, '$1 $2');
 				s = s.replace(/(\d+)(<mark[^>]*>[A-Za-zÄÖÜäöüß])/gi, '$1 $2');
 				s = s.replace(/(<mark[^>]*>§*\s*\d+)([A-ZÄÖÜ])/g, '$1 $2');
 				s = s.replace(/(<mark[^>]*>§*\s*\d+[a-z])([A-ZÄÖÜ])/g, '$1 $2');
 				s = s.replace(/(<\/mark>)([A-Za-zÄÖÜäöüß])/gi, '$1 $2');
+				s = s.replace(/([A-Za-zÄÖÜäöüß])(<mark[^>]*>)/gi, '$1 $2');
 
-				// 6. Remove leading breadcrumb repetition if present
+				// 9. Remove leading breadcrumb repetition if present
 				s = s.replace(/^[A-ZÄÖÜ0-9_\s]{2,10}\s*§\s*\d+[a-z]?\.\s*(§\s*(?:<mark[^>]*>)?\s*\d+)/i, '$1');
 				s = s.replace(/^\d+\.\s*(§\s*(?:<mark[^>]*>)?\s*\d+)/i, '$1');
 
-				// 7. Separate glued punctuation / words if any:
-				s = s.replace(/([.!?])(\([0-9a-z]+\))/gi, '$1 $2');
-				s = s.replace(/([.!?])([A-Za-zÄÖÜäöüß])/g, '$1 $2');
-
-				// 8. Collapse multiple spaces
+				// 10. Collapse multiple spaces
 				s = s.replace(/\s+/g, ' ').trim();
 
 				return s;

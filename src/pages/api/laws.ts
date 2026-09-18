@@ -4,8 +4,10 @@ import tocData from '@data/toc.json';
 interface LawEntry {
 	title: string;
 	slug: string;
+	abbreviation?: string;
 	xmlUrl: string;
 	firstLetter: string;
+	pdf?: string | null;
 }
 
 const laws = tocData.laws as LawEntry[];
@@ -39,15 +41,20 @@ export const GET: APIRoute = async ({ url }) => {
 		for (const law of laws) {
 			const slugLower = law.slug.toLowerCase();
 			const slugNormalized = slugLower.replace(/_/g, ' ');
+			const abbrLower = (law.abbreviation || '').toLowerCase();
 			const titleLower = law.title.toLowerCase();
 
-			if (slugLower === q || slugNormalized === qClean) {
+			if (slugLower === q || abbrLower === q || slugNormalized === qClean) {
 				exactSlugMatches.push(law);
-			} else if (slugLower.startsWith(q) || slugNormalized.startsWith(qClean)) {
+			} else if (slugLower.startsWith(q) || abbrLower.startsWith(q) || slugNormalized.startsWith(qClean)) {
 				prefixSlugMatches.push(law);
 			} else {
 				const matchesAll = searchTokens.every(
-					(token) => slugLower.includes(token) || slugNormalized.includes(token) || titleLower.includes(token)
+					(token) =>
+						slugLower.includes(token) ||
+						slugNormalized.includes(token) ||
+						abbrLower.includes(token) ||
+						titleLower.includes(token)
 				);
 				if (matchesAll) {
 					tokenMatches.push(law);
