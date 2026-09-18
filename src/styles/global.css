@@ -608,6 +608,81 @@
     font-size: var(--text-sm);
   }
 
+  /* ── Directory Law List Items (A–Z & Search) ──────────────────────── */
+  .law-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .law-item {
+    border-radius: var(--radius-sm);
+    transition: background var(--duration-fast);
+  }
+
+  .law-item:hover,
+  .law-item:focus-within {
+    background: var(--c-surface-raised);
+  }
+
+  .law-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    min-height: 48px;
+    text-decoration: none;
+    color: var(--c-content);
+    border-radius: var(--radius-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .law-link:visited {
+    color: var(--c-content);
+  }
+
+  .badge-slug {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-utility);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--c-primary);
+    background: var(--c-primary-subtle);
+    border: 1px solid var(--c-border);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    min-width: 80px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+
+  .law-title-text {
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    flex: 1;
+    color: var(--c-content);
+  }
+
+  .law-link:hover .law-title-text {
+    color: var(--c-primary);
+  }
+
   /* ── Shortcut Dialog ─────────────────────────────────────────────── */
   .shortcut-dialog {
     border: 1px solid var(--c-border);

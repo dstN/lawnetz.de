@@ -36,8 +36,12 @@ for (const law of laws) {
 }
 
 // Check if a letter was requested via SSR searchParams
-const rawLetterParam = Astro.url.searchParams.get('buchstabe') || Astro.url.searchParams.get('letter') || '';
-const initialLetter = rawLetterParam ? (alphabet.includes(rawLetterParam.toUpperCase()) ? rawLetterParam.toUpperCase() : '#') : '';
+const rawLetterParam = (Astro.url.searchParams.get('buchstabe') || Astro.url.searchParams.get('letter') || '').trim();
+let normalizedParam = rawLetterParam.toUpperCase();
+if (normalizedParam === '0' || normalizedParam === '0-9' || normalizedParam === 'ZIFFERN' || normalizedParam === '%23') {
+	normalizedParam = '#';
+}
+const initialLetter = alphabet.includes(normalizedParam) ? normalizedParam : '';
 
 let initialLaws: LawEntry[] = [];
 if (initialLetter) {
@@ -150,6 +154,36 @@ const curatedLeitgesetze = [
 						: `Wählen Sie einen Anfangsbuchstaben oder suchen Sie gezielt nach Gesetzen`}
 				</p>
 			</div>
+
+			<!-- Alphabet Jump Navigation Bar -->
+			<nav class="alpha-jump-nav" aria-label="Alphabetische Schnellnavigation">
+				<div class="alpha-jump-bar" role="toolbar" aria-label="Buchstabenleiste">
+					<button
+						type="button"
+						class={`alpha-jump-btn ${!initialLetter ? 'is-active' : ''}`}
+						id="alpha-btn-all"
+						aria-label="Übersicht aller Gesetze anzeigen"
+						aria-pressed={!initialLetter ? 'true' : 'false'}
+					>
+						Übersicht
+					</button>
+					{alphabet.map((letter) => {
+						const count = letterCounts.get(letter) || 0;
+						const isActive = initialLetter === letter;
+						return (
+							<button
+								type="button"
+								class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
+								data-alpha-letter={letter}
+								aria-label={`Buchstabe ${letter === '#' ? '0–9' : letter}: ${count.toLocaleString('de-DE')} Gesetze`}
+								aria-pressed={isActive ? 'true' : 'false'}
+							>
+								{letter === '#' ? '0–9' : letter}
+							</button>
+						);
+					})}
+				</div>
+			</nav>
 		</header>
 
 		<!-- Main Directory Views Container -->
@@ -240,10 +274,8 @@ const curatedLeitgesetze = [
 					{initialRenderedLaws.map((law) => (
 						<li class="law-item">
 							<a href={`/${encodeURIComponent(law.slug)}`} class="law-link">
+								<span class="badge-slug">{law.slug.toUpperCase()}</span>
 								<span class="law-title-text">{law.title}</span>
-								<span class="law-meta-tag">
-									<span class="badge-slug">{law.slug.toUpperCase()}</span>
-								</span>
 							</a>
 						</li>
 					))}
@@ -713,7 +745,7 @@ const curatedLeitgesetze = [
 	}
 
 	/* Law List */
-	.law-list {
+	:global(.law-list) {
 		list-style: none;
 		display: flex;
 		flex-direction: column;
@@ -726,7 +758,7 @@ const curatedLeitgesetze = [
 		box-sizing: border-box;
 	}
 
-	.law-item {
+	:global(.law-item) {
 		border-radius: var(--radius-sm);
 		transition: background-color var(--duration-fast);
 		width: 100%;
@@ -736,15 +768,14 @@ const curatedLeitgesetze = [
 		box-sizing: border-box;
 	}
 
-	.law-item:hover,
-	.law-item:focus-within {
+	:global(.law-item:hover),
+	:global(.law-item:focus-within) {
 		background: var(--c-surface-raised);
 	}
 
-	.law-link {
+	:global(.law-link) {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		align-items: baseline;
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
 		min-height: 48px;
@@ -755,38 +786,93 @@ const curatedLeitgesetze = [
 		max-width: 100%;
 		min-width: 0;
 		box-sizing: border-box;
-		overflow: hidden;
 	}
 
-	.law-title-text {
+	:global(.law-link:visited) {
+		color: var(--c-content);
+	}
+
+	:global(.badge-slug) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-utility);
+		font-size: var(--text-xs);
+		font-weight: 700;
+		color: var(--c-primary);
+		background: var(--c-primary-subtle);
+		border: 1px solid var(--c-border);
+		padding: 3px 8px;
+		border-radius: var(--radius-sm);
+		min-width: 80px;
+		max-width: 160px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex-shrink: 0;
+		text-align: center;
+		letter-spacing: 0.03em;
+	}
+
+	:global(.law-title-text) {
 		font-size: var(--text-base);
 		line-height: var(--leading-normal);
 		word-break: break-word;
 		overflow-wrap: anywhere;
 		min-width: 0;
 		flex: 1;
-		overflow: hidden;
+		color: var(--c-content);
 	}
 
-	.law-meta-tag {
-		flex-shrink: 0;
-		max-width: 35%;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	:global(.law-link:hover .law-title-text) {
+		color: var(--c-primary);
 	}
 
-	.badge-slug {
-		display: inline-block;
-		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		color: var(--c-content-tertiary);
+	/* Alphabet Jump Bar */
+	.alpha-jump-nav {
+		margin-top: var(--space-4);
+		width: 100%;
+	}
+
+	.alpha-jump-bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 3px;
 		background: var(--c-surface-sunken);
-		padding: 2px 6px;
+		border: 1px solid var(--c-border);
+		border-radius: var(--radius-md);
+		padding: 6px;
+	}
+
+	.alpha-jump-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 36px;
+		height: 36px;
+		padding: 0 var(--space-2);
+		border: 1px solid transparent;
+		background: transparent;
 		border-radius: var(--radius-sm);
-		max-width: 100%;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		font-family: var(--font-utility);
+		font-weight: 600;
+		font-size: var(--text-sm);
+		color: var(--c-content-secondary);
+		cursor: pointer;
+		transition: all var(--duration-fast);
+	}
+
+	.alpha-jump-btn:hover {
+		color: var(--c-primary);
+		background: var(--c-surface-raised);
+		border-color: var(--c-border);
+	}
+
+	.alpha-jump-btn.is-active,
+	.alpha-jump-btn[aria-pressed="true"] {
+		color: var(--fg-on-primary);
+		background: var(--c-primary);
+		border-color: var(--c-primary);
 	}
 
 	.search-empty-state {
@@ -1014,20 +1100,16 @@ const curatedLeitgesetze = [
 			a.href = `/${encodeURIComponent(law.slug)}`;
 			a.className = 'law-link';
 
-			const titleSpan = document.createElement('span');
-			titleSpan.className = 'law-title-text';
-			titleSpan.textContent = law.title;
-
-			const metaSpan = document.createElement('span');
-			metaSpan.className = 'law-meta-tag';
-
 			const badgeSpan = document.createElement('span');
 			badgeSpan.className = 'badge-slug';
 			badgeSpan.textContent = law.slug.toUpperCase();
 
-			metaSpan.appendChild(badgeSpan);
+			const titleSpan = document.createElement('span');
+			titleSpan.className = 'law-title-text';
+			titleSpan.textContent = law.title;
+
+			a.appendChild(badgeSpan);
 			a.appendChild(titleSpan);
-			a.appendChild(metaSpan);
 			li.appendChild(a);
 			fragment.appendChild(li);
 		}
@@ -1085,11 +1167,58 @@ const curatedLeitgesetze = [
 		updateSearchLoadMoreUI();
 	}
 
-	// Check if initial letter was rendered by SSR
+	const alphaJumpBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.alpha-jump-btn'));
+	const alphaBtnAll = document.getElementById('alpha-btn-all') as HTMLButtonElement | null;
+
+	function setActiveAlphaButton(letter: string | null) {
+		const key = letter ? letter.toUpperCase() : null;
+		alphaJumpBtns.forEach((btn) => {
+			const btnLetter = btn.getAttribute('data-alpha-letter');
+			const isMatch = key ? btnLetter === key : btn.id === 'alpha-btn-all';
+			btn.classList.toggle('is-active', isMatch);
+			btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+		});
+	}
+
+	if (alphaBtnAll) {
+		alphaBtnAll.addEventListener('click', () => {
+			showOverview();
+		});
+	}
+
+	alphaJumpBtns.forEach((btn) => {
+		const letter = btn.getAttribute('data-alpha-letter');
+		if (letter) {
+			btn.addEventListener('click', () => {
+				loadLetter(letter);
+			});
+		}
+	});
+
+	// Check if initial letter was rendered by SSR or provided in URL / Hash
 	const urlParams = new URLSearchParams(window.location.search);
-	const initialLetterFromUrl = urlParams.get('buchstabe') || urlParams.get('letter');
-	if (initialLetterFromUrl) {
-		currentLetter = initialLetterFromUrl.toUpperCase();
+	let rawParam = urlParams.get('buchstabe') || urlParams.get('letter') || '';
+	let letterFromUrl = rawParam.trim().toUpperCase();
+	if (letterFromUrl === '0' || letterFromUrl === '0-9' || letterFromUrl === 'ZIFFERN' || letterFromUrl === '%23') {
+		letterFromUrl = '#';
+	}
+	if (!alphabet.includes(letterFromUrl)) {
+		letterFromUrl = '';
+	}
+
+	// Hash fallback (e.g. /gesetze#b, /gesetze#ziffern, /gesetze#0)
+	if (!letterFromUrl && window.location.hash) {
+		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
+			letterFromUrl = '#';
+		} else if (alphabet.includes(hash)) {
+			letterFromUrl = hash;
+		}
+	}
+
+	if (letterFromUrl) {
+		currentLetter = letterFromUrl;
+		setActiveAlphaButton(letterFromUrl);
 		const ssrDataEl = document.getElementById('ssr-initial-laws');
 		if (ssrDataEl && ssrDataEl.textContent) {
 			try {
@@ -1099,12 +1228,25 @@ const curatedLeitgesetze = [
 				currentLetterShown = Math.min(CHUNK_SIZE, laws.length);
 				updateLetterLoadMoreUI();
 			} catch (e) {}
+		} else {
+			loadLetter(letterFromUrl, false);
 		}
+	} else {
+		setActiveAlphaButton(null);
 	}
 
-	function setActiveAlphaButton(_letter: string | null) {
-		// Alpha nav bar removed in favor of letter tiles grid
-	}
+	window.addEventListener('hashchange', () => {
+		const hash = window.location.hash.replace(/^#/, '').trim().toUpperCase();
+		let targetLetter = '';
+		if (hash === 'ZIFFERN' || hash === '0' || hash === '0-9' || hash === '#' || hash === '%23') {
+			targetLetter = '#';
+		} else if (alphabet.includes(hash)) {
+			targetLetter = hash;
+		}
+		if (targetLetter) {
+			loadLetter(targetLetter, false);
+		}
+	});
 
 	function showView(view: 'overview' | 'letter' | 'search') {
 		if (loadingView) loadingView.hidden = true;

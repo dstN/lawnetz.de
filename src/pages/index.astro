@@ -55,7 +55,7 @@ try {
 		<div class="law-index__alpha-nav" role="navigation" aria-label="Buchstaben-Navigation">
 			{
 				'ABCDEFGHIJKLMNOPQRSTUVWXYZ0'.split('').map((letter) => (
-					<a href={`/gesetze#${letter === '0' ? 'ziffern' : letter.toLowerCase()}`} class="law-index__alpha-link" aria-label={letter === '0' ? 'Gesetze mit Ziffern' : `Buchstabe ${letter}`}>
+					<a href={`/gesetze?buchstabe=${letter === '0' ? '%23' : letter}`} class="law-index__alpha-link" aria-label={letter === '0' ? 'Gesetze mit Ziffern' : `Buchstabe ${letter}`}>
 						{letter === '0' ? '0–9' : letter}
 					</a>
 				))
@@ -187,6 +187,15 @@ try {
 		let selectedIndex = -1;
 		let currentItems: Array<{ url: string; title: string; subtitle?: string; badge?: string }> = [];
 
+		function escapeHtml(str: string): string {
+			return str
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#039;');
+		}
+
 		function renderDropdown(items: typeof currentItems) {
 			currentItems = items;
 			selectedIndex = -1;
@@ -201,12 +210,12 @@ try {
 			searchDropdown.innerHTML = items
 				.map(
 					(item, idx) => `
-          <a href="${item.url}" class="suggestion-item" role="option" data-index="${idx}">
+          <a href="${escapeHtml(item.url)}" class="suggestion-item" role="option" data-index="${idx}">
             <div class="suggestion-main">
-              <span class="suggestion-title">${item.title}</span>
-              ${item.subtitle ? `<span class="suggestion-sub">${item.subtitle}</span>` : ''}
+              <span class="suggestion-title">${escapeHtml(item.title)}</span>
+              ${item.subtitle ? `<span class="suggestion-sub">${escapeHtml(item.subtitle)}</span>` : ''}
             </div>
-            ${item.badge ? `<span class="suggestion-badge">${item.badge}</span>` : ''}
+            ${item.badge ? `<span class="suggestion-badge">${escapeHtml(item.badge)}</span>` : ''}
           </a>
         `
 				)

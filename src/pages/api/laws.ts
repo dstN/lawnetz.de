@@ -27,31 +27,40 @@ export const GET: APIRoute = async ({ url }) => {
 
 	// 1. Search Query
 	if (queryParam && queryParam.trim().length > 0) {
-		const q = queryParam.trim().toLowerCase();
-		const matches: LawEntry[] = [];
+		const rawQ = queryParam.trim();
+		const q = rawQ.toLowerCase();
+		const qClean = q.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+		const searchTokens = qClean.split(' ').filter((t) => t.length > 0);
+
 		const exactSlugMatches: LawEntry[] = [];
 		const prefixSlugMatches: LawEntry[] = [];
-		const otherMatches: LawEntry[] = [];
+		const tokenMatches: LawEntry[] = [];
 
 		for (const law of laws) {
 			const slugLower = law.slug.toLowerCase();
+			const slugNormalized = slugLower.replace(/_/g, ' ');
 			const titleLower = law.title.toLowerCase();
 
-			if (slugLower === q) {
+			if (slugLower === q || slugNormalized === qClean) {
 				exactSlugMatches.push(law);
-			} else if (slugLower.startsWith(q)) {
+			} else if (slugLower.startsWith(q) || slugNormalized.startsWith(qClean)) {
 				prefixSlugMatches.push(law);
-			} else if (slugLower.includes(q) || titleLower.includes(q)) {
-				otherMatches.push(law);
+			} else {
+				const matchesAll = searchTokens.every(
+					(token) => slugLower.includes(token) || slugNormalized.includes(token) || titleLower.includes(token)
+				);
+				if (matchesAll) {
+					tokenMatches.push(law);
+				}
 			}
 
 			// Cap to 60 matches for lightning-fast performance
-			if (exactSlugMatches.length + prefixSlugMatches.length + otherMatches.length >= 60) {
+			if (exactSlugMatches.length + prefixSlugMatches.length + tokenMatches.length >= 60) {
 				break;
 			}
 		}
 
-		matches.push(...exactSlugMatches, ...prefixSlugMatches, ...otherMatches);
+		const matches = [...exactSlugMatches, ...prefixSlugMatches, ...tokenMatches];
 
 		return new Response(
 			JSON.stringify({
@@ -72,6 +81,9 @@ export const GET: APIRoute = async ({ url }) => {
 	// 2. Letter Query
 	if (letterParam) {
 		let key = letterParam.trim().toUpperCase();
+		if (key === '0' || key === '0-9' || key === 'ZIFFERN' || key === '%23') {
+			key = '#';
+		}
 		if (!lawsByLetter.has(key)) {
 			key = '#';
 		}
