@@ -81,7 +81,7 @@ const jsonLd = {
 
 	<article class="norm-container" data-pagefind-body>
 		<!-- Navigation -->
-		<nav aria-label="Brotkrumen" class="breadcrumbs">
+		<nav aria-label="Brotkrumen" class="breadcrumbs" data-pagefind-ignore>
 			<a href={`/${law.slug}/`} class="back-link" title={`Zurück zur Übersicht: ${law.title}`}>
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
 				<span>{law.abbreviation}</span>
@@ -92,7 +92,7 @@ const jsonLd = {
 
 		<!-- Header -->
 		<header class="norm-header">
-			<div class="norm-header-eyebrow">
+			<div class="norm-header-eyebrow" data-pagefind-ignore>
 				<a href={`/${law.slug}/`} class="norm-law-pill" title={`Zurück zur Übersicht: ${law.title}`}>
 					{law.abbreviation}
 				</a>
@@ -101,11 +101,11 @@ const jsonLd = {
 			</div>
 
 			<h1 class="norm-heading" data-pagefind-meta={`title:${norm.identifier}${norm.title ? ` ${norm.title}` : ''}`}>
-				<span class="norm-num">{norm.identifier}</span>
+				<span class="norm-num">{norm.identifier}</span>{' '}
 				{norm.title && <span class="norm-name">{norm.title}</span>}
 			</h1>
 
-			<div class="norm-tools-bar" role="toolbar" aria-label="Aktionen für diese Norm">
+			<div class="norm-tools-bar" role="toolbar" aria-label="Aktionen für diese Norm" data-pagefind-ignore>
 				<div class="norm-tools-left">
 					<button id="copy-citation-btn" class="tool-btn" type="button" aria-label="Fundstelle in Zwischenablage kopieren" title={`Zitieren: ${norm.identifier} ${law.abbreviation}`}>
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -154,6 +154,7 @@ const jsonLd = {
 										<button
 											type="button"
 											class="para-copy-btn"
+											data-pagefind-ignore
 											aria-label={`${paraCitation} kopieren`}
 											title={`${paraCitation} kopieren`}
 										>
@@ -187,7 +188,7 @@ const jsonLd = {
 				)
 			}
 
-			<footer class="norm-legal-notice">
+			<footer class="norm-legal-notice" data-pagefind-ignore>
 				<p>
 					<strong>Rechtlicher Hinweis:</strong> Dies ist eine nichtamtliche Textfassung zur Information. Verbindlich sind ausschließlich die im Bundesgesetzblatt (BGBl.) verkündeten amtlichen Fassungen.
 				</p>
@@ -197,7 +198,7 @@ const jsonLd = {
 		<!-- Prev / Next Navigation — only rendered when adjacent norms exist -->
 		{
 			(prevNorm || nextNorm) && (
-				<nav class="norm-pager" aria-label="Vorherige und nächste Paragrafen">
+				<nav class="norm-pager" aria-label="Vorherige und nächste Paragrafen" data-pagefind-ignore>
 					{prevNorm ? (
 						<a href={`/${law.slug}/${prevNorm.normSlug || prevNorm.slug}`} class="pager-link pager-prev" rel="prev" title={`Vorheriger: ${prevNorm.identifier}`}>
 							<span class="pager-direction" aria-hidden="true">← [</span>

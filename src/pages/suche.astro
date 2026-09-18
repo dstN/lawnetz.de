@@ -475,6 +475,50 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 			});
 			const items = await Promise.all(dataPromises);
 
+			function cleanSnippet(excerpt) {
+				if (!excerpt) return '';
+				let s = excerpt;
+
+				// 1. Remove UI tool artifacts & buttons
+				s = s.replace(/Zitieren\s*Quelle:\s*gesetze-im-internet\.de\s*↗?/gi, ' ');
+				s = s.replace(/Quelle:\s*gesetze-im-internet\.de\s*↗?/gi, ' ');
+				s = s.replace(/gesetze-im-internet\.de\s*↗?/gi, ' ');
+				s = s.replace(/\b(Zitieren|Norm kopieren|Absatz kopieren|Nichtamtliche Fassung|Non-official Translation|Copy Citation|Copy Section)\b/gi, ' ');
+
+				// 2. Separate law abbreviation from paragraph symbol: e.g. "BGB§ 138" -> "BGB § 138"
+				s = s.replace(/([A-ZÄÖÜ]{2,})(§+|Art\.?|Artikel)/g, '$1 $2');
+
+				// 3. Separate paragraph/article number from following title word:
+				// e.g. "§ 138Sittenwidriges" -> "§ 138 Sittenwidriges", "291Wucher" -> "291 Wucher"
+				s = s.replace(/(§+\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
+				s = s.replace(/(Art\.?\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
+				s = s.replace(/(\d+)([A-ZÄÖÜ][a-zäöüß])/g, '$1 $2');
+				s = s.replace(/(\d+[a-z])([A-ZÄÖÜ][a-zäöüß])/g, '$1 $2');
+
+				// 4. Separate numbering dots from following text: e.g. "291.§" -> "291. §", "1.für" -> "1. für"
+				s = s.replace(/(\d+\.)([§A-Za-zÄÖÜäöüß])/g, '$1 $2');
+
+				// 5. Handle missing spaces across or inside <mark> tags:
+				s = s.replace(/(§+\s*\d+[a-z]?)(<mark[^>]*>)/gi, '$1 $2');
+				s = s.replace(/(\d+)(<mark[^>]*>[A-Za-zÄÖÜäöüß])/gi, '$1 $2');
+				s = s.replace(/(<mark[^>]*>§*\s*\d+)([A-ZÄÖÜ])/g, '$1 $2');
+				s = s.replace(/(<mark[^>]*>§*\s*\d+[a-z])([A-ZÄÖÜ])/g, '$1 $2');
+				s = s.replace(/(<\/mark>)([A-Za-zÄÖÜäöüß])/gi, '$1 $2');
+
+				// 6. Remove leading breadcrumb repetition if present (e.g. "BGB § 138. § 138..." -> "§ 138...", "291. § 291..." -> "§ 291...")
+				s = s.replace(/^[A-ZÄÖÜ0-9_\s]{2,10}\s*§\s*\d+[a-z]?\.\s*(§\s*(?:<mark[^>]*>)?\s*\d+)/i, '$1');
+				s = s.replace(/^\d+\.\s*(§\s*(?:<mark[^>]*>)?\s*\d+)/i, '$1');
+
+				// 7. Separate glued punctuation / words if any:
+				s = s.replace(/([.!?])(\([0-9a-z]+\))/gi, '$1 $2');
+				s = s.replace(/([.!?])([A-Za-zÄÖÜäöüß])/g, '$1 $2');
+
+				// 8. Collapse multiple spaces
+				s = s.replace(/\s+/g, ' ').trim();
+
+				return s;
+			}
+
 			if (resultsContainer) {
 				const resultsHtml = items
 					.map(function (item) {
@@ -482,7 +526,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 						// Ensure clear separation between paragraph/article number and title
 						title = title.replace(/^(§+\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
 						title = title.replace(/^(Art\.?\s*\d+[a-z]?)([A-ZÄÖÜ])/g, '$1 $2');
-						const excerpt = item.excerpt || '';
+						const excerpt = cleanSnippet(item.excerpt || '');
 						const cleanUrl = (item.url || '').replace(/\/+$/, '') || '/';
 						return '<a href="' + cleanUrl + '" class="search-result-item">' + '<h3 class="search-result-title">' + title + '</h3>' + '<p class="search-result-snippet">' + excerpt + '</p>' + '</a>';
 					})

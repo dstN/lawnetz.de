@@ -1079,6 +1079,7 @@ const curatedLeitgesetze = [
 	const searchLoadMoreCount = document.getElementById('load-more-search-count') as HTMLSpanElement | null;
 
 	// In-memory cache for letters: letter => LawEntry[]
+	const alphabet = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
 	const cache = new Map<string, LawEntry[]>();
 	let currentLetter: string | null = null;
 

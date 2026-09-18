@@ -172,10 +172,25 @@
     background-color: var(--bg-sunken);
   }
 
-  /* ── Selection ─────────────────────────────────────────────────────── */
+  /* ── Selection (High Contrast & Accessible) ────────────────────────── */
   ::selection {
-    background-color: var(--c-primary-subtle);
-    color: var(--c-content);
+    background-color: var(--c-primary);
+    color: var(--fg-on-primary);
+  }
+
+  input::selection,
+  textarea::selection {
+    background-color: var(--c-primary);
+    color: var(--fg-on-primary);
+  }
+
+  /* ── Native Search Input Reset (Prevents duplicate 'x' clear buttons) ── */
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-results-button,
+  input[type='search']::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
   }
 
   hr {

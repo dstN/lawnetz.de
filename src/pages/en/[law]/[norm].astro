@@ -61,7 +61,7 @@ const jsonLd = {
 
 	<article class="norm-container" data-pagefind-body>
 		<!-- Navigation -->
-		<nav aria-label="Breadcrumb" class="breadcrumbs">
+		<nav aria-label="Breadcrumb" class="breadcrumbs" data-pagefind-ignore>
 			<a href={`/en/${law.slug}/`} class="back-link" title={`Back to Table of Contents: ${law.title}`}>
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
 				<span>{law.abbreviation}</span>
@@ -72,7 +72,7 @@ const jsonLd = {
 
 		<!-- Header -->
 		<header class="norm-header">
-			<div class="norm-header-eyebrow">
+			<div class="norm-header-eyebrow" data-pagefind-ignore>
 				<a href={`/en/${law.slug}/`} class="norm-law-pill" title={`Back to Table of Contents: ${law.title}`}>
 					{law.abbreviation}
 				</a>
@@ -81,11 +81,11 @@ const jsonLd = {
 			</div>
 
 			<h1 class="norm-heading">
-				<span class="norm-num">{norm.identifier}</span>
+				<span class="norm-num">{norm.identifier}</span>{' '}
 				{norm.title && <span class="norm-name">{norm.title}</span>}
 			</h1>
 
-			<div class="norm-tools-bar" role="toolbar" aria-label="Actions">
+			<div class="norm-tools-bar" role="toolbar" aria-label="Actions" data-pagefind-ignore>
 				<div class="norm-tools-left">
 					<button id="copy-citation-btn" class="tool-btn" type="button" aria-label="Copy citation to clipboard" title={`Copy citation: ${norm.identifier} ${law.abbreviation}`}>
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -134,6 +134,7 @@ const jsonLd = {
 										<button
 											type="button"
 											class="para-copy-btn"
+											data-pagefind-ignore
 											aria-label={`Copy ${paraCitation}`}
 											title={`Copy ${paraCitation}`}
 										>
@@ -156,7 +157,7 @@ const jsonLd = {
 				</div>
 			</div>
 
-			<footer class="norm-legal-notice">
+			<footer class="norm-legal-notice" data-pagefind-ignore>
 				<p>
 					<strong>Notice:</strong> This is a non-official English translation provided for informational purposes only. Only the official German versions published in the Federal Law Gazette (Bundesgesetzblatt) are legally binding.
 				</p>
@@ -166,7 +167,7 @@ const jsonLd = {
 		<!-- Sequential Navigation (only rendered when adjacent norms exist) -->
 		{
 			(prevNorm || nextNorm) && (
-				<nav class="norm-pagination" aria-label="Adjacent sections">
+				<nav class="norm-pagination" aria-label="Adjacent sections" data-pagefind-ignore>
 					{
 						prevNorm ? (
 							<a href={`/en/${law.slug}/${prevNorm.normSlug}`} class="page-link prev-link" rel="prev" title={`Previous: ${prevNorm.identifier}`}>
