@@ -195,36 +195,6 @@ const curatedStatutes = [
 						: `Select a letter or search directly for specific federal statutes`}
 				</p>
 			</div>
-
-			<!-- Alphabet Jump Navigation Bar -->
-			<nav class="alpha-jump-nav" aria-label="Alphabet quick navigation">
-				<div class="alpha-jump-bar" role="toolbar" aria-label="Alphabet toolbar">
-					<button
-						type="button"
-						class={`alpha-jump-btn ${!initialLetter ? 'is-active' : ''}`}
-						id="alpha-btn-all"
-						aria-label="Show overview of all laws"
-						aria-pressed={!initialLetter ? 'true' : 'false'}
-					>
-						Overview
-					</button>
-					{alphabet.map((letter) => {
-						const count = letterCounts.get(letter) || 0;
-						const isActive = initialLetter === letter;
-						return (
-							<button
-								type="button"
-								class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
-								data-alpha-letter={letter}
-								aria-label={`Letter ${letter === '#' ? '0–9' : letter}: ${count.toLocaleString('en-US')} statutes`}
-								aria-pressed={isActive ? 'true' : 'false'}
-							>
-								{letter === '#' ? '0–9' : letter}
-							</button>
-						);
-					})}
-				</div>
-			</nav>
 		</header>
 
 		<!-- Main Directory Views Container -->
@@ -294,6 +264,27 @@ const curatedStatutes = [
 
 			<!-- VIEW 2: Letter Laws List (Active when letter is selected) -->
 			<section id="letter-view" class="letter-view" style={!initialLetter ? 'display: none;' : ''}>
+				<!-- Alphabet Quick Switch Bar for Letter View -->
+				<nav class="alpha-jump-nav" aria-label="Alphabet quick navigation">
+					<div class="alpha-jump-bar" role="toolbar" aria-label="Alphabet toolbar">
+						{alphabet.map((letter) => {
+							const count = letterCounts.get(letter) || 0;
+							const isActive = initialLetter === letter;
+							return (
+								<button
+									type="button"
+									class={`alpha-jump-btn ${isActive ? 'is-active' : ''}`}
+									data-alpha-letter={letter}
+									aria-label={`Letter ${letter === '#' ? '0–9' : letter}: ${count.toLocaleString('en-US')} statutes`}
+									aria-pressed={isActive ? 'true' : 'false'}
+								>
+									{letter === '#' ? '0–9' : letter}
+								</button>
+							);
+						})}
+					</div>
+				</nav>
+
 				<div class="letter-view-header">
 					<div class="letter-view-info">
 						<button type="button" class="back-overview-btn" id="btn-back-overview">
@@ -318,13 +309,13 @@ const curatedStatutes = [
 						return (
 							<li class="law-item">
 								<a href={trans ? `/en/${trans.slug}/` : `/${encodeURIComponent(law.slug)}`} class="law-link">
-									<span class="badge-slug">{trans ? trans.abbreviation : law.slug.toUpperCase()}</span>
 									<span class="law-title-text">{law.title}</span>
-									{trans && (
-										<span class="law-meta-tag">
+									<div class="law-meta-tag">
+										{trans && (
 											<span class="badge-trans" title="Official English translation available">EN Translation</span>
-										</span>
-									)}
+										)}
+										<span class="badge-slug">{trans ? trans.abbreviation : law.slug.toUpperCase()}</span>
+									</div>
 								</a>
 							</li>
 						);
@@ -832,8 +823,9 @@ const curatedStatutes = [
 
 	:global(.law-link) {
 		display: flex;
-		align-items: baseline;
-		gap: var(--space-3);
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-4);
 		padding: var(--space-3) var(--space-4);
 		min-height: 48px;
 		text-decoration: none;
@@ -849,28 +841,6 @@ const curatedStatutes = [
 		color: var(--c-content);
 	}
 
-	:global(.badge-slug) {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		font-family: var(--font-utility);
-		font-size: var(--text-xs);
-		font-weight: 700;
-		color: var(--c-primary);
-		background: var(--c-primary-subtle);
-		border: 1px solid var(--c-border);
-		padding: 3px 8px;
-		border-radius: var(--radius-sm);
-		min-width: 80px;
-		max-width: 160px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		flex-shrink: 0;
-		text-align: center;
-		letter-spacing: 0.03em;
-	}
-
 	:global(.law-title-text) {
 		font-size: var(--text-base);
 		line-height: var(--leading-normal);
@@ -881,8 +851,36 @@ const curatedStatutes = [
 		color: var(--c-content);
 	}
 
+	:global(.badge-slug) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-utility);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--c-content-secondary);
+		background: var(--c-surface-sunken);
+		border: 1px solid var(--c-border);
+		padding: 3px 8px;
+		border-radius: var(--radius-sm);
+		max-width: 160px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex-shrink: 0;
+		margin-left: auto;
+		text-align: center;
+		letter-spacing: 0.02em;
+	}
+
 	:global(.law-link:hover .law-title-text) {
 		color: var(--c-primary);
+	}
+
+	:global(.law-link:hover .badge-slug) {
+		color: var(--c-primary);
+		border-color: var(--c-primary);
+		background: var(--c-primary-subtle);
 	}
 
 	:global(.law-meta-tag) {
@@ -1173,16 +1171,16 @@ const curatedStatutes = [
 			a.href = `/${encodeURIComponent(law.slug)}`;
 			a.className = 'law-link';
 
-			const badgeSpan = document.createElement('span');
-			badgeSpan.className = 'badge-slug';
-			badgeSpan.textContent = law.slug.toUpperCase();
-
 			const titleSpan = document.createElement('span');
 			titleSpan.className = 'law-title-text';
 			titleSpan.textContent = law.title;
 
-			a.appendChild(badgeSpan);
+			const badgeSpan = document.createElement('span');
+			badgeSpan.className = 'badge-slug';
+			badgeSpan.textContent = law.slug.toUpperCase();
+
 			a.appendChild(titleSpan);
+			a.appendChild(badgeSpan);
 			li.appendChild(a);
 			fragment.appendChild(li);
 		}

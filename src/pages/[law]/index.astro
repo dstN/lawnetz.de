@@ -105,7 +105,7 @@ const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
 				</span>
 				<span class="meta-item">
 					<span class="meta-sep" aria-hidden="true">·</span>
-					<a href={`https://www.gesetze-im-internet.de/${law.slug}/${law.slug}.pdf`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche PDF-Fassung herunterladen">
+					<a href={`https://www.gesetze-im-internet.de/${law.slug}/${encodeURIComponent((law.abbreviation || law.slug).trim().replace(/\s+/g, '_'))}.pdf`} target="_blank" rel="noopener noreferrer" class="meta-source-link" title="Amtliche PDF-Fassung herunterladen">
 						PDF ↗
 					</a>
 				</span>
