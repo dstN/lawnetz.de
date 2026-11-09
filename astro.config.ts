@@ -3,8 +3,10 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 
+const site = 'https://lawnetz.de';
+
 export default defineConfig({
-  site: 'https://lawnetz.de',
+  site,
   output: 'server',
   trailingSlash: 'never',
 
@@ -22,6 +24,9 @@ export default defineConfig({
         defaultLocale: 'de',
         locales: { de: 'de-DE' },
       },
+      // Law and norm pages come from the DB: src/pages/sitemap-recht-[page].xml.ts, 50k URLs per chunk.
+      // ponytail: fixed 3 chunks = 150k URLs (2026-11: ~131k); add a 4th when the count nears that.
+      customSitemaps: [0, 1, 2].map((i) => `${site}/sitemap-recht-${i}.xml`),
     }),
   ],
 

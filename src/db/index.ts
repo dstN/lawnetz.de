@@ -232,3 +232,25 @@ export async function hasTranslation(slug: string): Promise<string | null> {
   }
   return null;
 }
+
+/**
+ * Law and norm pages for the sitemap, in a stable order so chunks don't overlap.
+ * Leaves out laws without norms, "Zum Seitenanfang"-style navigation rows and
+ * norms whose slug was truncated (their page can't resolve the id, so it 404s).
+ */
+export async function getSitemapEntries(offset: number, limit: number): Promise<Array<{ path: string; lastmod: Date }>> {
+  if (!db) throw new Error('[DB] Sitemap needs the database');
+  type Row = { language: string; law: string; norm: string | null; lastmod: Date | string };
+  const [rows] = (await db.execute(sql`
+    SELECT language, slug AS law, NULL AS norm, last_synced_at AS lastmod FROM laws WHERE norm_count > 0
+    UNION ALL
+    SELECT n.language, n.law_slug, n.norm_slug, l.last_synced_at FROM norms n JOIN laws l ON l.slug = n.law_slug
+    WHERE n.id = CONCAT(n.law_slug, ':', n.norm_slug)
+      AND LOWER(TRIM(n.identifier)) NOT IN ('contents', 'table of contents', 'inhaltsverzeichnis', 'seitenanfang', 'zum seitenanfang', 'translations')
+    ORDER BY law, norm
+    LIMIT ${limit} OFFSET ${offset}`)) as [Row[], unknown];
+  return rows.map((r) => ({
+    path: `${r.language === 'en' ? '/en' : ''}/${encodeURIComponent(r.law)}${r.norm ? `/${encodeURIComponent(r.norm)}` : ''}`,
+    lastmod: new Date(r.lastmod),
+  }));
+}
