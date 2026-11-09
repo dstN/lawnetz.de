@@ -357,7 +357,7 @@ const curatedStatutes = [
 						const trans = transMap.get(law.slug.toLowerCase());
 						return (
 							<li class="law-item">
-								<a href={trans ? `/en/${trans.slug}/` : `/${encodeURIComponent(law.slug)}`} class="law-link">
+								<a href={trans ? `/en/${trans.slug}` : `/${encodeURIComponent(law.slug)}`} class="law-link">
 									<span class="law-title-text">{law.title}</span>
 									<div class="law-meta-tag">
 										{trans && (

@@ -24,14 +24,16 @@ interface Props {
 	title: string;
 	description?: string;
 	canonical?: string;
+	/** Thin pages (e.g. "no English translation") stay crawlable but out of the index. */
+	noindex?: boolean;
 }
 
-const { title, description = 'LawNetz | Deutsche Bundesgesetze und Rechtsverordnungen im Volltext.', canonical } = Astro.props;
+const { title, description = 'LawNetz | Deutsche Bundesgesetze und Rechtsverordnungen im Volltext.', canonical, noindex = false } = Astro.props;
 
 const currentPath = Astro.url.pathname || '';
 const isEnglish = currentPath.startsWith('/en');
 const fullTitle = title === 'Startseite' || title === 'Home' ? (isEnglish ? 'LawNetz | German Federal Law in English' : 'LawNetz | Bundesgesetze und Rechtsverordnungen') : `${title} | LawNetz`;
-const canonicalURL = canonical || new URL(currentPath, Astro.site).toString();
+const canonicalURL = new URL(canonical ?? currentPath, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -57,6 +59,7 @@ const canonicalURL = canonical || new URL(currentPath, Astro.site).toString();
 		<title>{fullTitle}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
+		{noindex && <meta name="robots" content="noindex" />}
 		<meta name="google-site-verification" content="TNK-9M1Naq8gNGtiFBFOIxF_Lp6SmPUGzOZWQCgIvEY" />
 
 		<!-- Open Graph -->

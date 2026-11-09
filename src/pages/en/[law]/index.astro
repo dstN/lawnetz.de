@@ -38,13 +38,13 @@ if (!entry) {
 		}
 	}
 	if (!germanLawFallback) {
-		return Astro.redirect('/404');
+		return new Response(null, { status: 404 });
 	}
 }
 
 // Redirect canonical URL if needed
 if (entry && lawSlug !== entry.slug) {
-	return Astro.redirect(`/en/${entry.slug}/`);
+	return Astro.redirect(`/en/${entry.slug}`, 301);
 }
 
 // Filter out spurious nav items
@@ -66,7 +66,7 @@ const description = entry
 	? `Official English translation of ${entry.title} (${entry.abbreviation}). ${dbNorms.length} sections, non-official translation for informational purposes.`
 	: `No official English translation is available for ${germanLawFallback?.title || ''}. Translations are provided for 135 selected German statutes.`;
 
-const canonicalUrl = entry ? `https://www.lawnetz.de/en/${entry.slug}/` : undefined;
+const canonicalUrl = entry ? `/en/${entry.slug}` : undefined;
 
 const STRUCTURE_PREFIX_REGEX = /^(Book|Part|Division|Subdivision|Title|Subtitle|Chapter|Subchapter)\s+/i;
 
@@ -88,7 +88,7 @@ function parseNormItem(identifier: string, title: string) {
 }
 ---
 
-<BaseLayout title={pageTitle} description={description} canonical={canonicalUrl}>
+<BaseLayout title={pageTitle} description={description} canonical={canonicalUrl} noindex={!entry}>
 	{
 		germanLawFallback ? (
 			<article class="law-container">
@@ -119,7 +119,7 @@ function parseNormItem(identifier: string, title: string) {
 					</div>
 
 					<div class="no-trans-actions">
-						<a href={`/${germanLawFallback.slug}/`} class="btn-german-action">
+						<a href={`/${germanLawFallback.slug}`} class="btn-german-action">
 							<FlagIcon country="DE" size={15} />
 							<span>Deutsche Fassung aufrufen ({germanLawFallback.slug.toUpperCase()}) →</span>
 						</a>

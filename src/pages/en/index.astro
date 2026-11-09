@@ -113,7 +113,7 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 							<ul class="law-list" role="list">
 								{list.map((law) => (
 									<li class="law-item" data-title={law.title.toLowerCase()} data-abbr={law.abbreviation.toLowerCase()}>
-										<a href={`/en/${law.slug}/`} class="law-link">
+										<a href={`/en/${law.slug}`} class="law-link">
 											<div class="law-title-wrap">
 												<span class="law-abbr-tag">{law.abbreviation}</span>
 												<span class="law-title-text">{law.title}</span>

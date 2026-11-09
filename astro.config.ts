@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  site: 'https://www.lawnetz.de',
+  site: 'https://lawnetz.de',
   output: 'server',
   trailingSlash: 'never',
 

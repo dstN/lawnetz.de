@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.lawnetz.de/sitemap-index.xml
+Sitemap: https://lawnetz.de/sitemap-index.xml

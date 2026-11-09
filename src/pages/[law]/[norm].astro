@@ -28,7 +28,7 @@ if (!law && lawParam) {
 }
 
 if (law && lawParam !== law.slug) {
-	return Astro.redirect(`/${law.slug}/${normParam}`);
+	return Astro.redirect(`/${law.slug}/${normParam}`, 301);
 }
 
 if (!norm && law && normParam) {
@@ -38,7 +38,7 @@ if (!norm && law && normParam) {
 }
 
 if (!law || !norm) {
-	return Astro.redirect('/404');
+	return new Response(null, { status: 404 });
 }
 
 const normSlug = (norm as any).normSlug || (norm as any).slug || normParam;
@@ -57,7 +57,7 @@ const fullNormText = `${norm.identifier} ${law.abbreviation}${norm.title ? ` —
 const snippet = paragraphsList.slice(0, 2).join(' ').replace(/\s+/g, ' ').slice(0, 140);
 const description = `${norm.identifier} ${law.abbreviation}${norm.title ? ` (${norm.title})` : ''}: ${snippet}… Nichtamtliche Textfassung im freien Bundesrechtsportal LawNetz.`;
 
-const canonicalUrl = `https://www.lawnetz.de/${law.slug}/${normSlug}`;
+const canonicalUrl = `/${law.slug}/${normSlug}`;
 const officialSourceUrl = `https://www.gesetze-im-internet.de/${law.slug}/${normSlug}.html`;
 
 // Schema.org Legislation structured data
@@ -82,7 +82,7 @@ const jsonLd = {
 	<article class="norm-container" data-pagefind-body>
 		<!-- Navigation -->
 		<nav aria-label="Brotkrumen" class="breadcrumbs" data-pagefind-ignore>
-			<a href={`/${law.slug}/`} class="back-link" title={`Zurück zur Übersicht: ${law.title}`}>
+			<a href={`/${law.slug}`} class="back-link" title={`Zurück zur Übersicht: ${law.title}`}>
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
 				<span>{law.abbreviation}</span>
 			</a>
@@ -93,7 +93,7 @@ const jsonLd = {
 		<!-- Header -->
 		<header class="norm-header">
 			<div class="norm-header-eyebrow" data-pagefind-ignore>
-				<a href={`/${law.slug}/`} class="norm-law-pill" title={`Zurück zur Übersicht: ${law.title}`}>
+				<a href={`/${law.slug}`} class="norm-law-pill" title={`Zurück zur Übersicht: ${law.title}`}>
 					{law.abbreviation}
 				</a>
 				<span class="eyebrow-dot" aria-hidden="true">·</span>

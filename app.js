@@ -2,7 +2,7 @@
  * LawNetz — Phusion Passenger Entry Point
  *
  * Hosting: Netcup Webhosting (EiWomiSau / Plesk) mit Phusion Passenger & Node.js 26
- * Domain: https://www.lawnetz.de
+ * Domain: https://lawnetz.de
  *
  * Konfiguration im Netcup Webinterface (WCP/Plesk):
  * - Anwendungsstamm (Prodroot): /httpdocs (oder Projektverzeichnis)

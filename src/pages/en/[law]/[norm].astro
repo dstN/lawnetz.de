@@ -36,7 +36,7 @@ const fullNormText = `${norm.identifier} ${law.abbreviation}${norm.title ? ` —
 const snippet = paragraphsList.slice(0, 2).join(' ').replace(/\s+/g, ' ').slice(0, 140);
 const description = `${norm.identifier} ${law.abbreviation}: ${norm.title || 'Official English Translation'}. ${snippet}… Non-official translation for informational purposes.`;
 
-const canonicalUrl = `https://www.lawnetz.de/en/${law.slug}/${norm.normSlug}`;
+const canonicalUrl = `/en/${law.slug}/${norm.normSlug}`;
 const officialSourceUrl = `https://www.gesetze-im-internet.de/${law.slug}/${norm.normSlug}.html`;
 
 // Schema.org Legislation structured data
@@ -62,7 +62,7 @@ const jsonLd = {
 	<article class="norm-container" data-pagefind-body>
 		<!-- Navigation -->
 		<nav aria-label="Breadcrumb" class="breadcrumbs" data-pagefind-ignore>
-			<a href={`/en/${law.slug}/`} class="back-link" title={`Back to Table of Contents: ${law.title}`}>
+			<a href={`/en/${law.slug}`} class="back-link" title={`Back to Table of Contents: ${law.title}`}>
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
 				<span>{law.abbreviation}</span>
 			</a>
@@ -73,7 +73,7 @@ const jsonLd = {
 		<!-- Header -->
 		<header class="norm-header">
 			<div class="norm-header-eyebrow" data-pagefind-ignore>
-				<a href={`/en/${law.slug}/`} class="norm-law-pill" title={`Back to Table of Contents: ${law.title}`}>
+				<a href={`/en/${law.slug}`} class="norm-law-pill" title={`Back to Table of Contents: ${law.title}`}>
 					{law.abbreviation}
 				</a>
 				<span class="eyebrow-dot" aria-hidden="true">·</span>

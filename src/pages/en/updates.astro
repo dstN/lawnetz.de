@@ -108,7 +108,7 @@ const description = 'Official record of recently amended or editorially updated 
 				{
 					updatedLaws.map((law) => (
 						<li class="update-card" data-search={`${law.abbreviation.toLowerCase()} ${law.title.toLowerCase()} ${law.slug.toLowerCase()}`}>
-							<a href={`/${law.slug}/`} class="update-card-link">
+							<a href={`/${law.slug}`} class="update-card-link">
 								<div class="update-card-header">
 									<span class="law-pill">{law.abbreviation}</span>
 									<span class="update-date">{law.lastUpdated}</span>

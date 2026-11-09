@@ -24,7 +24,7 @@ if (!law && lawParam) {
 	const dbLaw = await getLaw(lawParam);
 	if (dbLaw) {
 		if (dbLaw.slug !== lawParam) {
-			return Astro.redirect(`/${dbLaw.slug}/`);
+			return Astro.redirect(`/${dbLaw.slug}`, 301);
 		}
 		const dbNorms = await getLawNorms(dbLaw.slug);
 		law = {
@@ -41,14 +41,14 @@ if (!law && lawParam) {
 }
 
 if (!law) {
-	return Astro.redirect('/404');
+	return new Response(null, { status: 404 });
 }
 
 const englishTranslationSlug = await hasTranslation(law.slug);
 const pageTitle = `${law.abbreviation} | ${law.title} (Nichtamtliches Inhaltsverzeichnis)`;
 const normCount = law.norms ? law.norms.length : law.items ? law.items.filter((i: any) => i.type === 'norm').length : 0;
 const description = `${law.title} (${law.abbreviation}) im Volltext lesen. ${normCount} Paragrafen/Artikel, nichtamtliche Textfassung.`;
-const canonicalUrl = `https://www.lawnetz.de/${law.slug}/`;
+const canonicalUrl = `/${law.slug}`;
 
 const tocEntry = ((tocData as any).laws as any[])?.find((l: any) => l.slug === law.slug);
 const pdfFileName = tocEntry?.pdf || `${(law.abbreviation || law.slug).trim().replace(/\s+/g, '_')}.pdf`;
@@ -58,7 +58,7 @@ const pdfFileName = tocEntry?.pdf || `${(law.abbreviation || law.slug).trim().re
 	<article class="law-container">
 		<!-- Navigation -->
 		<nav aria-label="Brotkrumen" class="breadcrumbs">
-			<a href="/gesetze/" class="back-link" title="Zurück zur Gesetzesübersicht">
+			<a href="/gesetze" class="back-link" title="Zurück zur Gesetzesübersicht">
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
 				<span>Gesetze</span>
 			</a>
@@ -123,7 +123,7 @@ const pdfFileName = tocEntry?.pdf || `${(law.abbreviation || law.slug).trim().re
 					englishTranslationSlug && (
 						<span class="meta-item">
 							<span class="meta-sep" aria-hidden="true">·</span>
-							<a href={`/en/${englishTranslationSlug}/`} class="meta-trans-link" title="Official English translation of this statute">
+							<a href={`/en/${englishTranslationSlug}`} class="meta-trans-link" title="Official English translation of this statute">
 								<FlagIcon country="GB" size={12} />
 								<span>English Translation</span>
 							</a>

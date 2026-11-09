@@ -66,9 +66,9 @@ if (isEnglish) {
 			const slug = match[1];
 			const entry = (translationsData as any[]).find((t) => t.slug === slug || t.germanSlug === slug);
 			if (entry && entry.germanSlug) {
-				switchLangUrl = `/${entry.germanSlug}/`;
+				switchLangUrl = `/${entry.germanSlug}`;
 			} else {
-				switchLangUrl = `/${slug}/`;
+				switchLangUrl = `/${slug}`;
 			}
 		}
 	}
@@ -83,11 +83,11 @@ if (isEnglish) {
 			const baseSlug = deSlug.replace(/_\d{4}$/, '');
 			const entry = (translationsData as any[]).find((t) => t.germanSlug === deSlug || t.germanSlug === baseSlug);
 			if (entry) {
-				switchLangUrl = `/en/${entry.slug}/`;
+				switchLangUrl = `/en/${entry.slug}`;
 				switchLangTitle = `Zu der englischen Übersetzung wechseln (${entry.abbreviation})`;
 			} else {
 				// Statute does not have an English translation: route to /en/${deSlug}/ which displays the clear notification
-				switchLangUrl = `/en/${deSlug}/`;
+				switchLangUrl = `/en/${deSlug}`;
 				switchLangTitle = 'Keine amtliche englische Übersetzung verfügbar (Hinweis anzeigen)';
 			}
 		}
