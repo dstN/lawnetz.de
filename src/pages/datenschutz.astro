@@ -130,6 +130,8 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		font-size: var(--text-base);
 		color: var(--c-content-secondary);
 		line-height: var(--leading-normal);
+		/* 1.4.8: at most 80 characters a line, whatever the platform's text rendering */
+		max-inline-size: 80ch;
 	}
 
 	.content-body {

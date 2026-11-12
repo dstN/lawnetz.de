@@ -6,6 +6,12 @@ Wie eine Version entsteht, steht im README unter „Versionierung und Releases�
 
 ## [Unreleased]
 
+## [1.0.1] – 2026-11-12
+
+### Behoben
+
+- Einleitungstexte der Inhaltsseiten sind ausdrücklich auf 80 Zeichen je Zeile begrenzt (WCAG 1.4.8). Auf `/kontakt` war die Zeile in der CI unter Linux 812 statt höchstens 800 Pixel breit, weil Linux die Schrift etwas breiter setzt als Windows.
+
 ## [1.0.0] – 2026-11-12
 
 Erste versionierte Fassung. Was davor geschah, steht in der Git-Historie.

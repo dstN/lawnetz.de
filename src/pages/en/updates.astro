@@ -202,6 +202,8 @@ const description = 'Official record of recently amended or editorially updated 
 		line-height: var(--leading-relaxed);
 		/* 1.4.8: 2.5em from its last line to the smaller first line below */
 		margin-bottom: 1em;
+		/* 1.4.8: at most 80 characters a line, whatever the platform's text rendering */
+		max-inline-size: 80ch;
 	}
 
 	.sync-meta {
