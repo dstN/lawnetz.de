@@ -276,9 +276,9 @@ const curatedStatutes = [
 									type="button"
 									class="letter-tile-btn"
 									data-letter={item}
-									aria-label={`${isDigit ? 'Digit' : 'Letter'} ${item}: load ${count.toLocaleString('en-US')} laws`}
+									aria-label={`${isDigit ? 'Digit' : 'Letter'} ${item}: ${count.toLocaleString('en-US')} laws`}
 								>
-									<span class="tile-char">{item}</span>
+									<span class="tile-char">{item}</span>{' '}
 									<span class="tile-count">{count.toLocaleString('en-US')} laws</span>
 								</button>
 							);
@@ -519,7 +519,6 @@ const curatedStatutes = [
 		background: var(--c-surface-raised);
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius-md);
-		outline: none;
 		transition:
 			border-color var(--duration-fast),
 			box-shadow var(--duration-fast),
@@ -568,7 +567,6 @@ const curatedStatutes = [
 		max-width: 100%;
 		min-width: 0;
 		box-sizing: border-box;
-		overflow: hidden;
 	}
 
 	/* Loading Indicator */
@@ -617,6 +615,7 @@ const curatedStatutes = [
 	.section-subtitle {
 		font-size: var(--text-sm);
 		color: var(--c-content-secondary);
+		max-inline-size: 80ch;
 	}
 
 	/* Essentials Grid */
@@ -695,7 +694,8 @@ const curatedStatutes = [
 		font-size: var(--text-xs);
 		font-style: italic;
 		color: var(--c-content-tertiary);
-		margin-bottom: var(--space-2);
+		/* 1.4.8: 2.5em from its last line to the description's first */
+		margin-bottom: calc(2.5em - 1lh + 0.25em);
 	}
 
 	.card-desc {
@@ -827,27 +827,35 @@ const curatedStatutes = [
 		border: 1px solid var(--c-border);
 	}
 
+	/*
+	 * 44px targets (2.5.5) that still look 38px: a 3px transparent border the
+	 * background stops at, the visible 1px line drawn as an inset shadow, and
+	 * negative margins so the layout around them does not move.
+	 */
 	.back-overview-btn,
 	.reset-search-btn {
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
 		background: var(--c-primary-subtle);
-		border: 1px solid var(--c-border);
+		background-clip: padding-box;
+		border: 3px solid transparent;
+		box-shadow: inset 0 0 0 1px var(--c-border);
 		color: var(--c-primary);
 		padding: 6px 14px;
-		border-radius: var(--radius-sm);
+		border-radius: calc(var(--radius-sm) + 3px);
 		font-size: var(--text-xs);
 		font-weight: 600;
 		cursor: pointer;
-		min-height: 38px;
+		min-height: 44px;
+		margin-block: -3px;
 		transition: all var(--duration-fast);
 	}
 
 	.back-overview-btn:hover,
 	.reset-search-btn:hover {
-		background: var(--c-primary-hover);
-		border-color: var(--c-primary-hover);
+		background-color: var(--c-primary-hover);
+		box-shadow: inset 0 0 0 1px var(--c-primary-hover);
 		color: var(--fg-on-primary);
 	}
 
@@ -871,7 +879,6 @@ const curatedStatutes = [
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
-		overflow: hidden;
 		box-sizing: border-box;
 	}
 
@@ -964,36 +971,34 @@ const curatedStatutes = [
 		background: rgba(6, 95, 70, 0.35);
 	}
 
+	/*
+	 * 35 buttons of 44px (2.5.5) do not fit one row of 1060px, so the bar
+	 * wraps: two rows on a desktop, more on a phone. In one row they were 28px
+	 * wide there, and 10px on a 390px phone, which also failed 2.5.8 (AA).
+	 * Each button keeps its 32px pill inside a 6px transparent border.
+	 */
 	.alpha-jump-bar {
-		display: flex;
-		flex-wrap: nowrap;
-		align-items: center;
-		justify-content: space-between;
-		gap: 2px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+		justify-items: center;
+		gap: 0;
 		background: var(--c-surface-sunken);
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius-md);
-		padding: 4px 6px;
-		overflow-x: auto;
-		scrollbar-width: none;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	.alpha-jump-bar::-webkit-scrollbar {
-		display: none;
+		padding: 0 6px;
 	}
 
 	.alpha-jump-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		flex: 1 1 0;
-		min-width: 20px;
-		height: 32px;
+		width: 44px;
+		height: 44px;
 		padding: 0 2px;
-		border: 1px solid transparent;
+		border: 6px solid transparent;
 		background: transparent;
-		border-radius: var(--radius-sm);
+		background-clip: padding-box;
+		border-radius: calc(var(--radius-sm) + 6px);
 		font-family: var(--font-utility);
 		font-weight: 600;
 		font-size: var(--text-xs);
@@ -1005,24 +1010,20 @@ const curatedStatutes = [
 
 	.alpha-jump-btn:hover {
 		color: var(--c-primary);
-		background: var(--c-surface-raised);
-		border-color: var(--c-border);
+		background-color: var(--c-surface-raised);
+		box-shadow: inset 0 0 0 1px var(--c-border);
 	}
 
 	.alpha-jump-btn.is-active,
 	.alpha-jump-btn[aria-pressed="true"] {
 		color: var(--fg-on-primary);
-		background: var(--c-primary);
-		border-color: var(--c-primary);
+		background-color: var(--c-primary);
+		box-shadow: none;
 	}
 
+	/* In a grid the divider would take a cell of its own. */
 	.alpha-jump-divider {
-		display: inline-block;
-		width: 1px;
-		height: 18px;
-		background: var(--c-border);
-		margin: 0 3px;
-		flex-shrink: 0;
+		display: none;
 	}
 
 	.search-empty-state {
@@ -1104,7 +1105,12 @@ const curatedStatutes = [
 		}
 	}
 
+	/* a 44px target (2.5.5); the negative margins keep the old spacing */
 	.load-all-btn {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		margin-block: -8px;
 		background: transparent;
 		border: none;
 		color: var(--c-primary);

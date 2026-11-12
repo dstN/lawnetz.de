@@ -12,7 +12,13 @@ export default defineConfig({
 	webServer: {
 		command: 'node app.cjs',
 		port: PORT,
-		env: { PORT: String(PORT), HOST: '127.0.0.1' },
+		// DB_URL (CI: the service container with tests/fixtures/laws.sql) wins over
+		// whatever the build took from .env; see src/db/index.ts getEnv().
+		env: {
+			PORT: String(PORT),
+			HOST: '127.0.0.1',
+			...(process.env.DB_URL ? { DB_URL: process.env.DB_URL } : {}),
+		},
 		reuseExistingServer: !process.env.CI,
 		timeout: 60_000,
 	},

@@ -17,6 +17,7 @@ import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fetchAndParseLaw } from './fetch-law';
+import { saveLaw } from './sync-core';
 import { db, isDatabaseConfigured } from '../src/db/index';
 import * as schema from '../src/db/schema';
 
@@ -82,72 +83,8 @@ async function main() {
             fs.writeFileSync(path.join(lawsDir, `${law.slug}.json`), JSON.stringify(law, null, 2), 'utf-8');
           }
 
-          // Save to MySQL if active
-          if (db) {
-            await db
-              .insert(schema.laws)
-              .values({
-                slug: law.slug,
-                abbreviation: law.abbreviation,
-                title: law.title,
-                language: 'de',
-                normCount: law.norms.length,
-                sourceUrl: law.sourceUrl,
-                lastSyncedAt: new Date(),
-                createdAt: new Date(),
-              })
-              .onDuplicateKeyUpdate({
-                set: {
-                  abbreviation: law.abbreviation,
-                  title: law.title,
-                  normCount: law.norms.length,
-                  lastSyncedAt: new Date(),
-                },
-              });
-
-            // Batch insert norms
-            for (const norm of law.norms) {
-              const normId = `${law.slug}:${norm.slug}`;
-              const paragraphsJson = norm.paragraphs.map((p: any) => {
-                if (typeof p === 'string') {
-                  const m = p.match(/^\s*\((\d+[a-z]?)\)/);
-                  return { number: m ? m[1] : null, text: p, html: p };
-                }
-                return {
-                  number: p.number ?? null,
-                  text: p.text || '',
-                  html: p.html || p.text || '',
-                };
-              });
-              const contentText = norm.paragraphs
-                .map((p: any) => (typeof p === 'string' ? p : p.text || ''))
-                .join('\n');
-
-              await db
-                .insert(schema.norms)
-                .values({
-                  id: normId,
-                  lawSlug: law.slug,
-                  normSlug: norm.slug,
-                  identifier: norm.identifier,
-                  title: norm.title,
-                  paragraphs: paragraphsJson,
-                  contentText,
-                  orderIndex: norm.orderIndex,
-                  language: 'de',
-                  createdAt: new Date(),
-                })
-                .onDuplicateKeyUpdate({
-                  set: {
-                    identifier: norm.identifier,
-                    title: norm.title,
-                    paragraphs: paragraphsJson,
-                    contentText,
-                    orderIndex: norm.orderIndex,
-                  },
-                });
-            }
-          }
+          // Save to MySQL if active (the same code as the nightly sync)
+          if (db) await saveLaw(law);
 
           if (totalLawsProcessed % 25 === 0 || totalLawsProcessed === tocItems.length) {
             const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);

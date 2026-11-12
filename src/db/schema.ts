@@ -59,6 +59,40 @@ export const norms = mysqlTable(
 );
 
 // ==========================================================================
+// Law Outline — Buch / Abschnitt / Titel headings between the norms
+// ==========================================================================
+// GII's XML carries them as norms without a number; each row sits before the
+// first norm it covers. They are the law's section headings (WCAG 2.4.10).
+
+export const lawOutline = mysqlTable(
+  'law_outline',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    lawSlug: varchar('law_slug', { length: 128 }).notNull(),
+    position: int('position').notNull(), // order among the law's headings
+    beforeNorm: int('before_norm').notNull(), // orderIndex of the first norm below the heading
+    levelCode: varchar('level_code', { length: 64 }), // gliederungskennzahl, three digits a level
+    designation: text('designation'), // e.g. "Buch 1"
+    title: text('title'), // e.g. "Allgemeiner Teil"
+  },
+  (table) => [index('idx_law_outline_law').on(table.lawSlug, table.position)]
+);
+
+// ==========================================================================
+// Law Sync State — what the sync knows about each law's file at GII
+// ==========================================================================
+// One row per German law: ETag and Last-Modified of its xml.zip at the last
+// check, so scripts/sync-core.ts downloads only what changed.
+
+export const lawSyncState = mysqlTable('law_sync_state', {
+  slug: varchar('slug', { length: 128 }).primaryKey(),
+  etag: varchar('etag', { length: 255 }),
+  lastModified: varchar('last_modified', { length: 64 }),
+  status: varchar('status', { length: 16 }), // 'ok' | 'not_found' | 'error'
+  checkedAt: timestamp('checked_at').notNull(),
+});
+
+// ==========================================================================
 // Sync Logs — Audit trail of daily delta crawls
 // ==========================================================================
 
@@ -77,3 +111,5 @@ export type NewLaw = typeof laws.$inferInsert;
 export type Norm = typeof norms.$inferSelect;
 export type NewNorm = typeof norms.$inferInsert;
 export type SyncLog = typeof syncLogs.$inferSelect;
+export type LawOutlineRow = typeof lawOutline.$inferSelect;
+export type LawSyncState = typeof lawSyncState.$inferSelect;

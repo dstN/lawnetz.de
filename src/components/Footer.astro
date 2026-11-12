@@ -11,29 +11,66 @@ interface Props {
 const { currentPath: propPath = '' } = Astro.props;
 const currentPath = propPath || Astro.url.pathname || '';
 const isEnglish = currentPath.startsWith('/en');
+const here = currentPath.replace(/\/+$/, '') || '/';
 const currentYear = new Date().getFullYear();
 
-const links = isEnglish
-	? [
-			{ href: '/en/contact', label: 'Contact' },
-			{ href: '/en/legal-notice', label: 'Legal Notice' },
-			{ href: '/en/privacy', label: 'Privacy Policy' },
-			{ href: '/en/updates', label: 'Recent Updates' },
-			{ href: '/en/about', label: 'About & Source' },
-			{ href: '/en/accessibility', label: 'Accessibility' },
-			{ href: '/en/keyboard-shortcuts', label: 'Keyboard Shortcuts' },
-			{ href: 'https://github.com/dstN/lawnetz.de', label: 'GitHub ↗', external: true },
-	  ]
-	: [
-			{ href: '/kontakt', label: 'Kontakt' },
-			{ href: '/impressum', label: 'Impressum' },
-			{ href: '/datenschutz', label: 'Datenschutz' },
-			{ href: '/aktualitaeten', label: 'Aktualitätendienst' },
-			{ href: '/hinweise', label: 'Hinweise' },
-			{ href: '/barrierefreiheit', label: 'Barrierefreiheit' },
-			{ href: '/tastenkombinationen', label: 'Tastenkombinationen' },
-			{ href: 'https://github.com/dstN/lawnetz.de', label: 'GitHub ↗', external: true },
-	  ];
+const github = { href: 'https://github.com/dstN/lawnetz.de', label: 'GitHub ↗', external: true };
+
+/** Three small labelled groups read better than nine links in a ragged row. */
+const groups: Array<{ id: string; title: string; links: Array<{ href: string; label: string; external?: boolean }> }> =
+	isEnglish
+		? [
+				{
+					id: 'footer-legal',
+					title: 'Legal',
+					links: [
+						{ href: '/en/legal-notice', label: 'Legal Notice' },
+						{ href: '/en/privacy', label: 'Privacy Policy' },
+						{ href: '/en/accessibility', label: 'Accessibility' },
+					],
+				},
+				{
+					id: 'footer-help',
+					title: 'Help',
+					links: [
+						{ href: '/en/about', label: 'About & Source' },
+						{ href: '/en/glossary', label: 'Glossary' },
+						{ href: '/en/keyboard-shortcuts', label: 'Keyboard Shortcuts' },
+						{ href: '/en/contact', label: 'Contact' },
+					],
+				},
+				{
+					id: 'footer-project',
+					title: 'Project',
+					links: [{ href: '/en/updates', label: 'Recent Updates' }, github],
+				},
+			]
+		: [
+				{
+					id: 'footer-legal',
+					title: 'Rechtliches',
+					links: [
+						{ href: '/impressum', label: 'Impressum' },
+						{ href: '/datenschutz', label: 'Datenschutz' },
+						{ href: '/barrierefreiheit', label: 'Barrierefreiheit' },
+					],
+				},
+				{
+					id: 'footer-help',
+					title: 'Hilfe',
+					links: [
+						{ href: '/hinweise', label: 'Hinweise' },
+						{ href: '/glossar', label: 'Glossar' },
+						{ href: '/tastenkombinationen', label: 'Tastenkombinationen' },
+						{ href: '/kontakt', label: 'Kontakt' },
+					],
+				},
+				{
+					id: 'footer-project',
+					title: 'Projekt',
+					links: [{ href: '/aktualitaeten', label: 'Aktualitätendienst' }, github],
+				},
+			];
 ---
 
 <footer class="site-footer" role="contentinfo">
@@ -84,22 +121,30 @@ const links = isEnglish
 		</div>
 
 		<nav class="site-footer__nav" aria-label={isEnglish ? 'Legal notices and assistance' : 'Rechtliche Hinweise und Hilfe'}>
-			<ul class="site-footer__links" role="list">
-				{
-					links.map((link) => (
-						<li>
-							<a
-								href={link.href}
-								class="site-footer__link"
-								target={link.external ? '_blank' : undefined}
-								rel={link.external ? 'noopener noreferrer' : undefined}
-							>
-								{link.label}
-							</a>
-						</li>
-					))
-				}
-			</ul>
+			{
+				groups.map((group) => (
+					<div class="site-footer__group">
+						<h2 class="site-footer__heading" id={group.id}>
+							{group.title}
+						</h2>
+						<ul class="site-footer__links" role="list" aria-labelledby={group.id}>
+							{group.links.map((link) => (
+								<li>
+									<a
+										href={link.href}
+										class="site-footer__link"
+										target={link.external ? '_blank' : undefined}
+										rel={link.external ? 'noopener noreferrer' : undefined}
+										aria-current={link.href === here ? 'page' : undefined}
+									>
+										{link.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
 		</nav>
 	</div>
 </footer>

@@ -51,9 +51,10 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 	<div class="directory-container">
 		<header class="directory-header">
 			<nav aria-label="Breadcrumb" class="breadcrumbs">
-				<a href="/en">Home</a>
+				<!-- /en is both: the home page and the translations index (2.4.8) -->
+				<a href="/en" aria-current="page">Home</a>
 				<span aria-hidden="true">/</span>
-				<span aria-current="page">Official Translations</span>
+				<span>Official Translations</span>
 			</nav>
 
 			<div class="header-intro">
@@ -269,7 +270,6 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 		background: var(--surface-raised);
 		border: 1px solid var(--border-default);
 		border-radius: var(--radius-md);
-		outline: none;
 		transition:
 			border-color var(--duration-fast),
 			box-shadow var(--duration-fast);
@@ -316,7 +316,7 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 		list-style: none;
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-1);
+		gap: 0;
 		align-items: center;
 		margin: 0;
 		padding: 0;
@@ -329,18 +329,21 @@ const activeLetters = Array.from(grouped.keys()).sort((a, b) => {
 		align-items: center;
 	}
 
+	/* 44px targets (2.5.5) that keep their 32px hover square inside a 6px transparent border */
 	.alpha-link {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 32px;
-		height: 32px;
+		min-width: 44px;
+		height: 44px;
 		padding: 0 var(--space-1);
+		border: 6px solid transparent;
+		background-clip: padding-box;
 		font-size: var(--text-sm);
 		font-weight: 600;
 		color: var(--content-secondary);
 		text-decoration: none;
-		border-radius: var(--radius-sm);
+		border-radius: calc(var(--radius-sm) + 6px);
 		transition:
 			background-color var(--duration-fast),
 			color var(--duration-fast);

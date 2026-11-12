@@ -200,7 +200,8 @@ const description = 'Official record of recently amended or editorially updated 
 		font-size: var(--text-base);
 		color: var(--c-content-secondary);
 		line-height: var(--leading-relaxed);
-		margin-bottom: var(--space-2);
+		/* 1.4.8: 2.5em from its last line to the smaller first line below */
+		margin-bottom: 1em;
 	}
 
 	.sync-meta {
@@ -239,7 +240,6 @@ const description = 'Official record of recently amended or editorially updated 
 		background: var(--c-surface-raised);
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius-md);
-		outline: none;
 		transition:
 			border-color var(--duration-fast),
 			box-shadow var(--duration-fast);

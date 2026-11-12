@@ -19,6 +19,25 @@ jobs:
     name: Build & Run Automated A11y Suite
     runs-on: ubuntu-latest
 
+    # The law and norm pages read MySQL; tests/fixtures/laws.sql is a few laws
+    # from gesetze-im-internet.de, enough for every page type and the glossary.
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: lawnetz
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DB_URL: mysql://root@127.0.0.1:3306/lawnetz
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -32,6 +51,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Load the Test Database
+        run: |
+          npx drizzle-kit push --force
+          mysql -h 127.0.0.1 -u root --default-character-set=utf8mb4 lawnetz < tests/fixtures/laws.sql
+
       - name: Build Astro Application
         run: npm run build
 
@@ -41,7 +65,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run Axe-Core WCAG AAA E2E Suite
+      - name: Run WCAG 2.2 AAA E2E Suite (axe-core + AAA checks)
         run: npm run test:a11y
 
       - name: Upload Build Artifacts

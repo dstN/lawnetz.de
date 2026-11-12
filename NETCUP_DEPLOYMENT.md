@@ -56,7 +56,11 @@ Unter dem Menüpunkt **Node.js**:
    DB_URL=mysql://k12345_lawnetzuser:DeinPasswort@localhost:3306/k12345_lawnetz
 
    # Geheimer Schlüssel zur Absicherung des Cronjob-Endpunkts (für Plesk URL-Aufruf)
-   CRON_SECRET=a8f92b7c6d1e45903cde89712bf3456789abcdef
+   CRON_SECRET=exampleSecret
+   ```
+   Den Schlüssel einmalig zufällig erzeugen und statt `exampleSecret` eintragen, zum Beispiel mit Node (64 Hex-Zeichen):
+   ```bash
+   node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
    ```
    > [!TIP]
    > Sie müssen **keine** Einzelfelder (`DB_HOST`, `DB_USER`, `DB_PASSWORD` etc.) anlegen – die Angabe der `DB_URL` reicht vollkommen für Drizzle ORM, Drizzle Kit und alle Sync-Skripte aus.
@@ -84,16 +88,19 @@ Plesk ruft die Aktualisierungsroute per HTTP ab. Die Verarbeitung erfolgt im lau
    ```text
    https://www.lawnetz.de/api/cron/sync?token=DEIN_CRON_SECRET
    ```
-4. Ausführungszeit: Täglich um `03:00` Uhr (`0 3 * * *`).
+4. Ausführungszeit: nachts alle 5 Minuten von 01:00 bis 02:55 Uhr (`*/5 1-2 * * *`), also 24 Aufrufe.
 5. Der Endpunkt prüft den Parameter `token` gegen `CRON_SECRET` aus der `.env`. Bei fehlendem oder falschem Token wird der Zugriff mit `401 Unauthorized` abgewiesen.
 
-### Option B: Ausführung per Shell-Befehl
-Falls SSH-Zugriff mit Node.js konfiguriert ist:
-1. Pfad zu Node.js ermitteln (`which node`).
-2. Cronjob als **Befehl ausführen**:
-   ```bash
-   cd /var/www/vhosts/deinedomain.de/httpdocs && /opt/plesk/node/26/bin/node scripts/sync-daily.ts >> logs/cron.log 2>&1
-   ```
+Der Endpunkt prüft alle rund 6.130 Gesetze, aber nicht in einem Aufruf: Jeder Aufruf arbeitet 45 Sekunden lang die Gesetze ab, die am längsten nicht geprüft wurden, und hört dann auf, bevor ein Proxy die Anfrage abbricht. Ein Gesetz ist 20 Stunden nach seiner letzten Prüfung wieder fällig. gesetze-im-internet.de bricht parallele Anfragen ab, deshalb geht es eins nach dem anderen, rund 0,1 Sekunden pro unverändertem Gesetz: Eine volle Runde braucht etwa 10 Minuten, also gut ein Dutzend Aufrufe. Heruntergeladen werden nur Gesetze, deren Datei sich geändert hat (neues ETag, oder ohne gespeichertes ETag: `Last-Modified` nach unserem letzten Download).
+
+Jeder Aufruf, der etwas geprüft hat, steht in `sync_logs` (`details.remaining` = was in dieser Runde noch offen ist). Der Stand pro Gesetz liegt in `law_sync_state`. Die Logik steht in `scripts/sync-core.ts` und ist dieselbe, die `npm run sync:daily` lokal ausführt.
+
+### Option B: Ausführung per Shell-Befehl (geht mit dem jetzigen Deploy nicht)
+`scripts/sync-daily.ts` läuft auf dem Server nicht, weder mit `node` noch mit `tsx`:
+- Die Skripte importieren ohne Dateiendung (`./fetch-law`); das löst nur `tsx` auf, und `tsx` ist nach `npm prune --omit=dev` nicht installiert (es ist keine Abhängigkeit).
+- Der Deploy lädt `scripts/` und `src/data/` hoch, aber nicht `src/db/`, das die Skripte importieren.
+
+Der volle Abgleich aller Gesetze läuft deshalb lokal, mit der `.env` der Produktion: `npm run sync:daily` (nur geänderte Gesetze) oder, etwa nach einer Schemaänderung, die neue Daten speichert, erst `npm run db:push` und dann `npm run sync:daily -- --force`.
 
 ---
 

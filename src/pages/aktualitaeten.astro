@@ -191,7 +191,8 @@ const description = 'Tagesaktuelle Übersicht über kürzlich geänderte und neu
 		color: var(--c-content-secondary);
 		line-height: var(--leading-normal);
 		max-width: 65ch;
-		margin-bottom: var(--space-3);
+		/* 1.4.8: 2.5em from its last line to the smaller first line below */
+		margin-bottom: 1em;
 	}
 
 	.sync-meta {
@@ -239,7 +240,6 @@ const description = 'Tagesaktuelle Übersicht über kürzlich geänderte und neu
 	.filter-input-wrap input:focus {
 		border-color: var(--c-primary);
 		box-shadow: 0 0 0 3px var(--accent-subtle);
-		outline: none;
 	}
 
 	.count-badge {

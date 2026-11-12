@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { db } from '../src/db/index';
-import * as schema from '../src/db/schema';
 import { fetchAndParseLaw } from './fetch-law';
+import { saveLaw } from './sync-core';
 
 export async function syncLawToDb(slug: string): Promise<void> {
   if (!db) {
@@ -16,77 +16,7 @@ export async function syncLawToDb(slug: string): Promise<void> {
   }
 
   console.log(`[sync-law-to-db] Saving ${law.slug} (${law.norms.length} norms) to MySQL...`);
-
-  // Upsert law record
-  await db
-    .insert(schema.laws)
-    .values({
-      slug: law.slug,
-      abbreviation: law.abbreviation,
-      title: law.title,
-      language: 'de',
-      normCount: law.norms.length,
-      sourceUrl: law.sourceUrl,
-      lastSyncedAt: new Date(),
-      createdAt: new Date(),
-    })
-    .onDuplicateKeyUpdate({
-      set: {
-        abbreviation: law.abbreviation,
-        title: law.title,
-        normCount: law.norms.length,
-        lastSyncedAt: new Date(),
-      },
-    });
-
-  // Batch insert/update norms (chunked for high MySQL throughput)
-  const chunkSize = 50;
-  for (let i = 0; i < law.norms.length; i += chunkSize) {
-    const chunk = law.norms.slice(i, i + chunkSize);
-    await Promise.all(
-      chunk.map(async (norm) => {
-        const normId = `${law.slug}:${norm.slug}`;
-        const paragraphsJson = norm.paragraphs.map((p: any) => {
-          if (typeof p === 'string') {
-            const m = p.match(/^\s*\((\d+[a-z]?)\)/);
-            return { number: m ? m[1] : null, text: p, html: p };
-          }
-          return {
-            number: p.number ?? null,
-            text: p.text || '',
-            html: p.html || p.text || '',
-          };
-        });
-        const contentText = norm.paragraphs
-          .map((p: any) => (typeof p === 'string' ? p : p.text || ''))
-          .join('\n');
-
-        await db
-          .insert(schema.norms)
-          .values({
-            id: normId,
-            lawSlug: law.slug,
-            normSlug: norm.slug,
-            identifier: norm.identifier,
-            title: norm.title,
-            paragraphs: paragraphsJson,
-            contentText,
-            orderIndex: norm.orderIndex,
-            language: 'de',
-            createdAt: new Date(),
-          })
-          .onDuplicateKeyUpdate({
-            set: {
-              identifier: norm.identifier,
-              title: norm.title,
-              paragraphs: paragraphsJson,
-              contentText,
-              orderIndex: norm.orderIndex,
-            },
-          });
-      })
-    );
-  }
+  await saveLaw(law);
 
   console.log(`[sync-law-to-db] ✓ Successfully synced ${slug} to MySQL.`);
 }

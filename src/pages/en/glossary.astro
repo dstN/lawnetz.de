@@ -1,0 +1,207 @@
+---
+/**
+ * en/glossary.astro | Statutory definitions and abbreviations (English)
+ *
+ * WCAG 3.1.3 Unusual Words and 3.1.4 Abbreviations (AAA), for the official
+ * English translations. Same structure as /glossar.
+ */
+export const prerender = true;
+import BaseLayout from '@layouts/BaseLayout.astro';
+import translationsData from '@data/translations.json';
+import { glossaryEntries } from '@data/definitions';
+
+const translations = translationsData as Array<{ slug: string; title: string; abbreviation: string }>;
+const entries = glossaryEntries('en');
+const groups = [...new Set(entries.map((e) => e.law))].map((slug) => {
+	const law = translations.find((t) => t.slug === slug);
+	return {
+		slug,
+		title: law?.title ?? slug,
+		abbreviation: law?.abbreviation ?? slug.replace(/^englisch_/, '').toUpperCase(),
+		entries: entries.filter((e) => e.law === slug).sort((a, b) => a.term.localeCompare(b.term, 'en')),
+	};
+});
+
+/** "section_13" → "Section 13", "article_116" → "Article 116" */
+const citation = (norm: string) => norm.replace(/^(section|article)_/, (_, kind: string) => `${kind[0].toUpperCase()}${kind.slice(1)} `);
+
+const abbreviations: Array<[string, string]> = [
+	['Art.', 'Article'],
+	['BGBl.', 'Bundesgesetzblatt (Federal Law Gazette)'],
+	['cf.', 'compare'],
+	['e.g.', 'for example'],
+	['et seq.', 'and the following (sections)'],
+	['i.e.', 'that is'],
+	['No.', 'number'],
+	['para.', 'paragraph, a numbered subsection of a section'],
+	['p.', 'page (in the Federal Law Gazette)'],
+];
+---
+
+<BaseLayout title="Glossary" description="Statutory definitions in the German Civil Code and Basic Law, and abbreviations used in the English translations.">
+	<div class="content-container">
+		<header class="content-header">
+			<nav aria-label="Breadcrumb" class="breadcrumbs">
+				<a href="/en">Home</a>
+				<span aria-hidden="true">/</span>
+				<span aria-current="page">Glossary</span>
+			</nav>
+			<h1 class="content-title">Glossary</h1>
+			<p class="content-lead">
+				A law often decides for itself what a word means. This page shows where that happens, and what the abbreviations in the translations stand for.
+			</p>
+		</header>
+
+		<div class="content-body">
+			<section class="info-section" aria-labelledby="definitions">
+				<h2 id="definitions">Statutory definitions</h2>
+				<p>
+					Newer laws gather their definitions in a section called "Definitions", linked at the top of each law's page under "Terms this law defines". The large codes spread them over the whole text; the most important ones are listed here.
+				</p>
+				<p>
+					The text of the law always decides, and only the German version is binding. The same word can mean something else in another part of the law.
+				</p>
+
+				{
+					groups.map((group) => (
+						<section class="glossary-group" aria-labelledby={`group-${group.slug}`}>
+							<h3 id={`group-${group.slug}`}>
+								{group.title} ({group.abbreviation})
+							</h3>
+							<dl class="glossary-list">
+								{group.entries.map((entry) => (
+									<div class="glossary-item">
+										<dt>{entry.term}</dt>
+										<dd>
+											<a href={`/en/${entry.law}/${entry.norm}`} class="glossary-link">
+												{citation(entry.norm)} {group.abbreviation}
+											</a>
+										</dd>
+									</div>
+								))}
+							</dl>
+						</section>
+					))
+				}
+			</section>
+
+			<section class="info-section" aria-labelledby="abbreviations">
+				<h2 id="abbreviations">Abbreviations</h2>
+				<p>
+					The abbreviations of the laws themselves, such as BGB or GG, are listed with their full titles among the <a href="/en">official translations</a>. On the page of a single section, pointing at the abbreviation shows the title.
+				</p>
+				<dl class="glossary-list">
+					{
+						abbreviations.map(([short, long]) => (
+							<div class="glossary-item">
+								<dt>{short}</dt>
+								<dd>{long}</dd>
+							</div>
+						))
+					}
+				</dl>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.content-container {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	.content-header {
+		margin-bottom: var(--space-6);
+		border-bottom: 1px solid var(--c-border);
+		padding-bottom: var(--space-6);
+	}
+
+	.content-lead {
+		font-size: var(--text-lg);
+		color: var(--content-secondary);
+		line-height: var(--leading-relaxed);
+		max-inline-size: 80ch;
+	}
+
+	.content-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.info-section h2 {
+		font-family: var(--font-display);
+		font-size: var(--text-xl);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.info-section h3 {
+		font-family: var(--font-display);
+		font-size: var(--text-base);
+		font-weight: 700;
+		color: var(--content-primary);
+		margin-top: var(--space-6);
+	}
+
+	.info-section p {
+		font-size: var(--text-base);
+		color: var(--content-primary);
+		line-height: var(--leading-relaxed);
+		/* 1.4.8: 2.5em from a last line to the next first line, 80 characters a line */
+		margin-bottom: calc(2.5em - 1lh);
+		max-inline-size: 80ch;
+	}
+
+	.info-section a {
+		color: var(--accent-default);
+		text-decoration: underline;
+	}
+
+	.glossary-list {
+		margin-top: var(--space-3);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.glossary-item {
+		display: grid;
+		grid-template-columns: minmax(10rem, 22rem) 1fr;
+		gap: var(--space-4);
+		align-items: center;
+		min-block-size: 44px;
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	@media (max-width: 640px) {
+		.glossary-item {
+			grid-template-columns: 1fr;
+			gap: 0;
+			padding-block: var(--space-2);
+		}
+	}
+
+	.glossary-item dt {
+		font-weight: 600;
+		color: var(--content-primary);
+	}
+
+	.glossary-item dd {
+		margin: 0;
+		color: var(--content-secondary);
+	}
+
+	/* 44px target (2.5.5) */
+	.info-section .glossary-link {
+		display: inline-flex;
+		align-items: center;
+		min-block-size: 44px;
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
+		font-weight: 600;
+	}
+</style>

@@ -196,7 +196,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		font-size: var(--text-base);
 		color: var(--content-primary);
 		line-height: var(--leading-relaxed);
-		margin-bottom: var(--space-3);
+		/* 1.4.8: 2.5em from a last line to the next first line, 80 characters a line */
+		margin-bottom: calc(2.5em - 1lh);
+		max-inline-size: 80ch;
 	}
 
 	.shortcuts-table-wrapper {

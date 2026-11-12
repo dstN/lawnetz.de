@@ -425,14 +425,22 @@ try {
 		overflow-y: auto;
 	}
 
+	/*
+	 * Both buttons are 44px targets (2.5.5) inside the field. The submit
+	 * button draws its old 36px hover square inside a 4px transparent border,
+	 * placed so the icon stays where it was.
+	 */
 	.search-box__submit-btn {
 		position: absolute;
 		top: 50%;
-		left: var(--space-2);
+		left: var(--space-1);
 		transform: translateY(-50%);
 		background: none;
-		border: none;
-		padding: var(--space-2);
+		border: 4px solid transparent;
+		background-clip: padding-box;
+		inline-size: 44px;
+		block-size: 44px;
+		padding: 0;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -445,6 +453,11 @@ try {
 			background-color var(--duration-fast);
 	}
 
+	.search-box__submit-btn .search-box__icon {
+		position: static;
+		transform: none;
+	}
+
 	.search-box__submit-btn:hover {
 		color: var(--c-primary);
 		background-color: var(--c-primary-subtle);
@@ -453,14 +466,20 @@ try {
 	.search-box__clear-btn {
 		position: absolute;
 		top: 50%;
-		right: var(--space-10);
+		/* centred where the old 26px button was */
+		right: calc(var(--space-10) - 9px);
 		transform: translateY(-50%);
 		background: none;
 		border: none;
 		font-size: var(--text-sm);
 		color: var(--fg-tertiary);
 		cursor: pointer;
-		padding: var(--space-1) var(--space-2);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-inline-size: 44px;
+		min-block-size: 44px;
+		padding: 0;
 		border-radius: var(--radius-sm);
 		z-index: 2;
 		transition: color var(--duration-fast);

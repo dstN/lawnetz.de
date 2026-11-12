@@ -175,6 +175,75 @@ export async function getLawNorms(lawSlug: string): Promise<Array<{ normSlug: st
   return [];
 }
 
+/** What fetch-law yields per law, as far as the outline needs it */
+interface OutlineSource {
+  type: string;
+  orderIndex?: number;
+  levelCode?: string;
+  designation?: string;
+  title?: string;
+}
+
+let outlineTableMissing = false;
+
+/**
+ * Replaces a law's headings with those in `items` (fetch-law's order of
+ * headings and norms). Failing here must not fail the norms' sync, so a
+ * missing table (before `npm run db:push`) is only logged.
+ */
+export async function saveLawOutline(lawSlug: string, items: OutlineSource[]): Promise<void> {
+  if (!db) return;
+  const rows: Array<typeof schema.lawOutline.$inferInsert> = [];
+  let pending: OutlineSource[] = [];
+  for (const item of items) {
+    if (item.type === 'structure') {
+      pending.push(item);
+    } else if (item.type === 'norm' && item.orderIndex !== undefined) {
+      for (const heading of pending) {
+        rows.push({
+          lawSlug,
+          position: rows.length,
+          beforeNorm: item.orderIndex,
+          // The XML parser reads "010" as the number 10; three digits a level.
+          levelCode: heading.levelCode
+            ? String(heading.levelCode).padStart(Math.ceil(String(heading.levelCode).length / 3) * 3, '0')
+            : null,
+          designation: heading.designation ?? null,
+          title: heading.title ?? null,
+        });
+      }
+      pending = [];
+    }
+  }
+  try {
+    await db.transaction(async (tx: typeof db) => {
+      await tx.delete(schema.lawOutline).where(eq(schema.lawOutline.lawSlug, lawSlug));
+      if (rows.length > 0) await tx.insert(schema.lawOutline).values(rows);
+    });
+  } catch (err) {
+    // Once, not for each of 6,000 laws: most likely the table is missing.
+    if (!outlineTableMissing) console.warn('[DB] Outlines not saved (run `npm run db:push`?):', err);
+    outlineTableMissing = true;
+  }
+}
+
+/** A law's headings in order; none until the table exists and the sync has filled it. */
+export async function getLawOutline(lawSlug: string): Promise<schema.LawOutlineRow[]> {
+  if (!db || outlineTableMissing) return [];
+  try {
+    return await db
+      .select()
+      .from(schema.lawOutline)
+      .where(eq(schema.lawOutline.lawSlug, lawSlug))
+      .orderBy(asc(schema.lawOutline.position));
+  } catch (err) {
+    // Most likely `npm run db:push` has not created the table yet: keep the flat list.
+    outlineTableMissing = true;
+    console.warn('[DB] law_outline unavailable, tables of contents stay flat:', err);
+    return [];
+  }
+}
+
 export interface AdjacentNormItem {
   normSlug: string;
   slug: string;
@@ -184,9 +253,11 @@ export interface AdjacentNormItem {
 
 export async function getAdjacentNorms(
   lawSlug: string,
-  currentNormSlugOrIndex: string | number
+  currentNormSlugOrIndex: string | number,
+  /** The law's norms, when the caller has loaded them already */
+  lawNorms?: Awaited<ReturnType<typeof getLawNorms>>
 ): Promise<{ prev: AdjacentNormItem | null; next: AdjacentNormItem | null }> {
-  const allNorms = await getLawNorms(lawSlug);
+  const allNorms = lawNorms ?? (await getLawNorms(lawSlug));
 
   let currentIndex = -1;
   if (typeof currentNormSlugOrIndex === 'string') {

@@ -65,12 +65,41 @@ Die Anwendung ist anschließend unter `http://localhost:4321` erreichbar.
 | `npm run fetch-toc` | Aktualisiert das Inhaltsverzeichnis aller Bundesgesetze |
 | `npm run sync:translations` | Synchronisiert den Katalog englischer Übersetzungen |
 | `npm run scrape:all` | Importiert Gesetze in die MySQL-Datenbank |
-| `npm run sync:daily` | Führt den Delta-Sync für Gesetzesänderungen aus |
+| `npm run sync:daily` | Prüft alle fälligen Gesetze und lädt geänderte nach (`-- --force` lädt alle, `-- --slug bgb` nur eines); derselbe Code wie der nächtliche Cronjob |
 | `npm run db:push` | Überträgt das Drizzle-Schema auf die MySQL-Datenbank |
+| `npm test` | Smoke-Test des Builds: Datenbestand, keine Drittanbieter, Schriften |
+| `npm run test:a11y` | Playwright: axe-core und eigene Prüfungen für WCAG 2.2 AAA (siehe unten) |
+
+### Barrierefreiheitstests
+
+`tests/e2e/a11y.spec.ts` prüft jede Seite mit axe-core und mit `tests/e2e/fixtures/aaa.ts`, das die AAA-Kriterien misst, für die axe keine Regeln hat: Zielgröße 44 × 44 px (2.5.5), Textdarstellung (1.4.8), Ort (2.4.8), Tastatur (2.1.3) und Fokus (2.4.12, 2.4.13). Dazu kommen Umbruch bei 320 px (1.4.10) sowie Begriffe und Abkürzungen (3.1.3, 3.1.4). `tests/e2e/glossary.spec.ts` gleicht jeden Eintrag in `src/data/glossary.json` mit dem Gesetzestext ab.
+
+Die Gesetzes- und Normseiten brauchen MySQL. Die CI lädt dafür `tests/fixtures/laws.sql` (einige Gesetze von gesetze-im-internet.de) in einen Service-Container. Lokal genauso, mit einer leeren Datenbank, nie der Produktionsdatenbank:
+
+```bash
+export DB_URL=mysql://root@127.0.0.1:3306/lawnetz_test
+npx drizzle-kit push --force
+mysql -u root lawnetz_test < tests/fixtures/laws.sql
+npm run build && npm run test:a11y
+```
+
+Ohne `DB_URL` werden diese Tests übersprungen. Wie die Fixture entsteht, steht in `tests/fixtures/make-db-fixture.mjs`.
 
 ## Deployment
 
 Hinweise zur Bereitstellung auf Netcup-Webhosting (Plesk mit Phusion Passenger, MySQL und Cronjob-Konfiguration) sind in [NETCUP_DEPLOYMENT.md](./NETCUP_DEPLOYMENT.md) dokumentiert.
+
+## Versionierung und Releases
+
+Versionen folgen [Semantic Versioning](https://semver.org/lang/de/), die Änderungen stehen in [CHANGELOG.md](./CHANGELOG.md). **Major**, wenn ein Release einen Handgriff auf dem Server braucht (`db:push`, Cronjob, `.env`), **Minor** für neue Funktionen, **Patch** für Korrekturen.
+
+Jeder Push auf `main` deployt. Ein Release dazu:
+
+1. Die Einträge unter `[Unreleased]` im Changelog unter eine neue Überschrift `## [X.Y.Z] – JJJJ-MM-TT` setzen; was vor dem Deploy auf dem Server zu tun ist, gehört in einen Abschnitt „Betrieb (vor dem Deploy)“.
+2. `npm version X.Y.Z --no-git-tag-version` (setzt `package.json` und `package-lock.json`).
+3. Committen, dann `git tag vX.Y.Z` und `git push origin main vX.Y.Z`.
+
+Der Tag startet `.github/workflows/release.yml`: Er prüft, dass Tag, `package.json` und Changelog dieselbe Version nennen, und legt das GitHub-Release mit dem Changelog-Abschnitt als Text an.
 
 ## Datenquelle & Lizenz
 

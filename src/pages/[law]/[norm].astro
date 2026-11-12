@@ -14,7 +14,8 @@
  */
 
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { getLaw, getNorm, getAdjacentNorms } from '../../db/index';
+import { getLaw, getNorm, getAdjacentNorms, getLawNorms } from '../../db/index';
+import { lawDefinitions } from '@data/definitions';
 
 const { law: lawParam, norm: normParam } = Astro.params;
 
@@ -43,8 +44,11 @@ if (!law || !norm) {
 
 const normSlug = (norm as any).normSlug || (norm as any).slug || normParam;
 
+const lawNorms = await getLawNorms(law.slug);
+const definitions = lawDefinitions(law.slug, lawNorms, 'de');
+
 if (!prevNorm || !nextNorm) {
-	const adjacent = await getAdjacentNorms(law.slug, normSlug);
+	const adjacent = await getAdjacentNorms(law.slug, normSlug, lawNorms);
 	prevNorm = prevNorm || adjacent.prev;
 	nextNorm = nextNorm || adjacent.next;
 }
@@ -84,7 +88,7 @@ const jsonLd = {
 		<nav aria-label="Brotkrumen" class="breadcrumbs" data-pagefind-ignore>
 			<a href={`/${law.slug}`} class="back-link" title={`Zurück zur Übersicht: ${law.title}`}>
 				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-				<span>{law.abbreviation}</span>
+				<abbr title={law.title}>{law.abbreviation}</abbr>
 			</a>
 			<span class="bc-sep" aria-hidden="true">/</span>
 			<span class="bc-current" aria-current="page">{norm.identifier}</span>
@@ -93,9 +97,7 @@ const jsonLd = {
 		<!-- Header -->
 		<header class="norm-header">
 			<div class="norm-header-eyebrow" data-pagefind-ignore>
-				<a href={`/${law.slug}`} class="norm-law-pill" title={`Zurück zur Übersicht: ${law.title}`}>
-					{law.abbreviation}
-				</a>
+				<abbr class="norm-law-pill-label" title={law.title}>{law.abbreviation}</abbr>
 				<span class="eyebrow-dot" aria-hidden="true">·</span>
 				<span class="norm-eyebrow-sub">Nichtamtliche Fassung</span>
 			</div>
@@ -107,7 +109,7 @@ const jsonLd = {
 
 			<div class="norm-tools-bar" role="toolbar" aria-label="Aktionen für diese Norm" data-pagefind-ignore>
 				<div class="norm-tools-left">
-					<button id="copy-citation-btn" class="tool-btn" type="button" aria-label="Fundstelle in Zwischenablage kopieren" title={`Zitieren: ${norm.identifier} ${law.abbreviation}`}>
+					<button id="copy-citation-btn" class="tool-btn" type="button" aria-label="Zitieren: Fundstelle in die Zwischenablage kopieren" title={`Zitieren: ${norm.identifier} ${law.abbreviation}`}>
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
 							<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
@@ -115,7 +117,7 @@ const jsonLd = {
 						<span id="copy-btn-text">Zitieren</span>
 					</button>
 
-					<button id="copy-full-norm-btn" class="tool-btn" type="button" aria-label="Gesamte Norm mit allen Absätzen in Zwischenablage kopieren" title="Kopiert die gesamte Norm mit Überschrift und allen Absätzen">
+					<button id="copy-full-norm-btn" class="tool-btn" type="button" aria-label="Norm kopieren: die ganze Norm mit allen Absätzen in die Zwischenablage" title="Kopiert die gesamte Norm mit Überschrift und allen Absätzen">
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 							<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
 							<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -155,7 +157,7 @@ const jsonLd = {
 											type="button"
 											class="para-copy-btn"
 											data-pagefind-ignore
-											aria-label={`${paraCitation} kopieren`}
+											aria-label={`Absatz kopieren: ${paraCitation}`}
 											title={`${paraCitation} kopieren`}
 										>
 											<svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -192,6 +194,12 @@ const jsonLd = {
 				<p>
 					<strong>Rechtlicher Hinweis:</strong> Dies ist eine nichtamtliche Textfassung zur Information. Verbindlich sind ausschließlich die im Bundesgesetzblatt (BGBl.) verkündeten amtlichen Fassungen.
 				</p>
+				<p>
+					{definitions.length > 0 && (
+						<>Die Legaldefinitionen dieses Gesetzes stehen in der <a href={`/${law.slug}#begriffe`}>Übersicht von {law.abbreviation}</a>. </>
+					)}
+					Abkürzungen wie Abs. oder Nr. und die Legaldefinitionen der großen Gesetzbücher erklärt das <a href="/glossar">Glossar</a>.
+				</p>
 			</footer>
 		</section>
 
@@ -200,13 +208,13 @@ const jsonLd = {
 			(prevNorm || nextNorm) && (
 				<nav class="norm-pager" aria-label="Vorherige und nächste Paragrafen" data-pagefind-ignore>
 					{prevNorm ? (
-						<a href={`/${law.slug}/${prevNorm.normSlug || prevNorm.slug}`} class="pager-link pager-prev" rel="prev" title={`Vorheriger: ${prevNorm.identifier}`}>
+						<a href={`/${law.slug}/${prevNorm.normSlug || prevNorm.slug}`} class="pager-link pager-prev" rel="prev" title={`Vorherige Norm: ${prevNorm.identifier}${prevNorm.title ? ` ${prevNorm.title}` : ''}`}>
 							<span class="pager-direction" aria-hidden="true">← [</span>
 							<span class="pager-label">
 								<span class="pager-sub">Vorherige Norm</span>
 								<span class="pager-title">
-									{prevNorm.identifier}
-									{prevNorm.title ? ` ${prevNorm.title}` : ''}
+									<span class="pager-id">{prevNorm.identifier}</span>
+									{prevNorm.title && <span class="pager-name">{prevNorm.title}</span>}
 								</span>
 							</span>
 						</a>
@@ -215,12 +223,12 @@ const jsonLd = {
 					)}
 
 					{nextNorm ? (
-						<a href={`/${law.slug}/${nextNorm.normSlug || nextNorm.slug}`} class="pager-link pager-next" rel="next" title={`Nächster: ${nextNorm.identifier}`}>
+						<a href={`/${law.slug}/${nextNorm.normSlug || nextNorm.slug}`} class="pager-link pager-next" rel="next" title={`Nächste Norm: ${nextNorm.identifier}${nextNorm.title ? ` ${nextNorm.title}` : ''}`}>
 							<span class="pager-label">
 								<span class="pager-sub">Nächste Norm</span>
 								<span class="pager-title">
-									{nextNorm.identifier}
-									{nextNorm.title ? ` ${nextNorm.title}` : ''}
+									<span class="pager-id">{nextNorm.identifier}</span>
+									{nextNorm.title && <span class="pager-name">{nextNorm.title}</span>}
 								</span>
 							</span>
 							<span class="pager-direction" aria-hidden="true">] →</span>
@@ -246,9 +254,7 @@ const jsonLd = {
 	.breadcrumbs {
 		display: flex;
 		align-items: center;
-		white-space: nowrap;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
+		flex-wrap: wrap;
 		gap: var(--space-2);
 		font-size: var(--text-xs);
 		color: var(--content-tertiary);
@@ -266,6 +272,10 @@ const jsonLd = {
 		font-weight: 500;
 		padding: 2px 4px;
 		margin-left: -4px;
+		/* a 44px target (2.5.5); the negative margins keep the breadcrumb line as it was */
+		min-block-size: 44px;
+		min-inline-size: 44px;
+		margin-block: -10px;
 		border-radius: var(--radius-sm);
 		transition: color var(--duration-fast);
 	}
@@ -302,22 +312,23 @@ const jsonLd = {
 		color: var(--content-tertiary);
 	}
 
-	.norm-law-pill {
-		display: inline-block;
+	/* The breadcrumb above already links to the law; this is its label only. */
+	/* 3.1.4: the law's full title is the abbreviation's title (technique H28) */
+	abbr[title] {
+		text-decoration: none;
+		cursor: help;
+	}
+
+	.norm-law-pill-label {
 		padding: 2px 7px;
 		background: var(--accent-subtle);
 		color: var(--accent-default);
 		font-family: var(--font-mono);
 		font-weight: 700;
-		font-size: 11px;
+		font-size: 0.6875rem;
 		border-radius: var(--radius-sm);
 		letter-spacing: 0.05em;
-		text-decoration: none;
 		transition: background-color var(--duration-fast);
-	}
-
-	.norm-law-pill:hover {
-		background: var(--surface-overlay);
 	}
 
 	.eyebrow-dot {
@@ -338,6 +349,16 @@ const jsonLd = {
 		max-width: var(--layout-detail-width, 860px);
 		width: 100%;
 		box-sizing: border-box;
+	}
+
+	/* 1.4.8: at most 80 characters a line */
+	.norm-legal-notice p {
+		max-inline-size: 80ch;
+	}
+
+	.norm-legal-notice p + p {
+		/* 1.4.8: 2.5em from one paragraph's last line to the next one's first */
+		margin-top: calc(2.5em - 1lh);
 	}
 
 	.norm-heading {
@@ -393,21 +414,31 @@ const jsonLd = {
 		flex-wrap: wrap;
 	}
 
+	/* the buttons' 4px transparent borders already make the 8px between the pills */
 	.norm-tools-left {
 		display: flex;
 		align-items: center;
-		gap: var(--space-2);
+		gap: 0;
+		margin-inline-start: -4px;
 		flex-wrap: wrap;
 	}
 
+	/*
+	 * 44px targets (2.5.5) that still look 36px: a 4px transparent border the
+	 * background stops at, the visible line drawn as an inset shadow, and
+	 * negative margins so the layout around them does not move.
+	 */
 	.tool-btn {
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
 		padding: 6px 12px;
-		min-height: 36px;
+		min-height: 44px;
+		margin-block: -4px;
 		background: var(--surface-sunken);
-		border: 1px solid var(--border-subtle);
+		background-clip: padding-box;
+		border: 4px solid transparent;
+		box-shadow: inset 0 0 0 1px var(--border-subtle);
 		border-radius: var(--radius-full);
 		color: var(--content-primary);
 		font-size: var(--text-xs);
@@ -419,8 +450,8 @@ const jsonLd = {
 	}
 
 	.tool-btn:hover {
-		background: var(--surface-raised);
-		border-color: var(--border-strong);
+		background-color: var(--surface-raised);
+		box-shadow: inset 0 0 0 1px var(--border-strong);
 	}
 
 	@media (max-width: 640px) {
@@ -431,9 +462,10 @@ const jsonLd = {
 		}
 
 		.norm-tools-left {
-			width: 100%;
+			width: calc(100% + 8px);
 			display: flex;
-			gap: var(--space-2);
+			gap: 0;
+			margin-inline: -4px;
 		}
 
 		.norm-tools-left .tool-btn {
@@ -442,7 +474,6 @@ const jsonLd = {
 		}
 
 		.tool-link {
-			padding-top: 0;
 			font-size: var(--text-xs);
 		}
 	}
@@ -460,7 +491,7 @@ const jsonLd = {
 		color: var(--content-secondary);
 		text-decoration: none;
 		padding: var(--space-2) 0;
-		min-height: 40px;
+		min-height: 44px;
 	}
 
 	.tool-link:hover {
@@ -510,23 +541,31 @@ const jsonLd = {
 		font-size: var(--text-lg);
 		line-height: var(--leading-relaxed);
 		color: var(--content-primary);
-		max-width: 100%;
+		/* 1.4.8: at most 80 characters a line */
+		max-width: 80ch;
 		margin: 0;
 	}
 
 	/* Copy Button on Paragraph */
+	/*
+	 * A 44px target (2.5.5) drawn at its old 28px: an 8px transparent border the
+	 * background stops at, the visible line as an inset shadow, and the box
+	 * moved out by the same 8px so the pill stays where it was.
+	 */
 	.para-copy-btn {
 		position: absolute;
-		top: var(--space-2);
-		right: var(--space-2);
+		top: calc(var(--space-2) - 8px);
+		right: calc(var(--space-2) - 8px);
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-1);
-		height: 28px;
+		height: 44px;
 		padding: 0 var(--space-2);
 		background: var(--surface-raised);
-		border: 1px solid var(--border-default);
-		border-radius: var(--radius-sm);
+		background-clip: padding-box;
+		border: 8px solid transparent;
+		box-shadow: inset 0 0 0 1px var(--border-default);
+		border-radius: calc(var(--radius-sm) + 8px);
 		color: var(--content-secondary);
 		font-size: var(--text-xs);
 		font-weight: 500;
@@ -540,15 +579,14 @@ const jsonLd = {
 			background-color var(--duration-fast),
 			border-color var(--duration-fast),
 			color var(--duration-fast);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 		user-select: none;
 		white-space: nowrap;
 		z-index: 2;
 	}
 
 	.para-copy-btn:hover {
-		background: var(--surface-overlay);
-		border-color: var(--accent-default);
+		background-color: var(--surface-overlay);
+		box-shadow: inset 0 0 0 1px var(--accent-default);
 		color: var(--content-primary);
 	}
 
@@ -569,8 +607,8 @@ const jsonLd = {
 		opacity: 1 !important;
 		transform: translateY(0) !important;
 		pointer-events: auto !important;
-		background: var(--accent-subtle);
-		border-color: var(--accent-default);
+		background-color: var(--accent-subtle);
+		box-shadow: inset 0 0 0 1px var(--accent-default);
 		color: var(--accent-default);
 	}
 
@@ -598,7 +636,6 @@ const jsonLd = {
 			opacity: 1;
 			transform: translateY(0);
 			pointer-events: auto;
-			min-height: 34px;
 			padding: 0 var(--space-3);
 			border-radius: var(--radius-sm);
 			font-weight: 600;
@@ -740,10 +777,30 @@ const jsonLd = {
 		white-space: nowrap;
 	}
 
+	/*
+	 * The norm's number always shows; a long title ends in "…", and the link's
+	 * title attribute carries the whole text. Without max-inline-size the right-
+	 * aligned "next" title took its full width, ran out to the left and lost
+	 * its beginning, number and all.
+	 */
 	.pager-title {
+		display: flex;
+		gap: 0.3em;
+		max-inline-size: 100%;
 		font-size: var(--text-sm);
 		font-weight: 600;
 		white-space: nowrap;
+	}
+
+	.pager-id {
+		flex-shrink: 0;
+		max-inline-size: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.pager-name {
+		min-inline-size: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
@@ -830,7 +887,7 @@ const jsonLd = {
 				copyBtn.setAttribute('aria-label', `${citationText} kopiert!`);
 				setTimeout(() => {
 					copyBtnText.textContent = 'Zitieren';
-					copyBtn.setAttribute('aria-label', 'Fundstelle in Zwischenablage kopieren');
+					copyBtn.setAttribute('aria-label', 'Zitieren: Fundstelle in die Zwischenablage kopieren');
 				}, 2000);
 			} catch {
 				prompt('Fundstelle kopieren:', citationText);
@@ -847,10 +904,10 @@ const jsonLd = {
 			try {
 				await navigator.clipboard.writeText(fullNormText);
 				copyFullText.textContent = 'Kopiert!';
-				copyFullBtn.setAttribute('aria-label', 'Gesamte Norm kopiert!');
+				copyFullBtn.setAttribute('aria-label', 'Kopiert! Die ganze Norm ist in der Zwischenablage');
 				setTimeout(() => {
 					copyFullText.textContent = 'Norm kopieren';
-					copyFullBtn.setAttribute('aria-label', 'Gesamte Norm in Zwischenablage kopieren');
+					copyFullBtn.setAttribute('aria-label', 'Norm kopieren: die ganze Norm mit allen Absätzen in die Zwischenablage');
 				}, 2000);
 			} catch {
 				prompt('Norm kopieren:', fullNormText);

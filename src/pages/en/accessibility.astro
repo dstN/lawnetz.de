@@ -26,7 +26,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		<div class="content-body">
 			<section class="info-section">
 				<h2>1. Conformance Status</h2>
-				<p>This website complies with the Web Content Accessibility Guidelines (WCAG 2.2) at Conformance Level AAA.</p>
+				<p>The goal is Conformance Level AAA of the Web Content Accessibility Guidelines (WCAG 2.2). Every change is tested automatically: with axe-core and with our own checks for the AAA criteria axe does not cover (target size, visual presentation, focus, keyboard, location). LawNetz does not fully meet one criterion and meets another only in part; both are listed in section 3.</p>
 			</section>
 
 			<section class="info-section">
@@ -50,7 +50,19 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 					</div>
 					<div class="measure-item">
 						<dt class="measure-title">44px Minimum Touch Targets</dt>
-						<dd class="measure-desc">All buttons, links, and interactive elements feature a minimum touch target size of 44 × 44 pixels.</dd>
+						<dd class="measure-desc">All buttons, links, and interactive elements feature a minimum touch target size of 44 × 44 pixels. Only links within running text are exempt.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Visual Presentation</dt>
+						<dd class="measure-desc">Lines of at most 80 characters, line spacing of at least 1.5, paragraph spacing of at least 2.5 lines, no justified text. Font sizes follow the text size set in the browser.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Visible Focus</dt>
+						<dd class="measure-desc">The focus outline is at least 2 pixels wide, contrasts at 3:1 or more, and is never clipped or covered.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Terms and Abbreviations</dt>
+						<dd class="measure-desc">Every law's page lists the sections in which the law defines its own terms. The <a href="/en/glossary">glossary</a> collects key definitions of the Civil Code and the Basic Law and explains abbreviations such as Art. or para.</dd>
 					</div>
 					<div class="measure-item">
 						<dt class="measure-title">Zoom up to 400%</dt>
@@ -60,7 +72,21 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 			</section>
 
 			<section class="info-section">
-				<h2>3. Feedback & Contact</h2>
+				<h2>3. Content Not Fully Accessible</h2>
+				<dl class="measures-list">
+					<div class="measure-item">
+						<dt class="measure-title">Reading Level (3.1.5, AAA): not met</dt>
+						<dd class="measure-desc">Legal texts often require more reading ability than lower secondary education. LawNetz reproduces them unchanged, because only the wording counts, and offers no simplified versions.</dd>
+					</div>
+					<div class="measure-item">
+						<dt class="measure-title">Unusual Words (3.1.3, AAA): partially met</dt>
+						<dd class="measure-desc">Sections titled "Definitions" are found for every translated law. Definitions spread over the text are in the glossary only for the Civil Code and the Basic Law. Legal terms that no law defines are not explained, since explaining them would be legal advice.</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section class="info-section">
+				<h2>4. Feedback & Contact</h2>
 				<p>If you encounter accessibility barriers on LawNetz, please contact us:</p>
 				<p>
 					Email: <a href="mailto:barrierefreiheit@lawnetz.de">barrierefreiheit@lawnetz.de</a>
@@ -144,7 +170,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 		font-size: var(--text-base);
 		color: var(--content-primary);
 		line-height: var(--leading-relaxed);
-		margin-bottom: var(--space-3);
+		/* 1.4.8: 2.5em from a last line to the next first line, 80 characters a line */
+		margin-bottom: calc(2.5em - 1lh);
+		max-inline-size: 80ch;
 	}
 
 	.info-section a {

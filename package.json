@@ -1,7 +1,7 @@
 {
   "name": "lawnetz.de",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "node": ">=26.0.0"
   },
@@ -18,31 +18,31 @@
     "sync:daily": "npx tsx scripts/sync-daily.ts",
     "sync:translations": "npx tsx scripts/fetch-translations-catalog.ts",
     "build:full": "npm run fetch-toc && npm run sync:translations && npm run build",
-    "test": "npx tsx scripts/test-a11y-smoke.ts",
+    "test": "npx tsx scripts/test-a11y-smoke.ts && npx tsx --test scripts/sync-core.test.ts",
     "test:a11y": "npx playwright test",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.5",
+    "@astrojs/node": "^11.1.12",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.3.2",
+    "astro": "^7.4.11",
     "country-flag-icons": "^1.6.20",
-    "dotenv": "^17.4.2",
-    "drizzle-orm": "^0.45.2",
-    "fast-xml-parser": "^5.11.1",
+    "dotenv": "^18.0.10",
+    "drizzle-orm": "^0.45.4",
+    "fast-xml-parser": "^5.12.0",
     "fflate": "^0.8.3",
-    "mysql2": "^3.24.4"
+    "mysql2": "^3.24.6"
   },
   "allowScripts": {
     "esbuild": true
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@axe-core/playwright": "^4.13.0",
+    "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "^4.14.0",
     "@dstn/fli": "^2.0.1",
-    "@playwright/test": "^1.63.0",
-    "drizzle-kit": "^0.31.10",
-    "pagefind": "^1.5.2",
+    "@playwright/test": "^1.65.0",
+    "drizzle-kit": "^0.31.11",
+    "pagefind": "^1.6.0",
     "typescript": "^5.9.3"
   }
 }
