@@ -6,6 +6,16 @@ Wie eine Version entsteht, steht im README unter „Versionierung und Releases�
 
 ## [Unreleased]
 
+## [1.1.0] – 2026-11-16
+
+### Hinzugefügt
+
+- Gesetzes- und Normseiten senden `Last-Modified` und beantworten `If-Modified-Since` mit einem leeren 304, wenn sich nichts geändert hat. Maßgeblich ist der spätere Zeitpunkt aus letztem Download des Gesetzes und letztem Deploy. Das spart Suchmaschinen bei rund 150.000 Seiten Crawl-Budget und dem Server Arbeit. `Cache-Control: no-cache` sorgt dafür, dass Browser trotzdem jedes Mal nachfragen.
+
+### Geändert
+
+- Ein neuer Abruf einer englischen Übersetzung (`scripts/scrape-en-law.cjs`) setzt `last_synced_at`, damit `Last-Modified` stimmt.
+
 ## [1.0.1] – 2026-11-12
 
 ### Behoben

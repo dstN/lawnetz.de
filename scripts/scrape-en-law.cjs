@@ -211,7 +211,7 @@ async function scrapeEnglishLaw(slug, conn) {
     // Update laws table with norm_count and title
     await conn.query(`
       UPDATE laws
-      SET norm_count = ?, title = IF(title LIKE '>%' OR title = '', ?, title)
+      SET norm_count = ?, title = IF(title LIKE '>%' OR title = '', ?, title), last_synced_at = NOW()
       WHERE slug = ?
     `, [normsToInsert.length, title || slug, slug]);
 

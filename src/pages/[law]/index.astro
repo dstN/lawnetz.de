@@ -16,6 +16,7 @@ import FlagIcon from '@components/FlagIcon.astro';
 import tocData from '@data/toc.json';
 import { getLaw, getLawNorms, getLawOutline, hasTranslation } from '../../db/index';
 import { lawDefinitions } from '@data/definitions';
+import { notModified } from '../../http-cache';
 
 const { law: lawParam } = Astro.params;
 
@@ -55,6 +56,9 @@ if (!law && lawParam) {
 if (!law) {
 	return new Response(null, { status: 404 });
 }
+
+const unchanged = notModified(Astro.request, Astro.response.headers, law.lastSyncedAt);
+if (unchanged) return unchanged;
 
 const englishTranslationSlug = await hasTranslation(law.slug);
 const definitions = lawDefinitions(law.slug, law.norms ?? [], 'de');

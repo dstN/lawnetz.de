@@ -16,6 +16,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { getLaw, getNorm, getAdjacentNorms, getLawNorms } from '../../db/index';
 import { lawDefinitions } from '@data/definitions';
+import { notModified } from '../../http-cache';
 
 const { law: lawParam, norm: normParam } = Astro.params;
 
@@ -41,6 +42,9 @@ if (!norm && law && normParam) {
 if (!law || !norm) {
 	return new Response(null, { status: 404 });
 }
+
+const unchanged = notModified(Astro.request, Astro.response.headers, law.lastSyncedAt);
+if (unchanged) return unchanged;
 
 const normSlug = (norm as any).normSlug || (norm as any).slug || normParam;
 

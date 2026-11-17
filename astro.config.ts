@@ -40,4 +40,9 @@ export default defineConfig({
     port: 4321,
   },
 
+  vite: {
+    // When this build was made, for Last-Modified (src/http-cache.ts)
+    define: { __BUILT_AT__: JSON.stringify(new Date().toUTCString()) },
+  },
+
 });
