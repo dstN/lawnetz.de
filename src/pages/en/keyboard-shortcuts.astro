@@ -25,10 +25,10 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 			<section class="info-section">
 				<h2>Notes on Keyboard Shortcuts & Legacy Accesskeys</h2>
 				<p>
-					The legacy HTML <code>accesskey</code> attribute (such as Alt+0 through Alt+9 on traditional government portals) causes widespread conflicts with operating system commands, web browsers, and screen readers (NVDA, JAWS, VoiceOver).
+					The legacy HTML <code>accesskey</code> attribute (such as Alt+0 through Alt+9 on traditional government portals) often conflicts with operating system commands, web browsers, and screen readers (NVDA, JAWS, VoiceOver).
 				</p>
 				<p>
-					LawNetz employs modern, sequential two-key combinations modeled after established web applications (such as GitHub and Gmail): Press <kbd>g</kbd> (for "go to") followed by a target key.
+					LawNetz uses sequential two-key combinations instead, as GitHub and Gmail do: Press <kbd>g</kbd> (for "go to") followed by a target key.
 				</p>
 			</section>
 
@@ -112,7 +112,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 				<h2>Accessibility Architecture</h2>
 				<dl class="a11y-layers">
 					<dt>Layer 1: Skip Links</dt>
-					<dd>Press <kbd>Tab</kbd> immediately upon page load to reveal skip links directing focus straight to main content or navigation.</dd>
+					<dd>Press <kbd>Tab</kbd> right after the page loads to show skip links to the main content or the navigation.</dd>
 
 					<dt>Layer 2: ARIA Landmarks</dt>
 					<dd>Screen reader users can navigate directly between the header, primary navigation, main article content, and footer.</dd>

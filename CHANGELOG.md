@@ -6,6 +6,12 @@ Wie eine Version entsteht, steht im README unter „Versionierung und Releases�
 
 ## [Unreleased]
 
+## [1.1.2] – 2026-11-23
+
+### Geändert
+
+- Oberflächentexte auf Deutsch und Englisch sachlicher: Die Barrierefreiheits- und Hinweisseiten zählen ihre Punkte ohne fette Etiketten auf, und die Kurzbeschreibungen der Leitgesetze verzichten auf Zuschreibungen wie „fundamental“ oder „unantastbar“. „Amtliches Gesamtergebnis“ heißt jetzt „Insgesamt“. Kein Text ist länger geworden.
+
 ## [1.1.1] – 2026-11-23
 
 ### Geändert
