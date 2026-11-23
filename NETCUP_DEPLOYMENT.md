@@ -7,24 +7,24 @@ Anleitung für das Deployment auf Netcup-Webhosting-Tarifen (Plesk/WCP) unter No
 ## 1. Sicherheits- und Datenschutzarchitektur
 
 ### SQL-Injection-Schutz
-- **Abfrageerstellung**: Datenbankabfragen in `src/db/index.ts` werden über Drizzle ORM ausgeführt.
-- **Prepared Statements**: Parameter (z. B. `lawSlug`, `normSlug`, Sprach- und Filterparameter) werden als parametrisierte Werte (`?`) übergeben.
-- **Keine dynamische String-Konkatenation**: Es erfolgt keine Zusammensetzung von SQL-Befehlen aus ungeprüften Benutzereingaben.
-- **Scraper und Synchronisationsskripte**: Auch die Skripte in `scripts/` nutzen parametrisierte Abfragen.
+Alle Datenbankabfragen in `src/db/index.ts` laufen über Drizzle ORM. Parameter (z. B. `lawSlug`, `normSlug`, Sprach- und Filterparameter) gehen als Platzhalter (`?`) in Prepared Statements an die Datenbank; SQL-Befehle werden nie per String-Konkatenation aus ungeprüften Benutzereingaben zusammengesetzt. Die Scraper und Synchronisationsskripte in `scripts/` nutzen ebenfalls parametrisierte Abfragen.
 
 ### Datenschutz und Cookie-Verzicht
-- **Keine Cookies**: LawNetz setzt keine Cookies (`Set-Cookie` Header werden nicht gesendet).
-- **Lokale Ressourcen**:
-  - Schriftarten (*Atkinson Hyperlegible* und *Lexend*) liegen lokal unter `/fonts/` auf dem Server.
-  - Keine Abhängigkeiten zu externen Content Delivery Networks (CDNs) oder Schriftarten-Diensten.
-  - Keine Webanalyse-, Telemetrie- oder Werbedienste.
-  - Volltextsuche via Pagefind läuft clientseitig im Browser des Nutzers.
-- **LocalStorage**: Die vom Nutzer gewählte Darstellungspräferenz (Dunkel-/Hellmodus) wird im lokalen Browserspeicher abgelegt und nicht an den Server übertragen.
-- **Rechtliche Einordnung**: Da keine einwilligungspflichtigen Informationen auf Endgeräten gespeichert oder ausgelesen werden (§ 25 TDDDG) und keine Nutzerprofile gebildet werden, ist kein Cookie-Banner erforderlich.
-- **Content Security Policy (CSP)**: Sowohl über die Middleware (`src/middleware.ts`) als auch über `.htaccess` wird eine restriktive CSP ausgeliefert:
-  ```http
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://contact.yinside.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
-  ```
+LawNetz setzt keine Cookies und sendet keinen `Set-Cookie`-Header. Alles Weitere kommt vom eigenen Server oder bleibt im Browser:
+
+- Die Schriftarten (*Atkinson Hyperlegible* und *Lexend*) liegen lokal unter `/fonts/` auf dem Server.
+- Es gibt keine Abhängigkeiten zu externen Content Delivery Networks (CDNs) oder Schriftarten-Diensten.
+- Es laufen keine Webanalyse-, Telemetrie- oder Werbedienste.
+- Die Volltextsuche (Pagefind) läuft im Browser des Nutzers.
+- Die gewählte Darstellung (Dunkel-/Hellmodus) steht im LocalStorage des Browsers und wird nicht an den Server übertragen.
+
+Auf Endgeräten werden keine einwilligungspflichtigen Informationen gespeichert oder ausgelesen (§ 25 TDDDG), und es entstehen keine Nutzerprofile. Ein Cookie-Banner ist deshalb nicht erforderlich.
+
+Die Middleware (`src/middleware.ts`) und `.htaccess` liefern beide diese restriktive Content Security Policy (CSP) aus:
+
+```http
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://contact.yinside.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+```
 
 ---
 
@@ -63,9 +63,9 @@ Unter dem Menüpunkt **Node.js**:
    node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
    ```
    > [!TIP]
-   > Sie müssen **keine** Einzelfelder (`DB_HOST`, `DB_USER`, `DB_PASSWORD` etc.) anlegen – die Angabe der `DB_URL` reicht vollkommen für Drizzle ORM, Drizzle Kit und alle Sync-Skripte aus.
+   > Einzelfelder (`DB_HOST`, `DB_USER`, `DB_PASSWORD` etc.) sind nicht nötig. Drizzle ORM, Drizzle Kit und alle Sync-Skripte kommen mit `DB_URL` aus.
    >
-   > Auch in den **GitHub Secrets** müssen **keine** Datenbank-Zugangsdaten hinterlegt werden: Die `.env`-Datei verbleibt sicher auf Ihrem Netcup-Server und wird beim automatischen Deployment über GitHub Actions bewusst ausgeschlossen (`--exclude='.env'`).
+   > Auch in die **GitHub Secrets** gehören keine Datenbank-Zugangsdaten: Die `.env`-Datei bleibt auf Ihrem Netcup-Server, das automatische Deployment über GitHub Actions schließt sie aus (`--exclude='.env'`).
 
 4. Tabellenstruktur einrichten:
    ```bash
@@ -77,10 +77,10 @@ Unter dem Menüpunkt **Node.js**:
 
 ## 4. Automatische Aktualisierung (Cronjobs)
 
-Auf Shared-Hosting-Paketen laufen Cronjobs häufig in einer eingeschränkten Chroot-Umgebung ohne direkten Zugriff auf globale Node.js-Binaries. Für die tägliche Aktualisierung stehen zwei Möglichkeiten zur Verfügung:
+Auf Shared-Hosting-Paketen laufen Cronjobs häufig in einer eingeschränkten Chroot-Umgebung ohne direkten Zugriff auf globale Node.js-Binaries. Für die tägliche Aktualisierung gibt es zwei Wege:
 
 ### Option A: HTTP-Aufruf über Plesk (Empfohlen)
-Plesk ruft die Aktualisierungsroute per HTTP ab. Die Verarbeitung erfolgt im laufenden Node.js-Prozess:
+Plesk ruft die Aktualisierungsroute per HTTP ab, die Arbeit erledigt der laufende Node.js-Prozess:
 
 1. In Plesk unter **Geplante Aufgaben (Cronjobs)** auf **Aufgabe hinzufügen** klicken.
 2. Aufgabentyp: **URL abrufen**.
@@ -146,12 +146,12 @@ In Plesk unter **Node.js** auf **App neu starten** klicken (bzw. `touch tmp/rest
 
 ## 6. Automatisches Deployment über GitHub Actions (CI/CD)
 
-Im Repository ist ein Workflow für kontinuierliche Integration und automatisches Deployment eingerichtet (`.github/workflows/deploy.yml`), der nach dem bewährten **Bewerby-Muster** arbeitet:
+Der Workflow `.github/workflows/deploy.yml` baut und deployt automatisch, nach demselben Muster wie bei Bewerby:
 
-- **Passwortbasierte Authentifizierung**: Netcup-Webhosting bietet im WCP/Plesk primär Passwort-Authentifizierung für SSH/FTP. Die Verbindung erfolgt sicher über `sshpass` direkt mit OpenSSH (ohne unsichere Drittanbieter-Actions).
-- **Chroot-kompatibles Tar-Streaming**: Da in der Netcup-Chroot-Umgebung häufig kein `rsync` installiert ist, wird das gebaute Release als Tar-Stream über SSH direkt in ein Staging-Verzeichnis (`dist.new`) entpackt.
-- **Atomare Umschaltung (Zero-Downtime)**: `dist.new` wird blitzschnell zu `dist` umbenannt (der vorherige Release bleibt als `dist.prev` für Rollbacks erhalten).
-- **Automatischer Smoke-Test & Rollback**: Nach dem Neustart von Phusion Passenger prüft die Pipeline per `curl`, ob die Website erreichbar ist (HTTP 200) und ob Sicherheitsgrenzen eingehalten werden (die `.env` und `package.json` dürfen nicht öffentlich abrufbar sein). Bei Fehlern schlägt automatisch ein Rollback auf `dist.prev` an.
+- Netcup-Webhosting bietet im WCP/Plesk vor allem Passwort-Authentifizierung für SSH/FTP. Der Workflow verbindet sich deshalb mit `sshpass` direkt über OpenSSH, ohne Actions von Drittanbietern.
+- In der Netcup-Chroot-Umgebung fehlt häufig `rsync`. Das gebaute Release geht deshalb als Tar-Stream über SSH und wird direkt in ein Staging-Verzeichnis (`dist.new`) entpackt.
+- Danach wird `dist.new` atomar zu `dist` umbenannt, ohne Ausfallzeit. Das vorherige Release bleibt als `dist.prev` für Rollbacks erhalten.
+- Nach dem Neustart von Phusion Passenger prüft die Pipeline per `curl`, ob die Website erreichbar ist (HTTP 200) und ob `.env` und `package.json` nicht öffentlich abrufbar sind. Schlägt eine Prüfung fehl, rollt sie automatisch auf `dist.prev` zurück.
 
 ### Erforderliche GitHub Secrets
 
@@ -161,7 +161,7 @@ Hinterlege unter **Settings** → **Secrets and variables** → **Actions** (ode
 | :--- | :--- | :--- |
 | `DEPLOY_SSH_HOST` | `lawnetz.de` *(oder Server-IP)* | Hostname oder IP-Adresse deines Netcup-Servers |
 | `DEPLOY_SSH_USER` | `hosting123456` *(oder `k123456`)* | Der SSH- / FTP-Benutzername deines Webhosting-Pakets |
-| `DEPLOY_SSH_PASSWORD` | `DeinSicheresPasswort` | Das Passwort dieses Zugangs (**kein SSH-Schlüssel nötig!**) |
+| `DEPLOY_SSH_PASSWORD` | `DeinSicheresPasswort` | Das Passwort dieses Zugangs (kein SSH-Schlüssel nötig) |
 | `DEPLOY_PATH` | `/httpdocs` *(oder `/lawnetz.de`)* | Anwendungsstamm im Netcup-Chroot (was `pwd` nach dem SSH-Login ausgibt) |
 | `DEPLOY_DOMAIN` | `www.lawnetz.de` | Domain für den automatischen Smoke-Test nach dem Deployment |
 | `DEPLOY_SSH_HOSTKEY` | *(optional)* | Ausgabe von `ssh-keyscan -t ed25519 lawnetz.de` zur Pinning-Prüfung |

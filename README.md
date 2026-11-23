@@ -8,22 +8,19 @@ LawNetz bereitet rund 6.130 Gesetze und Rechtsverordnungen des Bundes sowie 135 
 
 ## Merkmale
 
-- **Architektur**: Server-Side Rendering (SSR) mit Astro und Node.js.
-- **Barrierefreiheit**:
-  - Orientierung an den Erfolgskriterien der Web Content Accessibility Guidelines (WCAG 2.2 Stufe AAA).
+- Server-Side Rendering (SSR) mit Astro und Node.js.
+- Barrierefreiheit, ausgerichtet an den Erfolgskriterien der Web Content Accessibility Guidelines (WCAG 2.2 Stufe AAA):
   - Tastaturnavigation mit sequenziellen Kurzbefehlen (`G` gefolgt von Navigationstasten, `?` für die Übersicht).
-  - Kontrastverhältnisse von mindestens 7:1 für Fließtext im Hell- und Dunkelmodus.
+  - Kontrastverhältnis von mindestens 7:1 für Fließtext im Hell- und Dunkelmodus.
   - Sprungmarken (Skip-Links) und ARIA-Landmarks für Screenreader.
-- **Datenschutz & Sicherheit**:
-  - Keine Verwendung von Tracking-Cookies oder Werbediensten.
-  - Sämtliche Schriftarten (*Atkinson Hyperlegible*, *Lexend*) werden lokal vom Webserver ausgeliefert.
-  - Clientseitige Volltextsuche via Pagefind ohne Übertragung von Suchanfragen an Dritte.
-  - Parametrisierte SQL-Abfragen über Drizzle ORM zur Vermeidung von SQL-Injections.
+- Datenschutz und Sicherheit:
+  - Keine Tracking-Cookies, keine Werbedienste.
+  - Alle Schriftarten (*Atkinson Hyperlegible*, *Lexend*) kommen vom eigenen Webserver.
+  - Die Volltextsuche (Pagefind) läuft im Browser und schickt keine Suchanfragen an Dritte.
+  - SQL-Abfragen laufen zum Schutz vor SQL-Injection parametrisiert über Drizzle ORM.
   - Restriktive Content Security Policy (CSP).
-- **Zweisprachigkeit**:
-  - Umschaltung zwischen deutschen Gesetzestexten und den vom Bundesministerium der Justiz herausgegebenen englischen Übersetzungen.
-- **Layout**:
-  - Responsives Layout mit einheitlicher Inhaltsbreite für Desktop- und Mobilgeräte.
+- Umschaltung zwischen deutschen Gesetzestexten und den englischen Übersetzungen des Bundesministeriums der Justiz.
+- Responsives Layout mit einheitlicher Inhaltsbreite auf Desktop und Mobilgeräten.
 
 ## Technologie-Stack
 
@@ -87,7 +84,7 @@ Ohne `DB_URL` werden diese Tests übersprungen. Wie die Fixture entsteht, steht 
 
 ## Deployment
 
-Hinweise zur Bereitstellung auf Netcup-Webhosting (Plesk mit Phusion Passenger, MySQL und Cronjob-Konfiguration) sind in [NETCUP_DEPLOYMENT.md](./NETCUP_DEPLOYMENT.md) dokumentiert.
+Wie LawNetz auf Netcup-Webhosting läuft (Plesk mit Phusion Passenger, MySQL, Cronjobs), steht in [NETCUP_DEPLOYMENT.md](./NETCUP_DEPLOYMENT.md).
 
 ## Versionierung und Releases
 
@@ -103,5 +100,6 @@ Der Tag startet `.github/workflows/release.yml`: Er prüft, dass Tag, `package.j
 
 ## Datenquelle & Lizenz
 
-- **Datenquelle**: Amtlicher Datenbestand des Bundesministeriums der Justiz und des Bundesamts für Justiz, bereitgestellt über [gesetze-im-internet.de](https://www.gesetze-im-internet.de). Gemäß § 5 Abs. 1 UrhG genießen amtliche Werke keinen urheberrechtlichen Schutz.
-- **Quellcode**: Open Source.
+Die Daten sind der amtliche Datenbestand des Bundesministeriums der Justiz und des Bundesamts für Justiz, bereitgestellt über [gesetze-im-internet.de](https://www.gesetze-im-internet.de). Amtliche Werke sind nach § 5 Abs. 1 UrhG nicht urheberrechtlich geschützt.
+
+Der Quellcode ist Open Source.

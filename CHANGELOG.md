@@ -6,6 +6,12 @@ Wie eine Version entsteht, steht im README unter „Versionierung und Releases�
 
 ## [Unreleased]
 
+## [1.1.1] – 2026-11-23
+
+### Geändert
+
+- README und `NETCUP_DEPLOYMENT.md` sprachlich überarbeitet: Listen mit fetten Etiketten sind Fließtext oder einfache Listen, Werbeformulierungen wie „bewährt“ und „blitzschnell“ sind gestrichen. Inhaltlich hat sich nichts geändert.
+
 ## [1.1.0] – 2026-11-16
 
 ### Hinzugefügt
